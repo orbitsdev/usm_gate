@@ -60,9 +60,30 @@ class ListCard extends Component implements HasForms, HasTable
                     ->sortable(),
 
                TextColumn::make('status')
-                    ->badge()
+                   
                     ->formatStateUsing(fn($state)=> ucfirst($state))
-                    ->searchable(),
+                    ->searchable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+
+                        'Active' => 'success',
+                        'InActive' => 'gray',
+                        'Block' => 'danger',
+                        'Expired' => 'danger',
+                        default=> 'gray',
+
+                    
+                    })
+                ->icon(fn (string $state): string => match ($state) {
+
+                    'Active' => 'heroicon-o-check',
+                    'InActive' => 'heroicon-o-pause',
+                    'Block' => 'heroicon-o-no-symbol',
+                    'Expired' => 'heroicon-0-x-mark',
+                    default => 'heroicon-0-clock'
+
+                })
+                    ,
 
             ])
             ->headerActions([
@@ -128,22 +149,24 @@ class ListCard extends Component implements HasForms, HasTable
                         return $data;
                     })
                     ->form([
-                        Select::make('account_id')
-                        ->label('Select Account')
-                        ->relationship(
-                                name: 'account',
-                                modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
-                            )
-                            ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
-                            ->searchable(['account.first_name', 'account.last_name'])
-                            ->preload()
+                        
+                        // Select::make('account_id')
+                        // ->label('Select Account')
+                        // ->relationship(
+                        //         name: 'account',
+                        //         modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
+                        //     )
+                        //     ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
+                        //     ->searchable(['account.first_name', 'account.last_name'])
+                        //     ->preload()
                             
     
-                            ->label('Owner Name')
-                            ->disabled(true)
+                        //     ->label('Owner Name')
+                        //     ->disabled(true)
     
     
-                            ,
+                        //     ,
+
                         TextInput::make('id_number')->required()->unique(ignoreRecord: true),
                         Flatpickr::make('valid_from'),
                         Flatpickr::make('valid_until')

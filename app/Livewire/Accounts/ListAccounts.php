@@ -12,6 +12,7 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
@@ -107,15 +108,33 @@ class ListAccounts extends Component implements HasForms, HasTable
             ->actions(
                 [
                     ActionGroup::make([
-                        EditAction::make()->form([
-                            TextInput::make('first_name'),
-                            TextInput::make('last_name'),
-                            TextInput::make('middle_name'),
+                        EditAction::make()
+                        ->mutateRecordDataUsing(function (Model $record, array $data): array {
+                            // $data['account_id'] = auth()->id();
+                     
+                            return $data;
+                        })
+                        ->form([
+                            TextInput::make('first_name')->required(),
+                            TextInput::make('last_name')->required(),
+                            TextInput::make('middle_name')->required(),
+                            TextInput::make('sex')->required(),
+                            DatePicker::make('birth_date')->required()->label('Birth date')
+                            ->timezone('Asia/Manila')
+                            ->closeOnDateSelection()->required(),
+                            TextInput::make('contact_number'),
+                            FileUpload::make('image')
+                            ->disk('public')
+                            ->directory('accounts')
+                            ->image()
+                            ->imageEditor()
+                            ->imageEditorMode(2)
+                            ->required()
                         ]),
                         DeleteAction::make(),
                     ]),
                 ],
-                position: ActionsPosition::BeforeCells,
+                // position: ActionsPosition::BeforeCells,
             )
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

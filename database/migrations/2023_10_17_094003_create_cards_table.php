@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigInteger('id_number')->unique()->nullable();
             $table->date('valid_from')->default(now())->nullable();
             $table->date('valid_until')->default(now()->addYears(1))->nullable();
-            $table->string('status')->default('active')->nullable();
+            $table->string('status')->default('Active')->nullable();
             $table->timestamps();
         });
     }
