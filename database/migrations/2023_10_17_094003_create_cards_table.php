@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('account_id')->nullable();
-            $table->bigInteger('id_number')->nullable();
-            $table->integer('valid_from')->default(now()->year)->nullable();
-            $table->integer('valid_until')->default(now()->addYears(1)->year)->nullable();
+            $table->bigInteger('id_number')->unique()->nullable();
+            $table->date('valid_from')->default(now())->nullable();
+            $table->date('valid_until')->default(now()->addYears(1))->nullable();
             $table->string('status')->default('active')->nullable();
             $table->timestamps();
         });

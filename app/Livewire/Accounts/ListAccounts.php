@@ -72,14 +72,13 @@ class ListAccounts extends Component implements HasForms, HasTable
             )
             ->headerActions([
                 CreateAction::make('add')->form([
-                    TextInput::make('first_name'),
-                    TextInput::make('last_name'),
-                    TextInput::make('middle_name'),
-                    TextInput::make('sex'),
+                    TextInput::make('first_name')->required(),
+                    TextInput::make('last_name')->required(),
+                    TextInput::make('middle_name')->required(),
+                    TextInput::make('sex')->required(),
                     DatePicker::make('birth_date')->required()->label('Birth date')
                     ->timezone('Asia/Manila')
-                  
-                    ->closeOnDateSelection(),
+                    ->closeOnDateSelection()->required(),
                     TextInput::make('contact_number'),
                     FileUpload::make('image')
                     ->disk('public')
