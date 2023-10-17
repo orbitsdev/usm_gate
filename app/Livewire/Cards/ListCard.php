@@ -49,6 +49,7 @@ class ListCard extends Component implements HasForms, HasTable
                 })
                 ,
                TextColumn::make('id_number')
+               ->copyable()
                 ->searchable()
 
                     ->sortable(),
@@ -103,7 +104,9 @@ class ListCard extends Component implements HasForms, HasTable
 
 
                         ,
-                    TextInput::make('id_number')->required()->unique(ignoreRecord: true),
+                    TextInput::make('id_number')->required()->unique(ignoreRecord: true)
+                  
+                    ,
                     Flatpickr::make('valid_from'),
                     Flatpickr::make('valid_until')
                     
