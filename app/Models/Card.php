@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Log;
 use App\Models\Record;
 use App\Models\Account;
+use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -24,5 +25,10 @@ class Card extends Model
         return $this->hasMany(Log::class);
     }
 
-    
+
+
+public function transactions(){
+    return $this->hasMany(Transaction::class);
+}
+
 }
