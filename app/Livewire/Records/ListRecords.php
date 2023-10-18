@@ -51,19 +51,30 @@ class ListRecords extends Component implements HasForms, HasTable
                 TextColumn::make('doord_id')
                     ->searchable(),
                 TextColumn::make('entry')
-                    ->searchable(),
+                   ->formatStateUsing(fn($state)=> $state ? 'In' : 'None'),
                 TextColumn::make('exit')
-                    ->searchable(),
-                TextColumn::make('created_at')->label('Time in')->formatStateUsing(function($record){
+                   ->formatStateUsing(fn($state)=> $state ? 'Out' : 'None'),
+                TextColumn::make('created_at')->label('Time Enter')->formatStateUsing(function($record){
+
+                        if($record->entry){
+
+                            return $record->created_at->format('h:i A');
+                        }else{
+                            'None';
+                        }
               
-                        return $record->created_at->format('h:i a');
                        
         
                     }),
 
                     TextColumn::make('updated_at')->label('Time out')->formatStateUsing(function($record){
-              
-                        return $record->updated_at->format('h:i a');
+                        
+                        if($record->entry == true && $record->exit ==true){
+
+                            return $record->updated_at->format('h:i A');
+                        }else{
+                            return '-- Currently Inside -- ';
+                        }
                        
         
                     }),
