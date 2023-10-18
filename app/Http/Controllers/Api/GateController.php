@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Day;
+use App\Models\Log;
 use App\Models\Card;
+use App\Models\Record;
 use App\Models\CardSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -11,7 +13,6 @@ use App\Http\Controllers\Controller;
 
 class GateController extends Controller
 {
-
     public function checkCard(Request $request)
     {
         $card = Card::where('id_number', $request->id_number)->first();
@@ -26,7 +27,22 @@ class GateController extends Controller
                 return $this->checkDay($card, $day,  $request);
             }
         } else {
-            return response()->json(['source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'Not Found', 'message' => 'Cannot Procceed Card Not Found',  ], 404);
+
+            $log = Log::create([
+
+                'source'=> 'usm-admin',
+                'transaction'=> $request->request_type,
+                'error_type'=> 'not-found',
+                'message'=> '(checking) Cannot Procceed Card Not Found',
+            ]);
+
+            return response()->json([
+                'source'=> $log->source,
+                'transaction'=> $log->transaction,
+                'data'=> $card, 
+                'success' => false , 
+                'error_type'=> $log->error_type,
+                'message' => $log->message,  ], 404);
         }
     }
 
@@ -52,7 +68,25 @@ class GateController extends Controller
             return $this->checkCardValidity($card, $day, $request);
         } else {
 
-            return response()->json(['source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'Card Not Active', 'message' => 'Cannot Procceed Card is ' . $card->status], 404);
+
+            $log = Log::create([
+                'card_id' => $card->id,
+                'source'=> 'usm-admin',
+                'transaction'=> $request->request_type,
+                'error_type'=> 'card-not-active',
+                'message'=> '( checking ) Cannot Procceed Card is ' . $card->status,
+            ]);
+
+            return response()->json([
+                
+                'source'=> $log->source,
+                'transaction'=> $log->transaction,
+                'data'=> $card, 
+                'success' => false , 
+                'error_type'=> $log->error_type,
+                'message' => $log->message, 
+             ], 404);
+
         }
     }
 
@@ -93,22 +127,31 @@ class GateController extends Controller
         if ($isCardValid) {
             return $this->checkCardlatestRecord($card, $day,  $request);
         } else {
-            // return response()->json(['error' => 'Card is Validity Only in' , 'success' => false'source'=> 'USM-ADMIN'], 404);
-        
 
-            
+
+            $log = Log::create([
+                'card_id' => $card->id,
+                'source'=> 'usm-admin',
+                'transaction'=> $request->request_type,
+                'error_type'=> 'card-expired',
+                'message'=> '( checking ) Cannot Procceed Card is expired. The validity of the card is valid only from ' . $cardValidFromStartOfDay->format('F j, Y') . ' until ' . $cardValidUntilEndOfDay->format('F j, Y') . ' based on the date set in the setting from ' . $cardSettingValidFromStartOfDay->format('F j, Y'),
+            ]);
+
             return response()->json([
-                'source'=> 'USM-ADMIN', 
-                'data'=> $card, 'success' => false , 'error_type'=> 'Card Expired', 'message' =>  'Cannot Procceed Card is expired. The validity of the card is valid only from ' . $cardValidFromStartOfDay->format('F j, Y') . ' until ' . $cardValidUntilEndOfDay->format('F j, Y') . ' based on the date set in the setting from ' . $cardSettingValidFromStartOfDay->format('F j, Y'), ], 404);
+                
+                'source'=> $log->source,
+                'transaction'=> $log->transaction,
+                'data'=> $card, 
+                'success' => false , 
+                'error_type'=> $log->error_type,
+                'message' => $log->message, 
+             ], 404);
 
-            // return response()->json([
-            //     'error' => 'Card has expired. The validity of the card is valid only from ' . $cardValidFromStartOfDay->format('F j, Y') . ' until ' . $cardValidUntilEndOfDay->format('F j, Y') . ' based on the date set in the setting from ' . $cardSettingValidFromStartOfDay->format('F j, Y'),
-            //     'success' => false
-            // 'source'=> 'USM-ADMIN'], 404);
+
+
         }
 
 
-        //  return response()->json(['data' => $card, 'success' => true, 'request'=> 'entry', 'day'=> $day,'card_setting_valid' => $isCardSettingValid, 'card_valid' => $isCardValid ]);
 
 
 
@@ -131,8 +174,27 @@ class GateController extends Controller
 
         } else {
 
-            return response()->json(['source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'No Scanned Parameter When Sending API', 'message' => 'Cannot Procceed  Cant Identify Whic Side of the door scanned missing parameter' ], 404);
-            // return response()->json(['error' => 'scanned type no value', 'success' => false'source'=> 'USM-ADMIN'], 404);
+            $log = Log::create([
+                'card_id' => $card->id,
+                'source'=> 'usm-admin',
+                'transaction'=> $request->request_type,
+                'error_type'=> 'api-missing-parameter',
+                'message'=> '( checking ) Cannot Procceed  Cant Identify Whic Side of the door scanned missing parameter',
+            ]);
+
+            return response()->json([
+                
+                'source'=> $log->source,
+                'transaction'=> $log->transaction,
+                'data'=> $card, 
+                'success' => false , 
+                'error_type'=> $log->error_type,
+                'message' => $log->message, 
+             ], 404);
+
+
+            // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'No Scanned Parameter When Sending API', 'message' => '( checking ) Cannot Procceed  Cant Identify Whic Side of the door scanned missing parameter' ], 404);
+            // return response()->json(['error' => 'scanned type no value', 'success' => false'transaction'=> $request->request_type,'source'=> 'USM-ADMIN'], 404);
         }
     }
 
@@ -151,33 +213,103 @@ class GateController extends Controller
                 
                 if($card_latest_record->entry == false  && $card_latest_record->exit == false){
 
-                    return response()->json(['source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => 'Success! Card Doesnt Have Entry Record']);
+
+                    
+                    if($request->request_type=='saving'){
+                        $card_latest_record->entry = true;
+                        $card_latest_record->save();
+                    }
+
+
+                    return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Doesnt Have Entry Record']);
                     
                 }else if($card_latest_record->entry == true  && $card_latest_record->exit == false){
+
+                    $log = Log::create([
+                        'card_id' => $card->id,
+                        'source'=> 'usm-admin',
+                        'transaction'=> $request->request_type,
+                        'error_type'=> 'multiple-enter-attempt',
+                        'message'=> '( checking ) Cannot proceed. Card cannot enter again until it has exited',
+                    ]);
+        
+                    return response()->json([
+                        
+                        'source'=> $log->source,
+                        'transaction'=> $log->transaction,
+                        'data'=> $card, 
+                        'success' => false , 
+                        'error_type'=> $log->error_type,
+                        'message' => $log->message, 
+                     ], 404);
                     
-                    return response()->json(['source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'Already Login', 'message' => 'Cannot proceed. Card cannot enter again until it has exited',], 404);
+                 
                     
                 }else if($card_latest_record->entry == false  && $card_latest_record->exit == true){
 
-                    return response()->json(['source'=> 'USM-ADMIN', 'data' => $card, 'success' => false, 'error_type' => 'Invalid Exit', 'message' => 'Cannot Procceed Invalid exit without entry',], 404);
+                    $log = Log::create([
+                        'card_id' => $card->id,
+                        'source'=> 'usm-admin',
+                        'transaction'=> $request->request_type,
+                        'error_type'=> 'invalid-exit',
+                        'message'=> '( checking ) Cannot Procceed Invalid exit without entry',
+                    ]);
+        
+                    return response()->json([
+                        
+                        'source'=> $log->source,
+                        'transaction'=> $log->transaction,
+                        'data'=> $card, 
+                        'success' => false , 
+                        'error_type'=> $log->error_type,
+                        'message' => $log->message, 
+                     ], 404);
+                    
+
+                    // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data' => $card, 'success' => false, 'error_type' => 'Invalid Exit', 'message' => '( checking ) Cannot Procceed Invalid exit without entry',], 404);
                 }
                 
                 else{
-                    return response()->json(['source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => 'Success! Card Ready To Login Again']);
+
+                    if($request->request_type=='saving'){
+                        $new_record = Record::create([ 
+                            'day_id'=> $day->id,
+                            'card_id'=> $card->id,
+                            'door_ip'=> '23023021',
+                            'entry'=> true,
+                        ]);
+                    }
+                    return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Ready To Login Again']);
 
                 }
                 
 
 
             } else {
-
                 
-                return response()->json(['source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => 'Success! Card last Record is Not The Same Today']);
+                if($request->request_type=='saving'){
+                    $new_record = Record::create([ 
+                        'day_id'=> $day->id,
+                        'card_id'=> $card->id,
+                        'door_ip'=> '23023021',
+                        'entry'=> true,
+                    ]);
+                }
+                
+                return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card last Record is Not The Same Today']);
                 // return response()->json(['data' => $card, 'success' => true, 'request' => 'last record is not the same today']);
             }
 
         } else {
-            return response()->json(['source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => 'Success! Card Doesnt Have Record ']);
+            if($request->request_type=='saving'){
+                $new_record = Record::create([ 
+                    'day_id'=> $day->id,
+                    'card_id'=> $card->id,
+                    'door_ip'=> '23023021',
+                    'entry'=> true,
+                ]);
+            }
+            return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Doesnt Have Record ']);
             // return response()->json(['data' => $card, 'success' => true, 'request' => 'no last record means success']);
         }
     }
@@ -185,26 +317,67 @@ class GateController extends Controller
     public function cardProcessForExit($card, $day, $request)
     {
 
-    
         $today = $day->created_at->startOfDay();
         $card_latest_record = $card->records()->latest()->first();
     
         if (!empty($card_latest_record)) {
             if ($card_latest_record->exit == false) {
-    
-                return response()->json(['source'=> 'USM-ADMIN','data' => $card, 'success' => true, 'error_type' => null, 'message' => 'Ready To Exit Because It nit exit yes']);
+                if($request->request_type=='saving'){
+                    $card_latest_record->exit = true;
+                    $card_latest_record->save();
+                }
+                return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => true, 'error_type' => null, 'message' => '( checking ) Ready To Exit Because It nit exit yes']);
             } else {
+
+
+                $log = Log::create([
+                    'card_id' => $card->id,
+                    'source'=> 'usm-admin',
+                    'transaction'=> $request->request_type,
+                    'error_type'=> 'multiple-exit-attempt',
+                    'message'=> '( checking ) Cannot Exit Over and Over Again. Enter first.',
+                ]);
+    
+                return response()->json([
+                    
+                    'source'=> $log->source,
+                    'transaction'=> $log->transaction,
+                    'data'=> $card, 
+                    'success' => false , 
+                    'error_type'=> $log->error_type,
+                    'message' => $log->message, 
+                 ], 404);
+
                 // Card has already exited on the same day
-                return response()->json(['source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => 'Multiple Exit ', 'message' => 'Cannot Exit Over and Over Again. Enter first.', ], 404);
+                // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => 'Multiple Exit ', 'message' => '( checking ) Cannot Exit Over and Over Again. Enter first.', ], 404);
             }
         } else {
+
+
+            $log = Log::create([
+                'source'=> 'usm-admin',
+                'transaction'=> $request->request_type,
+                'error_type'=> 'no-entry-record',
+                'message'=> '( checking ) No entry record found for the card',
+            ]);
+
+            return response()->json([
+                
+                'source'=> $log->source,
+                'transaction'=> $log->transaction,
+                'data'=> $card, 
+                'success' => false , 
+                'error_type'=> $log->error_type,
+                'message' => $log->message, 
+             ], 404);
+
+
             // No records for the card yet, handle accordingly
-            return response()->json(['source'=> 'USM-ADMIN','data' => $card, 'success' => true, 'error_type' => null, 'message' => 'No entry record found for the card']);
+            // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => null, 'message' => '( checking ) No entry record found for the card']);
+       
         }
 
-       
-    }
-
+}
  
 
 }

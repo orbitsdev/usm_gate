@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CardSaveRecontroller;
 use App\Http\Controllers\Api\CheckCardApiController;
+use App\Http\Controllers\Api\ErrorController;
 use App\Http\Controllers\Api\GateController;
 use App\Models\Day;
 use App\Models\Card;
@@ -27,7 +28,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/check-card', [CheckCardApiController::class, 'checkCard'])->name('check-card');
-Route::post('/save-record', [CardSaveRecontroller::class, 'saveRecord'])->name('save-record');
+// Route::post('/save-record', [CardSaveRecontroller::class, 'saveRecord'])->name('save-record');
+Route::post('/save-error', [ErrorController::class, 'saveError'])->name('save-error');
+
 
 
 
