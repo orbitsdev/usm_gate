@@ -78,10 +78,10 @@ class ListCard extends Component implements HasForms, HasTable
                 ->icon(fn (string $state): string => match ($state) {
 
                     'Active' => 'heroicon-o-check',
-                    'InActive' => 'heroicon-o-pause',
+                    'Inactive' => 'heroicon-o-ellipsis-horizontal',
                     'Block' => 'heroicon-o-no-symbol',
-                    'Expired' => 'heroicon-0-x-mark',
-                    default => 'heroicon-0-clock'
+                    'Expired' => 'heroicon-o-x-mark',
+                    default => 'heroicon-o-clock'
 
                 })
                     ,
@@ -180,7 +180,7 @@ class ListCard extends Component implements HasForms, HasTable
                         ->label('Card Status')
                         ->options([
                             'Active' => 'Active',
-                            'InActive' => 'InActive',
+                            'Inactive' => 'Inactive',
                             'Block' => 'Block',
                             'Expired' => 'Expored',
                         ])
@@ -193,12 +193,10 @@ class ListCard extends Component implements HasForms, HasTable
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkActionGroup::make([
-                        BulkAction::make('delete')
-                            ->requiresConfirmation()
-                            ->action(fn (Collection $records) => $records->each->delete())
-                    ])->label('Actions'),
-                ]),
+                    BulkAction::make('delete')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each->delete())
+                ])->label('Actions'),
             ]);
     }
 

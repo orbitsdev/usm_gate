@@ -21,9 +21,10 @@ class RecordFactory extends Factory
         return [
             'day_id' => Day::inRandomOrder()->first()->id,
             'purpose_id' => Purpose::inRandomOrder()->first()->id,
-            'doord_id' => $this->faker->ipv4,
-            'entry' =>$this->faker->randomElement(['Left', 'Right']),
-            'exit' =>$this->faker->randomElement(['Left', 'Right'])
+            'door_ip' => $this->faker->ipv4,
+            'entry' => $this->faker->boolean,
+            'exit' => $this->faker->boolean,
+            
     
         ];
     }

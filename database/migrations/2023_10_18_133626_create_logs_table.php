@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('records', function (Blueprint $table) {
+        Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('day_id')->nullable();
             $table->foreignId('card_id')->nullable();
-            $table->foreignId('purpose_id')->nullable();
-            $table->foreignId('door_id')->nullable();
-            $table->string('door_ip')->nullable();
-            $table->boolean('entry')->default(false)->nullable();
-            $table->boolean('exit')->default(false)->nullable();
+            $table->string('source')->nullable();
+            $table->string('transaction')->nullable();
+            $table->string('error_type')->nullable();
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('records');
+        Schema::dropIfExists('logs');
     }
 };

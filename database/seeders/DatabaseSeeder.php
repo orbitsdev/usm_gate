@@ -11,6 +11,7 @@ use Database\Seeders\RecordSeeder;
 use Database\Seeders\AccountSeeder;
 use Database\Seeders\PurposeSeeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\CardSettingsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,13 +21,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-
         $this->call(UserSeeder::class);
         $this->call(AccountSeeder::class);
+        $this->call(DaySeeder::class); // Move DaySeeder before CardSeeder
+        $this->call(PurposeSeeder::class); // Move PurposeSeeder before CardSeeder
+        $this->call(CardSettingsSeeder::class);
         $this->call(CardSeeder::class);
-        $this->call(DaySeeder::class);
-        $this->call(PurposeSeeder::class);
-        $this->call(RecordSeeder::class);
+        // $this->call(RecordSeeder::class);
         
         // \App\Models\User::factory(10)->create();
 

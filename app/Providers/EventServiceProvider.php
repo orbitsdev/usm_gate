@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Day;
+use App\Models\Card;
 use App\Models\Account;
+use App\Observers\DayObserver;
+use App\Observers\CardObserver;
 use App\Observers\AccountObsever;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
@@ -28,6 +32,8 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Account::observe(AccountObsever::class);
+        Day::observe(DayObserver::class);
+        Card::observe(CardObserver::class);
     }
 
     /**
