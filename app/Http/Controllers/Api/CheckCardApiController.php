@@ -31,7 +31,7 @@ class CheckCardApiController extends Controller
             $log = Log::create([
 
                 'source'=> 'usm-admin',
-                'transaction'=> 'checking',
+                'transaction'=> $request->request_type,
                 'error_type'=> 'not-found',
                 'message'=> '(checking) Cannot Procceed Card Not Found',
             ]);
@@ -72,7 +72,7 @@ class CheckCardApiController extends Controller
             $log = Log::create([
                 'card_id' => $card->id,
                 'source'=> 'usm-admin',
-                'transaction'=> 'checking',
+                'transaction'=> $request->request_type,
                 'error_type'=> 'card-not-active',
                 'message'=> '( checking ) Cannot Procceed Card is ' . $card->status,
             ]);
@@ -132,7 +132,7 @@ class CheckCardApiController extends Controller
             $log = Log::create([
                 'card_id' => $card->id,
                 'source'=> 'usm-admin',
-                'transaction'=> 'checking',
+                'transaction'=> $request->request_type,
                 'error_type'=> 'card-expired',
                 'message'=> '( checking ) Cannot Procceed Card is expired. The validity of the card is valid only from ' . $cardValidFromStartOfDay->format('F j, Y') . ' until ' . $cardValidUntilEndOfDay->format('F j, Y') . ' based on the date set in the setting from ' . $cardSettingValidFromStartOfDay->format('F j, Y'),
             ]);
@@ -177,7 +177,7 @@ class CheckCardApiController extends Controller
             $log = Log::create([
                 'card_id' => $card->id,
                 'source'=> 'usm-admin',
-                'transaction'=> 'checking',
+                'transaction'=> $request->request_type,
                 'error_type'=> 'api-missing-parameter',
                 'message'=> '( checking ) Cannot Procceed  Cant Identify Whic Side of the door scanned missing parameter',
             ]);
@@ -193,8 +193,8 @@ class CheckCardApiController extends Controller
              ], 404);
 
 
-            // return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'No Scanned Parameter When Sending API', 'message' => '( checking ) Cannot Procceed  Cant Identify Whic Side of the door scanned missing parameter' ], 404);
-            // return response()->json(['error' => 'scanned type no value', 'success' => false'transaction'=> 'checking','source'=> 'USM-ADMIN'], 404);
+            // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'No Scanned Parameter When Sending API', 'message' => '( checking ) Cannot Procceed  Cant Identify Whic Side of the door scanned missing parameter' ], 404);
+            // return response()->json(['error' => 'scanned type no value', 'success' => false'transaction'=> $request->request_type,'source'=> 'USM-ADMIN'], 404);
         }
     }
 
@@ -221,14 +221,14 @@ class CheckCardApiController extends Controller
                     }
 
 
-                    return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Doesnt Have Entry Record']);
+                    return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Doesnt Have Entry Record']);
                     
                 }else if($card_latest_record->entry == true  && $card_latest_record->exit == false){
 
                     $log = Log::create([
                         'card_id' => $card->id,
                         'source'=> 'usm-admin',
-                        'transaction'=> 'checking',
+                        'transaction'=> $request->request_type,
                         'error_type'=> 'multiple-enter-attempt',
                         'message'=> '( checking ) Cannot proceed. Card cannot enter again until it has exited',
                     ]);
@@ -250,7 +250,7 @@ class CheckCardApiController extends Controller
                     $log = Log::create([
                         'card_id' => $card->id,
                         'source'=> 'usm-admin',
-                        'transaction'=> 'checking',
+                        'transaction'=> $request->request_type,
                         'error_type'=> 'invalid-exit',
                         'message'=> '( checking ) Cannot Procceed Invalid exit without entry',
                     ]);
@@ -266,7 +266,7 @@ class CheckCardApiController extends Controller
                      ], 404);
                     
 
-                    // return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN', 'data' => $card, 'success' => false, 'error_type' => 'Invalid Exit', 'message' => '( checking ) Cannot Procceed Invalid exit without entry',], 404);
+                    // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data' => $card, 'success' => false, 'error_type' => 'Invalid Exit', 'message' => '( checking ) Cannot Procceed Invalid exit without entry',], 404);
                 }
                 
                 else{
@@ -279,7 +279,7 @@ class CheckCardApiController extends Controller
                             'entry'=> true,
                         ]);
                     }
-                    return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Ready To Login Again']);
+                    return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Ready To Login Again']);
 
                 }
                 
@@ -296,7 +296,7 @@ class CheckCardApiController extends Controller
                     ]);
                 }
                 
-                return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card last Record is Not The Same Today']);
+                return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card last Record is Not The Same Today']);
                 // return response()->json(['data' => $card, 'success' => true, 'request' => 'last record is not the same today']);
             }
 
@@ -309,7 +309,7 @@ class CheckCardApiController extends Controller
                     'entry'=> true,
                 ]);
             }
-            return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Doesnt Have Record ']);
+            return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Doesnt Have Record ']);
             // return response()->json(['data' => $card, 'success' => true, 'request' => 'no last record means success']);
         }
     }
@@ -317,7 +317,6 @@ class CheckCardApiController extends Controller
     public function cardProcessForExit($card, $day, $request)
     {
 
-    
         $today = $day->created_at->startOfDay();
         $card_latest_record = $card->records()->latest()->first();
     
@@ -327,14 +326,14 @@ class CheckCardApiController extends Controller
                     $card_latest_record->exit = true;
                     $card_latest_record->save();
                 }
-                return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN','data' => $card, 'success' => true, 'error_type' => null, 'message' => '( checking ) Ready To Exit Because It nit exit yes']);
+                return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => true, 'error_type' => null, 'message' => '( checking ) Ready To Exit Because It nit exit yes']);
             } else {
 
 
                 $log = Log::create([
                     'card_id' => $card->id,
                     'source'=> 'usm-admin',
-                    'transaction'=> 'checking',
+                    'transaction'=> $request->request_type,
                     'error_type'=> 'multiple-exit-attempt',
                     'message'=> '( checking ) Cannot Exit Over and Over Again. Enter first.',
                 ]);
@@ -350,16 +349,31 @@ class CheckCardApiController extends Controller
                  ], 404);
 
                 // Card has already exited on the same day
-                // return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => 'Multiple Exit ', 'message' => '( checking ) Cannot Exit Over and Over Again. Enter first.', ], 404);
+                // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => 'Multiple Exit ', 'message' => '( checking ) Cannot Exit Over and Over Again. Enter first.', ], 404);
             }
         } else {
 
-            if($request->request_type=='saving'){
-                $card_latest_record->exit = true;
-                $card_latest_record->save();
-            }
+
+            $log = Log::create([
+                'source'=> 'usm-admin',
+                'transaction'=> $request->request_type,
+                'error_type'=> 'no-entry-record',
+                'message'=> '( checking ) No entry record found for the card',
+            ]);
+
+            return response()->json([
+                
+                'source'=> $log->source,
+                'transaction'=> $log->transaction,
+                'data'=> $card, 
+                'success' => false , 
+                'error_type'=> $log->error_type,
+                'message' => $log->message, 
+             ], 404);
+
+
             // No records for the card yet, handle accordingly
-            return response()->json(['transaction'=> 'checking','source'=> 'USM-ADMIN','data' => $card, 'success' => true, 'error_type' => null, 'message' => '( checking ) No entry record found for the card']);
+            // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => null, 'message' => '( checking ) No entry record found for the card']);
        
         }
 
