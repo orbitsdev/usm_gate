@@ -19,7 +19,7 @@ class ScanController extends Controller
     
                 if (!empty($card)) {
                     $transaction = Transaction::create([
-                        'card_id' => $request->card_id,
+                        'card_id' => $card->id,
                     ]);
     
                     // Return a success response

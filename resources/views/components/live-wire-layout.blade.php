@@ -188,6 +188,13 @@
                 </a>
                 
                 </li>
+                <li>
+                  <a href="{{ route('transactions') }}" class="{{ request()->routeIs('transactions') ? 'bg-gray-50 text-indigo-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}">
+                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{ request()->routeIs('transactions') ? 'border-indigo-600' : '' }} text-[0.625rem] font-medium">H</span>
+                    <span class="truncate">Scanned Logs</span>
+                </a>
+                
+                </li>
 
 
                 {{-- <li>
