@@ -6,12 +6,12 @@ import Pusher from 'pusher-js';
 window.Pusher = Pusher;
  
 window.Echo = new Echo({
-    broadcaster: 'pusher',
+    broadcaster: import.meta.env.BROADCAST_DRIVER,
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     forceTLS: false,
     wsHost: window.location.hostname,
-    wsPort: 6001,
+    wsPort: import.meta.env.BROADCAST_PORT,
     disableStats: true,
 });
     
