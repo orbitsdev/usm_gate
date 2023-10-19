@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Card;
+use App\Events\Scanned;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,11 +17,13 @@ class ScanController extends Controller
         try {
             if (!empty($request->card_id)) {
                 $card = Card::where('id_number', $request->card_id)->first();
-    
+                Scanned::dispatch($card);
                 if (!empty($card)) {
                     $transaction = Transaction::create([
                         'card_id' => $card->id,
                     ]);
+
+
     
                     // Return a success response
                     return response()->json([

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\Scanned;
 use App\Models\Day;
 use App\Models\Log;
 use App\Models\Card;
@@ -16,7 +17,7 @@ class CheckCardApiController extends Controller
     public function checkCard(Request $request)
     {
         $card = Card::where('id_number', $request->id_number)->first();
-
+        Scanned::dispatch($card);
         if ($card) {
             $day = Day::latest()->first();
 

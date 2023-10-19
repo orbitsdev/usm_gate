@@ -14,7 +14,7 @@ class ErrorController extends Controller
     public function saveError(Request $request)
 {
     try {
-        // Start a database transaction
+       
         DB::beginTransaction();
 
         $log = Log::create([
@@ -27,7 +27,7 @@ class ErrorController extends Controller
 
         LogCreation::dispatch($log);
         
-        // Commit the transaction if everything is successful
+      
         DB::commit();
 
         
@@ -35,10 +35,7 @@ class ErrorController extends Controller
         return response()->json(['data' => $log, 'success' => true, 'message' => 'Error Created']);
 
     } catch (\Exception $e) {
-        // Log the exception for debugging purposes
-        // \Log::error('Exception: ' . $e->getMessage());
-
-        // Rollback the transaction in case of an exception
+      
         DB::rollBack();
 
         return response()->json([

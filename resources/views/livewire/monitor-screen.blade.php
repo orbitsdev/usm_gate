@@ -4,7 +4,13 @@
             class="rounded-full mx-auto mb-4 h-3/5 w-3/5 object-cover">
         <h2 class="text-2xl font-bold mb-2">Anna Marries</h2>
         <p class="text-gray-600">Student</p>
-        <p>
+        <p class="text-4xl mt-4">
+                @if(!empty($card->account))
+                    
+                {{$card->account}}
+
+                @endif
+        </p>
             {{
             $log
             }}</p>

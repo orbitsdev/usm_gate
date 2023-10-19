@@ -2,16 +2,18 @@
 
 namespace App\Providers;
 
-use App\Events\LogCreation;
-use App\Listeners\LogCreationWhenApiTrigger;
 use App\Models\Day;
 use App\Models\Card;
+use App\Events\Scanned;
 use App\Models\Account;
+use App\Events\LogCreation;
 use App\Observers\DayObserver;
 use App\Observers\CardObserver;
 use App\Observers\AccountObsever;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
+use App\Listeners\CardScanningDetection;
+use App\Listeners\LogCreationWhenApiTrigger;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -28,8 +30,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         LogCreation::class=> [
             LogCreationWhenApiTrigger::class,
+        ],
+        Scanned::class =>[
+            CardScanningDetection::class,
         ]
-        
+        ,
     ];
 
     /**

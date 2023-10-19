@@ -16,9 +16,9 @@ window.Echo = new Echo({
 });
     
     
-// });
+// // });
 
-window.Echo.channel('log')
-    .listen('LogCreation', e => {
-        console.log(e.log);
-    });
+// window.Echo.channel('log')
+//     .listen('LogCreation', e => {
+//         console.log(e.log);
+//     });

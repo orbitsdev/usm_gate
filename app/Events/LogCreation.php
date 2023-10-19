@@ -13,26 +13,50 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class LogCreation implements ShouldBroadcast
 {
-use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
 
-    public Log $log;
 
-    public function __construct(Log $log)
+
+    public function __construct(public Log $log)
     {
-        $this->log = $log;
+
 
     }
 
-    public function broadcastOn()
-    {
-        return new Channel('log');
 
-        
+    public function broadcastOn(): array
+    {
+        return [
+            new Channel('log'),
+        ];
     }
+
+    public function broadcastWith(): array
+{
+    return ['id' => $this->log->id];
+}
+    
+//     public function broadcastAs(): string
+// {
+//     return 'card.scanned';
+// }
+//     public function broadcastOn(): array
+//     {
+//         return [
+//             new Channel('log.'.$this->log->id),
+//         ];
+//     }
+    
+    // public function broadcastWith () {
+    //     return [
+    //         'id'       => $this->log->id,
+            
+    //     ];
+    // }
     
 
     // /**
