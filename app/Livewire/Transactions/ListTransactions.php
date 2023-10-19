@@ -41,9 +41,14 @@ class ListTransactions extends Component implements HasForms, HasTable
                 
                 })
                 ->label('Account'),
+              
                 
                 TextColumn::make('card_id')
                     ->sortable(),
+
+
+                    TextColumn::make('card.id_number')->searchable()
+                    ->label('ID number'),
                 TextColumn::make('created_at')
                     ->dateTime(),
               

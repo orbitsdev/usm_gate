@@ -11,11 +11,11 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Actions\DeleteAction;
 
 class ListLogs extends Component implements HasForms, HasTable
 {
@@ -27,12 +27,7 @@ class ListLogs extends Component implements HasForms, HasTable
         return $table
             ->query(Log::query())
             ->columns([
-                // TextColumn::make('card_id')
-                //       ->numeric()
-                //       ->sortable()
-                //       ->label('card_id')
-                //       ,
-              TextColumn::make('card.id_number')
+              TextColumn::make('card_id')
                     ->numeric()
                     ->sortable(),
               TextColumn::make('source')
