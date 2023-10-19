@@ -8,9 +8,12 @@ use Livewire\Component;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
@@ -44,12 +47,16 @@ class ListLogs extends Component implements HasForms, HasTable
                 //
             ])
             ->actions([
-                //
+                DeleteAction::make(),
             ])
             ->bulkActions([
+             
                 Tables\Actions\BulkActionGroup::make([
-                    //
-                ]),
+                    BulkAction::make('delete')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each->delete())
+                ])->label('Actions'),
+                
             ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\LogCreation;
 use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,8 +25,12 @@ class ErrorController extends Controller
             'message' => $request->message,
         ]);
 
+        LogCreation::dispatch($log);
+        
         // Commit the transaction if everything is successful
         DB::commit();
+
+        
 
         return response()->json(['data' => $log, 'success' => true, 'message' => 'Error Created']);
 

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\LogCreation;
+use App\Listeners\LogCreationWhenApiTrigger;
 use App\Models\Day;
 use App\Models\Card;
 use App\Models\Account;
@@ -24,6 +26,10 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        LogCreation::class=> [
+            LogCreationWhenApiTrigger::class,
+        ]
+        
     ];
 
     /**
