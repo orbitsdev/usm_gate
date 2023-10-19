@@ -90,7 +90,9 @@ class ListRecords extends Component implements HasForms, HasTable
                 Tables\Actions\BulkActionGroup::make([
                     //
                 ]),
-            ]);
+            ])
+            ->poll('3s')
+            ;
     }
 
     public function render(): View
