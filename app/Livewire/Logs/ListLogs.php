@@ -27,6 +27,9 @@ class ListLogs extends Component implements HasForms, HasTable
         return $table
             ->query(Log::query())
             ->columns([
+              TextColumn::make('card.id_number')
+                    ->numeric()
+                    ->sortable(),
               TextColumn::make('card_id')
                     ->numeric()
                     ->sortable(),
