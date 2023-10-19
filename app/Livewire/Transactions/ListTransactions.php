@@ -68,7 +68,7 @@ class ListTransactions extends Component implements HasForms, HasTable
                         ->requiresConfirmation()
                         ->action(fn (Collection $records) => $records->each->delete())
                 ])->label('Actions'),
-            ]);
+            ])->poll('2s');
     }
 
     public function render(): View
