@@ -15,7 +15,7 @@ class CheckCardApiController extends Controller
 {
     public function checkCard(Request $request)
     {
-        $card = Card::where('status', 'Active')->where('id_number', $request->id_number)->first();
+        $card = Card::where('id_number', $request->id_number)->first();
 
         if ($card) {
             $day = Day::latest()->first();
