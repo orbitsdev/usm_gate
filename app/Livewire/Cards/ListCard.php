@@ -182,7 +182,7 @@ class ListCard extends Component implements HasForms, HasTable
                             'Active' => 'Active',
                             'Inactive' => 'Inactive',
                             'Block' => 'Block',
-                            'Expired' => 'Expored',
+                            'Expired' => 'Expired',
                         ])
                         ->default('Active')
     
