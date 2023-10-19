@@ -91,7 +91,8 @@ class ListRecords extends Component implements HasForms, HasTable
                     //
                 ]),
             ])
-            ->poll('3s')
+            ->poll('1s');
+
             ;
     }
 
