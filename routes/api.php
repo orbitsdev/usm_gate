@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\Scanned;
 use App\Http\Controllers\Api\CardSaveRecontroller;
 use App\Http\Controllers\Api\CheckCardApiController;
 use App\Http\Controllers\Api\ErrorController;
@@ -33,6 +34,13 @@ Route::post('/check-card', [CheckCardApiController::class, 'checkCard'])->name('
 Route::post('/save-error', [ErrorController::class, 'saveError'])->name('save-error');
 Route::post('/save-scan', [ScanController::class, 'saveScan'])->name('save-scan');
 
+Route::post('/test', function(Request $request){
+
+    $card = Card::first();
+    Scanned::dispatch($card);
+    
+    return response()->json(['data'=>$card,'success'=> true]); 
+});
 
 
 
