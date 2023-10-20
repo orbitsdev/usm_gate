@@ -41,13 +41,13 @@ return [
                 // 'port' => env('PUSHER_PORT', 443),
                 // 'scheme' => env('PUSHER_SCHEME', 'https'),
                 // 'encrypted' => true,
-                // 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
-
+                
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'encrypted' => false,
                 'host' => env('PUSHER_HOST'),
                 'port' => env('BROADCAST_PORT'),
                 'scheme' => 'http',
+                // 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
 
             ],
             'client_options' => [
