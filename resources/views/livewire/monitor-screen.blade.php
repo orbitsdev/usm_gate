@@ -12,9 +12,11 @@
                         @if ($transaction->card->account->image)
                             <img src="{{ Storage::disk('public')->url($transaction->card->account->image) }}"
                                 alt="Attendee Image" class="rounded-lg mx-auto mb-6 h-[60dvh] w-[60dvh] object-cover border-4 border-white">
-                        @else
-                            <img src="{{ asset('images/sample.jpg') }}" alt="Attendee Image"
+                                has image
+                                @else
+                                <img src="{{ asset('images/sample.jpg') }}" alt="Attendee Image"
                                 class="rounded-full mx-auto mb-6 h-[55dvh] w-[55dvh] object-cover">
+                                no image
                         @endif
                         <h2 class="text-6xl font-bold mb-2 mt-8 text-white">
                             {{ $transaction->card->account->last_name ?? '' }},
