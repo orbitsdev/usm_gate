@@ -165,7 +165,7 @@ class ListCard extends Component implements HasForms, HasTable
                             
     
                             ->label('Owner Name')
-                            ->disabled(true)
+                            // ->disabled(true)
     
     
                             ,
