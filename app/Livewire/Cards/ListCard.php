@@ -180,9 +180,9 @@ class ListCard extends Component implements HasForms, HasTable
                         ->label('Card Status')
                         ->options([
                             'Active' => 'Active',
-                            'Inactive' => 'Inactive',
                             'Block' => 'Block',
                             'Expired' => 'Expired',
+                            'Inactive' => 'Inactive',
                         ])
                         ->default('Active')
     
