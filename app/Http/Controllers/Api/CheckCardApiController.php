@@ -45,7 +45,7 @@ class CheckCardApiController extends Controller
                 'data'=> $card, 
                 'success' => false , 
                 'error_type'=> $log->error_type,
-                'message' => $log->message,  ], 404);
+                'message' => $log->message,  ]);
         }
     }
 
@@ -97,7 +97,7 @@ class CheckCardApiController extends Controller
                 'success' => false , 
                 'error_type'=> $log->error_type,
                 'message' => $log->message, 
-             ], 404);
+             ]);
 
         }
     }
@@ -157,7 +157,7 @@ class CheckCardApiController extends Controller
                 'success' => false , 
                 'error_type'=> $log->error_type,
                 'message' => $log->message, 
-             ], 404);
+             ]);
 
 
 
@@ -202,11 +202,11 @@ class CheckCardApiController extends Controller
                 'success' => false , 
                 'error_type'=> $log->error_type,
                 'message' => $log->message, 
-             ], 404);
+             ]);
 
 
-            // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'No Scanned Parameter When Sending API', 'message' => '( checking ) Cannot Procceed  Cant Identify Whic Side of the door scanned missing parameter' ], 404);
-            // return response()->json(['error' => 'scanned type no value', 'success' => false'transaction'=> $request->request_type,'source'=> 'USM-ADMIN'], 404);
+            // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => false , 'error_type'=> 'No Scanned Parameter When Sending API', 'message' => '( checking ) Cannot Procceed  Cant Identify Whic Side of the door scanned missing parameter' ]);
+            // return response()->json(['error' => 'scanned type no value', 'success' => false'transaction'=> $request->request_type,'source'=> 'USM-ADMIN']);
         }
     }
 
@@ -253,7 +253,7 @@ class CheckCardApiController extends Controller
                         'success' => false , 
                         'error_type'=> $log->error_type,
                         'message' => $log->message, 
-                     ], 404);
+                     ]);
                     
                  
                     
@@ -275,10 +275,10 @@ class CheckCardApiController extends Controller
                         'success' => false , 
                         'error_type'=> $log->error_type,
                         'message' => $log->message, 
-                     ], 404);
+                     ]);
                     
 
-                    // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data' => $card, 'success' => false, 'error_type' => 'Invalid Exit', 'message' => '( checking ) Cannot Procceed Invalid exit without entry',], 404);
+                    // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data' => $card, 'success' => false, 'error_type' => 'Invalid Exit', 'message' => '( checking ) Cannot Procceed Invalid exit without entry',]);
                 }
                 
                 else{
@@ -358,10 +358,10 @@ class CheckCardApiController extends Controller
                     'success' => false , 
                     'error_type'=> $log->error_type,
                     'message' => $log->message, 
-                 ], 404);
+                 ]);
 
                 // Card has already exited on the same day
-                // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => 'Multiple Exit ', 'message' => '( checking ) Cannot Exit Over and Over Again. Enter first.', ], 404);
+                // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => 'Multiple Exit ', 'message' => '( checking ) Cannot Exit Over and Over Again. Enter first.', ]);
             }
         } else {
 
@@ -381,7 +381,7 @@ class CheckCardApiController extends Controller
                 'success' => false , 
                 'error_type'=> $log->error_type,
                 'message' => $log->message, 
-             ], 404);
+             ]);
 
 
             // No records for the card yet, handle accordingly
