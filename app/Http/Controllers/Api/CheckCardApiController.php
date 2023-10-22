@@ -250,7 +250,7 @@ class CheckCardApiController extends Controller
                         'source'=> $log->source,
                         'transaction'=> $log->transaction,
                         'data'=> $card, 
-                        'success' => false , 
+                        'success' => true , 
                         'error_type'=> $log->error_type,
                         'message' => $log->message, 
                      ]);
