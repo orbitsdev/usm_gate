@@ -11,13 +11,15 @@ use App\Models\CardSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\Transaction;
 
 class CheckCardApiController extends Controller
 {
     public function checkCard(Request $request)
     {
         $card = Card::where('id_number', $request->id_number)->first();
-        Scanned::dispatch($card);
+        $this->createTransaction($card);
+        // Scanned::dispatch($card);
         if ($card) {
             $day = Day::latest()->first();
 
@@ -45,6 +47,12 @@ class CheckCardApiController extends Controller
                 'error_type'=> $log->error_type,
                 'message' => $log->message,  ], 404);
         }
+    }
+
+    public function createTransaction(Card $card){
+            $new_transaction = Transaction::create([
+                'card_id'=> $card->id
+            ]);
     }
 
     public function checkDay($card, $day,  $request)

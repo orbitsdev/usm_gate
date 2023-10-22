@@ -27,28 +27,50 @@ class ListTransactions extends Component implements HasForms, HasTable
         return $table
             ->query(Transaction::query())
             ->columns([
-                TextColumn::make('card')->searchable()
-                ->formatStateUsing(function($record){
-                    $firstName = $record->card && $record->card->account && $record->card->account->first_name
-                    ? $record->card->account->first_name
-                    : 'Unknown';
+                // TextColumn::make('card')->searchable()
+                // ->formatStateUsing(function($record){
+                //     $firstName = $record->card && $record->card->account && $record->card->account->first_name
+                //     ? $record->card->account->first_name
+                //     : 'Unknown';
                 
-                $lastName = $record->card && $record->card->account && $record->card->account->last_name
-                    ? $record->card->account->last_name
-                    : 'Unknown';
+                // $lastName = $record->card && $record->card->account && $record->card->account->last_name
+                //     ? $record->card->account->last_name
+                //     : 'Unknown';
                 
-                return $firstName . ' - ' . $lastName;
+                // return $firstName . ' - ' . $lastName;
                 
-                })
-                ->label('Account'),
+                // })
+                // ->label('Account'),
               
                 
-                TextColumn::make('card_id')
-                    ->sortable(),
-
-
-                    TextColumn::make('card.id_number')->searchable()
+                TextColumn::make('card.account')->label('Account')->formatStateUsing(function (Transaction $record) {
+                    $first_name =  $record->card->account->first_name ?? '';
+                    $last_name =  $record->card->account->last_name.',' ?? '';
+                
+                    return ucfirst($last_name) . '  ' . ucfirst($first_name);
+                })
+                ->searchable(query: function (Builder $query, string $search): Builder {
+                    return $query->whereHas('card.account', function ($query) use ($search) {
+                        $query->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%");
+                    });
+                }),
+                
+                
+                
+                    
+                TextColumn::make('card.id_number')->searchable()
                     ->label('ID number'),
+                
+                TextColumn::make('door_name')->searchable()->label('Door Name'),
+
+                TextColumn::make('source')->searchable()->label('Source'),
+                TextColumn::make('scanned_type')
+                    ->sortable()
+                    ->label('Scanned In')
+                    ,
+
+
                 TextColumn::make('created_at')
                     ->dateTime(),
               
@@ -60,7 +82,7 @@ class ListTransactions extends Component implements HasForms, HasTable
                 //
             ])
             ->actions([
-                DeleteAction::make(),
+                DeleteAction::make()->button()->outlined(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

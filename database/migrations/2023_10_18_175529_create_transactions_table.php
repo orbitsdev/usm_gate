@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('card_id')->nullable();
-
+            //future use if mobile app implementd
+            $table->string('source')->nullable();
+            $table->string('door_name')->nullable();
+            $table->string('scanned_type')->nullable();
             $table->timestamps();
         });
     }
