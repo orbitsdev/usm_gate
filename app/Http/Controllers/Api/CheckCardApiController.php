@@ -333,6 +333,7 @@ class CheckCardApiController extends Controller
         $card_latest_record = $card->records()->latest()->first();
     
         if (!empty($card_latest_record)) {
+
             if ($card_latest_record->exit == false) {
                 if($request->request_type=='saving'){
                     $card_latest_record->exit = true;
@@ -341,7 +342,7 @@ class CheckCardApiController extends Controller
                 return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => true, 'error_type' => null, 'message' => '( checking ) Ready To Exit Because It nit exit yes']);
             } else {
 
-
+                
                 $log = Log::create([
                     'card_id' => $card->id ?? null,
                     'source'=> 'usm-admin',
@@ -355,7 +356,7 @@ class CheckCardApiController extends Controller
                     'source'=> $log->source,
                     'transaction'=> $log->transaction,
                     'data'=> $card, 
-                    'success' => false , 
+                    'success' => true , 
                     'error_type'=> $log->error_type,
                     'message' => $log->message, 
                  ]);
