@@ -42,7 +42,7 @@ class ErrorController extends Controller
             'success' => false,
             'error_type' => $request->error_type ?? null, // or $log->error_type
             'message' => $e->getMessage(),
-        ], 500); // Use 500 for server error
+        ]); // Use 500 for server error
     }
 }
 

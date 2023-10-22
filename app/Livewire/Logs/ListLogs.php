@@ -57,7 +57,9 @@ class ListLogs extends Component implements HasForms, HasTable
                         ->action(fn (Collection $records) => $records->each->delete())
                 ])->label('Actions'),
                 
-            ]);
+            ])
+            ->poll('2s')
+            ;
     }
 
     public function render(): View
