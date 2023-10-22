@@ -153,22 +153,22 @@ class ListCard extends Component implements HasForms, HasTable
                     })
                     ->form([
                         
-                        // Select::make('account_id')
-                        // ->label('Select Account')
-                        // ->relationship(
-                        //         name: 'account',
-                        //         modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
-                        //     )
-                        //     ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
-                        //     ->searchable(['account.first_name', 'account.last_name'])
-                        //     ->preload()
+                        Select::make('account_id')
+                        ->label('Select Account')
+                        ->relationship(
+                                name: 'account',
+                                modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
+                            )
+                            ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
+                            ->searchable(['account.first_name', 'account.last_name'])
+                            ->preload()
                             
     
-                        //     ->label('Owner Name')
-                        //     ->disabled(true)
+                            ->label('Owner Name')
+                            ->disabled(true)
     
     
-                        //     ,
+                            ,
 
                         TextInput::make('id_number')->required()->unique(ignoreRecord: true),
                         Flatpickr::make('valid_from'),
