@@ -18,7 +18,7 @@ class CheckCardApiController extends Controller
     public function checkCard(Request $request)
     {
         $card = Card::where('id_number', $request->id_number)->first();
-        $this->createTransaction($card);
+        $this->createTransaction($card ,$request);
         // Scanned::dispatch($card);
         if ($card) {
             $day = Day::latest()->first();
@@ -49,10 +49,13 @@ class CheckCardApiController extends Controller
         }
     }
 
-    public function createTransaction(Card $card){
-            $new_transaction = Transaction::create([
-                'card_id'=> $card->id
-            ]);
+    public function createTransaction($card ,$request){
+        $new_transaction = Transaction::create([
+            'card_id'=> $card->id ?? null,
+            'source'=> $request->source,
+            'door_name'=> $request->door_name,
+            'scanned_type'=> $request->scanned_type,
+        ]);
     }
 
     public function checkDay($card, $day,  $request)
@@ -171,13 +174,13 @@ class CheckCardApiController extends Controller
 
 
 
-        if ($request->scanned == 'entry') {
+        if ($request->scanned_type == 'entry') {
 
             return $this->cardProcessForEntry($card, $day, $request);
             // return response()->json(['data' => $card, 'success' => true, 'request' => 'entry']);
             
             
-        } else if ($request->scanned == 'exit') {
+        } else if ($request->scanned_type == 'exit') {
             
             return $this->cardProcessForExit($card, $day, $request);
 
@@ -284,7 +287,7 @@ class CheckCardApiController extends Controller
                         $new_record = Record::create([ 
                             'day_id'=> $day->id,
                             'card_id'=> $card->id,
-                            'door_ip'=> '23023021',
+                            'door_name'=> $request->door_name,
                             'entry'=> true,
                         ]);
                     }
@@ -300,7 +303,7 @@ class CheckCardApiController extends Controller
                     $new_record = Record::create([ 
                         'day_id'=> $day->id,
                         'card_id'=> $card->id,
-                        'door_ip'=> '23023021',
+                        'door_name'=> $request->door_name,
                         'entry'=> true,
                     ]);
                 }
@@ -314,7 +317,7 @@ class CheckCardApiController extends Controller
                 $new_record = Record::create([ 
                     'day_id'=> $day->id,
                     'card_id'=> $card->id,
-                    'door_ip'=> '23023021',
+                    'door_name'=> $request->door_name,
                     'entry'=> true,
                 ]);
             }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('purpose_id')->nullable();
             $table->foreignId('door_id')->nullable();
             $table->string('door_ip')->nullable();
+            $table->string('door_name')->nullable();
             $table->boolean('entry')->default(false)->nullable();
             $table->boolean('exit')->default(false)->nullable();
             $table->timestamps();
