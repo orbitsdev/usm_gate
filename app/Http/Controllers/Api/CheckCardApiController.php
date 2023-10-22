@@ -82,7 +82,7 @@ class CheckCardApiController extends Controller
 
 
             $log = Log::create([
-                'card_id' => $card->id,
+                'card_id' => $card->id ?? null,
                 'source'=> 'usm-admin',
                 'transaction'=> $request->request_type,
                 'error_type'=> 'card-not-active',
@@ -142,7 +142,7 @@ class CheckCardApiController extends Controller
 
 
             $log = Log::create([
-                'card_id' => $card->id,
+                'card_id' => $card->id ?? null,
                 'source'=> 'usm-admin',
                 'transaction'=> $request->request_type,
                 'error_type'=> 'card-expired',
@@ -187,7 +187,7 @@ class CheckCardApiController extends Controller
         } else {
 
             $log = Log::create([
-                'card_id' => $card->id,
+                'card_id' => $card->id ?? null,
                 'source'=> 'usm-admin',
                 'transaction'=> $request->request_type,
                 'error_type'=> 'api-missing-parameter',
@@ -238,7 +238,7 @@ class CheckCardApiController extends Controller
                 }else if($card_latest_record->entry == true  && $card_latest_record->exit == false){
 
                     $log = Log::create([
-                        'card_id' => $card->id,
+                        'card_id' => $card->id ?? null,
                         'source'=> 'usm-admin',
                         'transaction'=> $request->request_type,
                         'error_type'=> 'multiple-enter-attempt',
@@ -260,7 +260,7 @@ class CheckCardApiController extends Controller
                 }else if($card_latest_record->entry == false  && $card_latest_record->exit == true){
 
                     $log = Log::create([
-                        'card_id' => $card->id,
+                        'card_id' => $card->id ?? null,
                         'source'=> 'usm-admin',
                         'transaction'=> $request->request_type,
                         'error_type'=> 'invalid-exit',
@@ -343,7 +343,7 @@ class CheckCardApiController extends Controller
 
 
                 $log = Log::create([
-                    'card_id' => $card->id,
+                    'card_id' => $card->id ?? null,
                     'source'=> 'usm-admin',
                     'transaction'=> $request->request_type,
                     'error_type'=> 'multiple-exit-attempt',
