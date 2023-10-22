@@ -242,7 +242,7 @@ class CheckCardApiController extends Controller
                         'source'=> 'usm-admin',
                         'transaction'=> $request->request_type,
                         'error_type'=> 'multiple-enter-attempt',
-                        'message'=> '( checking ) You can proceed but you must exit first Card cannot enter again until it has exited',
+                        'message'=> '( checking ) You can proceed but you must exit f Card cannot enter again until it has exited',
                     ]);
         
                     return response()->json([
@@ -250,7 +250,7 @@ class CheckCardApiController extends Controller
                         'source'=> $log->source,
                         'transaction'=> $log->transaction,
                         'data'=> $card, 
-                        'success' => true , 
+                        'success' => false , 
                         'error_type'=> $log->error_type,
                         'message' => $log->message, 
                      ]);
