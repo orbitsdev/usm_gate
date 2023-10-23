@@ -389,14 +389,14 @@ class CheckCardApiController extends Controller
             }
         } else {
 
-
             $log = Log::create([
                 'source'=> 'usm-admin',
                 'transaction'=> $request->request_type,
                 'error_type'=> 'no-entry-record',
                 'message'=> '( checking ) No entry record found for the card',
             ]);
-
+            
+            $this->updateTransaction('no-entry-record', false, $transaction, 'The card doesn\'t have an entry record.');
             return response()->json([
                 
                 'source'=> $log->source,
