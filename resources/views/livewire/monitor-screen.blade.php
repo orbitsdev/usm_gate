@@ -4,7 +4,9 @@
         <div class=" rounded max-w-7xl w-full h-full text-center ">
             @if ($transaction)
                 @if ($transaction->success)
-                    <div class="flex flex-col items-center">
+                    @if($transaction->card->account)
+                        <div class="flex flex-col items-center">
+                        
                         @if ($transaction->card->account->image)
                             <x-account-image :url="Storage::disk('public')->url($transaction->card->account->image)" />
                         @else
@@ -84,6 +86,13 @@
                             </h2>
                         </div> --}}
                     </div>
+
+                    @else
+                    <x-warning-image>
+                      
+                            No acccount was assigned to card
+                    </x-warning-image>
+                    @endif
                 @else
                     <x-warning-image>
                         @if ($transaction->error_type == 'card-api-missing-parameter-in-java')
