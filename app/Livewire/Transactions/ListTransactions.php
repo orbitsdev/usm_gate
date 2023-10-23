@@ -43,7 +43,15 @@ class ListTransactions extends Component implements HasForms, HasTable
                 // })
                 // ->label('Account'),
               
-                
+                IconColumn::make('success')
+                ->sortable()
+                ->boolean()
+                ->label('Success')
+                ,
+                TextColumn::make('message')
+                ->wrap()
+                ,
+            
                 TextColumn::make('card.account')->label('Account')->formatStateUsing(function (Transaction $record) {
                     $first_name =  $record->card->account->first_name ?? '';
                     $last_name =  $record->card->account->last_name.',' ?? '';
@@ -62,11 +70,8 @@ class ListTransactions extends Component implements HasForms, HasTable
                     
                 TextColumn::make('card.id_number')->searchable()
                     ->label('ID number'),
-                
-                TextColumn::make('door_name')->searchable()->label('Door Name'),
 
-                TextColumn::make('source')->searchable()->label('Source'),
-                TextColumn::make('scanned_type')
+                    TextColumn::make('scanned_type')
                     ->sortable()
                     ->label('Scanned In')
                     ,
@@ -74,14 +79,12 @@ class ListTransactions extends Component implements HasForms, HasTable
 
                     ->label('Error')
                     ,
-                IconColumn::make('success')
-                    ->sortable()
-                    ->boolean()
-                    ->label('Success')
-                    ,
-                    TextColumn::make('message')
-                    ->wrap()
-                    ,
+              
+                TextColumn::make('door_name')->searchable()->label('Door Name'),
+
+                TextColumn::make('source')->searchable()->label('Source'),
+                
+              
 
 
                 TextColumn::make('created_at')
@@ -103,7 +106,16 @@ class ListTransactions extends Component implements HasForms, HasTable
                         ->requiresConfirmation()
                         ->action(fn (Collection $records) => $records->each->delete())
                 ])->label('Actions'),
-            ])->poll('2s');
+            ])
+            ->modifyQueryUsing(fn (Builder $query) => 
+            // $query->whereHas('patient.animal.user', function($query){
+            //     $query->where('id', auth()->user()->id);
+            // })
+
+            $query->latest(),
+            
+            )
+            ->poll('2s');
     }
 
     public function render(): View

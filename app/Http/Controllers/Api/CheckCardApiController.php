@@ -77,7 +77,7 @@ class CheckCardApiController extends Controller
         } else {
           
 
-            $this->updateTransaction('card-not-active', false, $transaction, 'Card Not Active');
+            $this->updateTransaction('card-not-active', false, $transaction, 'Card is '.$card->status);
             
             $log = Log::create([ 'card_id' => $card->id ?? null,
                 'source'=> 'usm-admin',
@@ -373,7 +373,7 @@ class CheckCardApiController extends Controller
                     'door_exit' => $request->door_name,
                 ]);
                 $card_latest_record->touch();
-                $this->updateTransaction(null, true, $transaction, 'Multiple exit attempts. Please exit now');
+                $this->updateTransaction('multiple-exit-attempt', true, $transaction, 'Multiple exit attempts. Please exit now. If you are trying to enter, please proceed to the entry');
                 return response()->json([
                     
                     'source'=> $log->source,
