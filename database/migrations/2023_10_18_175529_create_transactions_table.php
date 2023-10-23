@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('source')->nullable();
             $table->string('door_name')->nullable();
             $table->string('scanned_type')->nullable();
+            $table->string('error_type')->nullable();
+            $table->boolean('success')->nullable();
             $table->timestamps();
         });
     }

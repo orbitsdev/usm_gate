@@ -31,46 +31,45 @@ class ListDays extends Component implements HasForms, HasTable
             ->columns([
 
 
-               TextColumn::make('created_at')
-               ->label('Date')
+                TextColumn::make('created_at')
+                    ->label('Date')
 
-                ->date('F j, Y - l')
-                ->searchable(),
+                    ->date('F j, Y - l'),
+                  
+                TextColumn::make('records_count')->counts('records')->badge()->label('Records')
 
-                TextColumn::make('records_count')->counts('records')->badge()->label('Record')
-                    
-               
+
             ])
             ->filters([
-                 
-Filter::make('created_at')
-->form([
-    DatePicker::make('created_from'),
-    DatePicker::make('created_until'),
-])
-->query(function (Builder $query, array $data): Builder {
-    return $query
-        ->when(
-            $data['created_from'],
-            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-        )
-        ->when(
-            $data['created_until'],
-            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
-        );
-})
+
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from'),
+                        DatePicker::make('created_until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    })
             ])
             ->actions([
                 Action::make('View Records')->icon('heroicon-o-document-text')->button()
-                ->url(fn ($record): string => route('day-view-record', ['day' => $record->id]))
+                    ->url(fn ($record): string => route('day-view-record', ['day' => $record->id]))
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                        BulkAction::make('delete')
-                            ->requiresConfirmation()
-                            ->action(fn (Collection $records) => $records->each->delete())
-                    ])->label('Actions'),
-            
+                    BulkAction::make('delete')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each->delete())
+                ])->label('Actions'),
+
             ]);
     }
 

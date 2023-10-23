@@ -6,7 +6,12 @@ use Filament\Tables;
 use App\Models\Account;
 use Livewire\Component;
 use Filament\Tables\Table;
+use App\Exports\AccountExport;
+use App\Imports\AccountImport;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
@@ -48,173 +53,225 @@ class ListAccounts extends Component implements HasForms, HasTable
         return $table
             ->query(Account::query()->latest())
             ->columns(
-                [   
-                   TextColumn::make('first_name')
+                [
+                  
+                    TextColumn::make('first_name')
                         ->searchable(),
-                   TextColumn::make('last_name')
+                    TextColumn::make('last_name')
                         ->searchable(),
-                   TextColumn::make('middle_name')
+                    TextColumn::make('middle_name')
                         ->searchable(),
-                   TextColumn::make('sex')
+                    TextColumn::make('sex')
                         ->searchable(),
-                   TextColumn::make('birth_date')
-                        ->date()
-                        ->sortable(),
-                   TextColumn::make('contact_number')
-                   ->formatStateUsing(fn($state) => $state ? '0'.$state : $state)
+                    TextColumn::make('birth_date')
+                        ->date(),
+
+
+                    TextColumn::make('contact_number')
+                        ->formatStateUsing(fn ($state) => $state ? '0' . $state : $state)
                         ->searchable()
                         ->copyable()
                         ->copyMessage('Copied')
-                        ->copyMessageDuration(1500)
-                        ,
-                        ImageColumn::make('image')
+                        ->copyMessageDuration(1500),
+                        TextColumn::make('address')
+                       ->wrap(),
+                       ImageColumn::make('image')
                         ->width(60)->height(60)
                         ->url(fn (Account $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
-                        
-                        ->openUrlInNewTab()
 
-                        ,
+                        ->openUrlInNewTab(),
+                    TextColumn::make('account_type')
+                        ->searchable()
+                        ->badge()
+                        ->color(fn (string $state): string => match ($state) {
+                            'Student' => 'success',
+                            'Teacher' => 'primary',
+                            default => 'gray',
+                        })
+                        ->label('Account Type'),
+
+                        TextColumn::make('id')->label('ID'),
+                    
 
                 ],
 
             )
-            ->headerActions([
-                CreateAction::make('add')->form([
-                    Section::make()
-                    ->description('Personal Information')
-                    ->icon('heroicon-m-identification')
-    ->columns([
-        'sm' => 3,
-        'xl' => 6,
-        '2xl' => 9,
-    ])
-    ->schema([
-        Select::make('account_type')
-        ->options([
-            'Student' => 'Student',
-            'Teacher' => 'Teacher',
-        ])
-        ->required()
-        ->native(false)
-        ->columnSpanFull()
-        ->label('Account Type')
-        
-        ,
-        TextInput::make('first_name')->required()->columnSpan(3),
-        TextInput::make('middle_name')->required()->columnSpan(3),
-        TextInput::make('last_name')->required()->columnSpan(3),
-        Select::make('sex')
-        ->options([
-            'Male' => 'Male',
-            'Female' => 'Female',
-        ]) ->columnSpan(3),
-      
-        DatePicker::make('birth_date')->required()->label('Birth date')
-        ->timezone('Asia/Manila')
-        ->closeOnDateSelection()->required()
-        ->columnSpan(3)
-        ->native(false)
-        ,
-        TextInput::make('contact_number')
-        ->columnSpan(3)
-        ->maxLength(10)
-        ->prefix('+63')
+            ->headerActions([   
 
-        ,
-        FileUpload::make('image')
-        ->disk('public')
-        ->directory('accounts')
-        ->image()
-        ->imageEditor()
-        ->imageEditorMode(2)
-        ->required()
-        ->columnSpanFull()
-        ])->columnSpanFull(),
+                Action::make('Import ')->button()->action(function (array $data): void {
 
+                    $file  = Storage::disk('public')->path($data['file']);
                    
+                    Excel::import(new AccountImport, $file);
+    
+                    if (Storage::disk('public')->exists($data['file'])) {
+    
+                        Storage::disk('public')->delete($data['file']);
+                    }
+                })->icon('heroicon-o-arrow-up-tray')->form([
+                    FileUpload::make('file')->acceptedFileTypes(['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/csv', 'text/csv', 'text/plain'])->disk('public')->directory('imports')
+                    ->label('Excel File')
+                ])
+                ->outlined()
+                ->button()
+                ->label('Import')
+                ->modalHeading("Import to Create or Update Accounts. Format Must Follow. You Can Click 'Download' to See the Reference.")
+
+            
+                ,
+
+                Action::make('Export')->button()->action(function(array $data) {
+              
+                
+                    // return Excel::download(new UserExport, 'invoices.xlsx');
+                    $filename = now()->format('Y-m-d');
+                    return Excel::download(new AccountExport, $filename.'-ACCOUNTS.xlsx');
+    
+                })
+                ->outlined()
+                ->button()
+                ->icon('heroicon-o-arrow-down-tray')
+                ->requiresConfirmation()->modalHeading('Export Accounts')
+                ->modalHeading('Download Excel as Report or Reference')
+                ->button('Yes')
+                ->label('Download')
+                ,
+                
+                CreateAction::make('add')
+                ->icon('heroicon-o-sparkles')
+                ->label('New Account')
+                ->form([
+                    Section::make()
+                        ->description('Personal Information')
+                        ->icon('heroicon-m-user')
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 9,
+                        ])
+                        ->schema([
+                            Select::make('account_type')
+                                ->options([
+                                    'Student' => 'Student',
+                                    'Teacher' => 'Teacher',
+                                ])
+                                ->required()
+                                ->native(false)
+                                ->columnSpanFull()
+                                ->label('Account Type'),
+                            TextInput::make('first_name')->required()->columnSpan(3),
+                            TextInput::make('middle_name')->required()->columnSpan(3),
+                            TextInput::make('last_name')->required()->columnSpan(3),
+                            Select::make('sex')
+                                ->options([
+                                    'Male' => 'Male',
+                                    'Female' => 'Female',
+                                ])->columnSpan(3),
+
+                            DatePicker::make('birth_date')->required()->label('Birth date')
+                                ->timezone('Asia/Manila')
+                                ->closeOnDateSelection()->required()
+                                ->columnSpan(3)
+                                ->native(false),
+                            TextInput::make('contact_number')
+                                ->columnSpan(3)
+                                ->maxLength(10)
+                                ->prefix('+63'),
+                            FileUpload::make('image')
+                                ->disk('public')
+                                ->directory('accounts')
+                                ->image()
+                                ->imageEditor()
+                                ->imageEditorMode(2)
+                                ->required()
+                                ->columnSpanFull()
+                        ])->columnSpanFull(),
+
+
 
 
                 ])
-                ->modalWidth('6xl')
-                ->createAnother(false)
-                
+                    ->modalWidth('6xl')
+                    ->createAnother(false)
+
 
 
             ])
-            
+
 
             ->filters([
+                SelectFilter::make('account_type')
+                    ->options([
+
+                        'Student' => 'Student',
+                        'Teacher' => 'Teacher',
+                    ]),
                 SelectFilter::make('sex')
                     ->options([
 
                         'Male' => 'Male',
                         'Female' => 'Female',
-                    ])
+                    ]),
             ])
             ->actions(
                 [
                     ActionGroup::make([
                         EditAction::make()
-                        ->mutateRecordDataUsing(function (Model $record, array $data): array {
-                            // $data['account_id'] = auth()->id();
-                     
-                            return $data;
-                        })
-                        ->form([
-                            Section::make()
-                    ->description('Personal Information')
-                    ->icon('heroicon-m-identification')
-    ->columns([
-        'sm' => 3,
-        'xl' => 6,
-        '2xl' => 9,
-    ])
-    ->schema([
-        Select::make('account_type')
-        ->options([
-            'Student' => 'Student',
-            'Teacher' => 'Teacher',
-        ])
-        ->required()
-        ->native(false)
-        ->columnSpanFull()
-        ->label('Account Type')
-        
-        ,
-        TextInput::make('first_name')->required()->columnSpan(3),
-        TextInput::make('middle_name')->required()->columnSpan(3),
-        TextInput::make('last_name')->required()->columnSpan(3),
-        Select::make('sex')
-        ->options([
-            'Male' => 'Male',
-            'Female' => 'Female',
-        ]) ->columnSpan(3),
-      
-        DatePicker::make('birth_date')->required()->label('Birth date')
-        ->timezone('Asia/Manila')
-        ->closeOnDateSelection()->required()
-        ->columnSpan(3)
-        ->native(false)
-        ,
-        TextInput::make('contact_number')
-        ->columnSpan(3)
-        ->maxLength(10)
-        ->prefix('+63')
+                            ->mutateRecordDataUsing(function (Model $record, array $data): array {
+                                // $data['account_id'] = auth()->id();
 
-        ,
-        FileUpload::make('image')
-        ->disk('public')
-        ->directory('accounts')
-        ->image()
-        ->imageEditor()
-        ->imageEditorMode(2)
-        ->required()
-        ->columnSpanFull()
-        ])->columnSpanFull(),
+                                return $data;
+                            })
+                            ->form([
+                                Section::make()
+                                    ->description('Personal Information')
+                                    ->icon('heroicon-m-user')
+                                    ->columns([
+                                        'sm' => 3,
+                                        'xl' => 6,
+                                        '2xl' => 9,
+                                    ])
+                                    ->schema([
+                                        Select::make('account_type')
+                                            ->options([
+                                                'Student' => 'Student',
+                                                'Teacher' => 'Teacher',
+                                            ])
+                                            ->required()
+                                            ->native(false)
+                                            ->columnSpanFull()
+                                            ->label('Account Type'),
+                                        TextInput::make('first_name')->required()->columnSpan(3),
+                                        TextInput::make('middle_name')->required()->columnSpan(3),
+                                        TextInput::make('last_name')->required()->columnSpan(3),
+                                        Select::make('sex')
+                                            ->options([
+                                                'Male' => 'Male',
+                                                'Female' => 'Female',
+                                            ])->columnSpan(3),
 
-                   
+                                        DatePicker::make('birth_date')->required()->label('Birth date')
+                                            ->timezone('Asia/Manila')
+                                            ->closeOnDateSelection()->required()
+                                            ->columnSpan(3)
+                                            ->native(false),
+                                        TextInput::make('contact_number')
+                                            ->columnSpan(3)
+                                            ->maxLength(10)
+                                            ->prefix('+63'),
+                                        FileUpload::make('image')
+                                            ->disk('public')
+                                            ->directory('accounts')
+                                            ->image()
+                                            ->imageEditor()
+                                            ->imageEditorMode(2)
+                                            ->required()
+                                            ->columnSpanFull()
+                                    ])->columnSpanFull(),
 
-                        ]),
+
+
+                            ])->modalWidth('6xl'),
                         DeleteAction::make(),
                     ]),
                 ],
@@ -226,6 +283,15 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->requiresConfirmation()
                         ->action(fn (Collection $records) => $records->each->delete())
                 ])->label('Actions'),
+            ])
+            ->defaultGroup('account_type')
+            ->groups([
+                Group::make('account_type')
+                    ->titlePrefixedWithLabel(false)
+                    ->getTitleFromRecordUsing(fn (Account $record): string => $record->account_type ?  ucfirst($record->account_type) : '')
+                    ->label('Account'),
+
+
             ]);
     }
 
