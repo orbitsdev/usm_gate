@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Models\Day;
+use App\Models\Log;
 use App\Models\Transaction;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -19,6 +20,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
 
             Transaction::truncate();
+            // Log::truncate();
 
 
             // $dayRecord = Day::latest()->first();
@@ -30,7 +32,7 @@ class Kernel extends ConsoleKernel
             //     info("Updated  rows");
             // }
         })
-        // ->everyTwentySeconds();        
+        // ->everyTenSeconds();        
         ->daily()->at('00:00');
     }
 
