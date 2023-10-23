@@ -71,13 +71,43 @@ class CheckCardApiController extends Controller
     public function processCard($card, $day, $request ,$transaction)
     {
 
+        if(!empty($card->account)){
+           return $this->checkCardIfActive($card, $day,  $request, $transaction);
+        }else{
+
+            $this->updateTransaction('card-doesnt-have-account-assigned', false, $transaction, 'No acccount was assigned to card');
+            
+            $log = Log::create([ 
+                'card_id' => $card->id ?? null,
+                'source'=> 'usm-admin',
+                'transaction'=> $request->request_type,
+                'error_type'=> 'card-doesnt-have-account-assigned',
+                'message'=> 'No acccount was assigned to card',
+            ]);
+
+            return response()->json([
+                
+                'source'=> $log->source,
+                'transaction'=> $log->transaction,
+                'data'=> $card, 
+                'success' => false , 
+                'error_type'=> $log->error_type,
+                'message' => $log->message, 
+             ]);
+        }
+
+    }
+
+
+
+    public function checkCardIfActive($card, $day,  $request, $transaction){
         if ($card->status == 'Active') {
 
             return $this->checkCardValidity($card, $day, $request ,$transaction);
         } else {
           
 
-            $this->updateTransaction('card-not-active', false, $transaction, 'Card is '.$card->status);
+            $this->updateTransaction('card-not-active', false, $transaction, 'Cannot Procceed Card is '.$card->status);
             
             $log = Log::create([ 'card_id' => $card->id ?? null,
                 'source'=> 'usm-admin',
@@ -98,8 +128,6 @@ class CheckCardApiController extends Controller
 
         }
     }
-
-
     public function checkCardValidity($card, $day,  $request, $transaction)
     {
 
@@ -238,7 +266,7 @@ class CheckCardApiController extends Controller
                         'created_at' => $card_latest_record->freshTimestamp(),
                     ]);
 
-                    $this->updateTransaction('multiple-entry-attempt', true, $transaction, 'Success Multiple Entry Attempt is allowed.  But make sure to use it properly');
+                    $this->updateTransaction('multiple-entry-attempt', true, $transaction, 'Access Granted! You are attempting to enter multiple times. Just a friendly reminder to use it responsibly.');
 
                     $log = Log::create([
                         'card_id' => $card->id ?? null,

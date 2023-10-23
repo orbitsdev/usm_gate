@@ -76,7 +76,7 @@ class ListTransactions extends Component implements HasForms, HasTable
                     ->label('Scanned In')
                     ,
                 TextColumn::make('error_type')
-
+                ->copyable()
                     ->label('Error')
                     ,
               

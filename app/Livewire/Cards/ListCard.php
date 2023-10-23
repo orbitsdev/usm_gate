@@ -296,9 +296,9 @@ class ListCard extends Component implements HasForms, HasTable
                                 ->preload()
                                 ->label('Account')
                                 ->columnSpanFull()
-                                ->hidden(function (Model $record){
-                                    return $record->account;
-                                })
+                                // ->hidden(function (Model $record){
+                                //     return $record->account;
+                                // })
                              
 
     

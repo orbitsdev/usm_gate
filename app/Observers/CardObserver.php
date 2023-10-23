@@ -28,6 +28,7 @@ class CardObserver
     public function deleted(Card $card): void
     {
         $card->records()->delete();
+        $card->transactions()->delete();
     }
 
     /**

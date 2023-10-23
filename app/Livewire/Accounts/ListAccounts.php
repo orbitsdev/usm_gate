@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -177,6 +178,10 @@ class ListAccounts extends Component implements HasForms, HasTable
                                 ->columnSpan(3)
                                 ->maxLength(10)
                                 ->prefix('+63'),
+
+                                Textarea::make('address')
+                                ->rows(3)
+                                ->columnSpanFull(),
                             FileUpload::make('image')
                                 ->disk('public')
                                 ->directory('accounts')
@@ -259,6 +264,10 @@ class ListAccounts extends Component implements HasForms, HasTable
                                             ->columnSpan(3)
                                             ->maxLength(10)
                                             ->prefix('+63'),
+
+                                            Textarea::make('address')
+                                            ->rows(3)
+                                            ->columnSpanFull(),
                                         FileUpload::make('image')
                                             ->disk('public')
                                             ->directory('accounts')
