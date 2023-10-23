@@ -32,7 +32,7 @@ class CheckCardApiController extends Controller
 
         } else {
 
-            $this->updateTransaction('not-found', false, $transaction , 'Cannot Procceed Card Not Found');
+            $this->updateTransaction('card-not-found', false, $transaction , 'Card Not Found');
             $log = Log::create([  'source'=> 'usm-admin',  'transaction'=> $request->request_type, 'error_type'=> 'not-found', 'message'=> '(checking) Cannot Procceed Card Not Found',]);
             return response()->json(['source'=> $log->source, 'transaction'=> $log->transaction, 'data'=> $card, 'success' => false , 'error_type'=> $log->error_type, 'message' => $log->message, ]);
         }
@@ -41,6 +41,7 @@ class CheckCardApiController extends Controller
     public function updateTransaction($error, $success , $transaction ,$message){
         $transaction->error_type = $error;
         $transaction->success = $success;
+        $transaction->message = $message;
         $transaction->save();
     }
     // public function createTransaction($card ,$request){
@@ -64,6 +65,7 @@ class CheckCardApiController extends Controller
             $day = Day::create();
             return $this->processCard($card, $day,  $request, $transaction);
         }
+
     }
 
     public function processCard($card, $day, $request ,$transaction)
@@ -75,9 +77,9 @@ class CheckCardApiController extends Controller
         } else {
           
 
-            $this->updateTransaction('not-card-not-active', false, $transaction, 'Card Not Active');
+            $this->updateTransaction('card-not-active', false, $transaction, 'Card Not Active');
             
-            $log = Log::create([  'card_id' => $card->id ?? null,
+            $log = Log::create([ 'card_id' => $card->id ?? null,
                 'source'=> 'usm-admin',
                 'transaction'=> $request->request_type,
                 'error_type'=> 'card-not-active',
@@ -128,7 +130,7 @@ class CheckCardApiController extends Controller
             
             $date_validity_message = '( checking ) Cannot Procceed Card is expired. The validity of the card is valid only from ' . $cardValidFromStartOfDay->format('F j, Y') . ' until ' . $cardValidUntilEndOfDay->format('F j, Y') . ' based on the date set in the setting from ' . $cardSettingValidFromStartOfDay->format('F j, Y');
 
-            $this->updateTransaction('card-expired', false, $transaction ,$date_validity_message);
+            $this->updateTransaction('card-is-expired', false, $transaction ,$date_validity_message);
 
             $log = Log::create([
                 'card_id' => $card->id ?? null,
@@ -176,7 +178,7 @@ class CheckCardApiController extends Controller
         } else {
           
 
-            $this->updateTransaction('card-api-missing-parameter', false, $transaction, 'Api Missing Parameter Java Source Code');
+            $this->updateTransaction('card-api-missing-parameter-in-java', false, $transaction, 'Api missing parameter in java source code');
 
 
             $log = Log::create([
@@ -225,7 +227,7 @@ class CheckCardApiController extends Controller
                         $card_latest_record->save();
                     }
                     
-                    $this->updateTransaction(null, true, $transaction , 'Success  Your card doesnt have entry record');
+                    $this->updateTransaction(null, true, $transaction , 'Success! card doesnt have unfinished record ');
                     
                     return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data'=> $card, 'success' => true , 'error_type'=> null, 'message' => '( checking ) Success! Card Doesnt Have Entry Record']);
                     
@@ -236,7 +238,7 @@ class CheckCardApiController extends Controller
                         'created_at' => $card_latest_record->freshTimestamp(),
                     ]);
 
-                    $this->updateTransaction('multiple-entry-attemp', true, $transaction, 'Succes You Can Still Procced But Make Sure To Exit First Before Entering Again');
+                    $this->updateTransaction('multiple-entry-attempt', true, $transaction, 'Success Multiple Entry Attempt is allowed.  But make sure to use it properly');
 
                     $log = Log::create([
                         'card_id' => $card->id ?? null,
@@ -262,7 +264,7 @@ class CheckCardApiController extends Controller
                     
                 }else if($card_latest_record->entry == false  && $card_latest_record->exit == true){
 
-                    $this->updateTransaction('invalid-exit', false, $transaction, 'You are scanning on the  exit but you dont have any entry record ');
+                    $this->updateTransaction('invalid-exit-no-entry-found', false, $transaction, 'Attempted to exit, but the card doesn\'t have an exit record.');
                     $log = Log::create([
                         'card_id' => $card->id ?? null,
                         'source'=> 'usm-admin',
@@ -287,7 +289,7 @@ class CheckCardApiController extends Controller
                 
                 else{
 
-                    $this->updateTransaction(null, true, $transaction, 'Success card is ready to use for another transaction');
+                    $this->updateTransaction(null, true, $transaction, 'Success card ready for another transaction');
                     if($request->request_type=='saving'){
                         $new_record = Record::create([ 
                             'day_id'=> $day->id,
@@ -322,7 +324,7 @@ class CheckCardApiController extends Controller
 
         } else {
 
-            $this->updateTransaction(null, true, $transaction, 'Success card doesnt have any record');
+            $this->updateTransaction(null, true, $transaction, 'Success, the card doesn\'t have any record.');
             if($request->request_type=='saving'){
                 $new_record = Record::create([ 
                     'day_id'=> $day->id,
@@ -352,7 +354,7 @@ class CheckCardApiController extends Controller
                     $card_latest_record->save();
                 }
 
-                $this->updateTransaction(null, true, $transaction, 'Success no exit yet');
+                $this->updateTransaction(null, true, $transaction, 'Success, the card has no exit record yet');
 
                 return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => true, 'error_type' => null, 'message' => '( checking ) Ready To Exit Because It nit exit yes']);
             } else {
@@ -371,7 +373,7 @@ class CheckCardApiController extends Controller
                     'door_exit' => $request->door_name,
                 ]);
                 $card_latest_record->touch();
-                $this->updateTransaction(null, true, $transaction, 'Multiple exit Attempt');
+                $this->updateTransaction(null, true, $transaction, 'Multiple exit attempts. Please exit now');
                 return response()->json([
                     
                     'source'=> $log->source,

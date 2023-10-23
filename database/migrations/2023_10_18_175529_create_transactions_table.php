@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('scanned_type')->nullable();
             $table->string('error_type')->nullable();
             $table->boolean('success')->nullable();
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }

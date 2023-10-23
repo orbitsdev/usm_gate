@@ -60,16 +60,17 @@ class ListCard extends Component implements HasForms, HasTable
                TextColumn::make('id_number')
                ->copyable()
                 ->searchable()
-
-                    ->sortable(),
+                ->label('Card ID')
+                ->sortable(),
+                 
                TextColumn::make('valid_from')
                
-               ->date()
+               ->date(),
 
-                    ->sortable(),
+               
                TextColumn::make('valid_until')
-               ->date()
-                    ->sortable(),
+               ->date(),
+                   
 
                TextColumn::make('status')
                    

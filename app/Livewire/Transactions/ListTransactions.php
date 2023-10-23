@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Actions\DeleteAction;
@@ -68,6 +69,18 @@ class ListTransactions extends Component implements HasForms, HasTable
                 TextColumn::make('scanned_type')
                     ->sortable()
                     ->label('Scanned In')
+                    ,
+                TextColumn::make('error_type')
+
+                    ->label('Error')
+                    ,
+                IconColumn::make('success')
+                    ->sortable()
+                    ->boolean()
+                    ->label('Success')
+                    ,
+                    TextColumn::make('message')
+                    ->wrap()
                     ,
 
 
