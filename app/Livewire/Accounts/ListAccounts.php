@@ -7,6 +7,8 @@ use App\Models\Account;
 use Livewire\Component;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -59,7 +61,12 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->date()
                         ->sortable(),
                    TextColumn::make('contact_number')
-                        ->searchable(),
+                   ->formatStateUsing(fn($state) => $state ? '0'.$state : $state)
+                        ->searchable()
+                        ->copyable()
+                        ->copyMessage('Copied')
+                        ->copyMessageDuration(1500)
+                        ,
                         ImageColumn::make('image')
                         ->width(60)->height(60)
                         ->url(fn (Account $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
@@ -73,21 +80,60 @@ class ListAccounts extends Component implements HasForms, HasTable
             )
             ->headerActions([
                 CreateAction::make('add')->form([
-                    TextInput::make('first_name')->required(),
-                    TextInput::make('last_name')->required(),
-                    TextInput::make('middle_name')->required(),
-                    TextInput::make('sex')->required(),
-                    DatePicker::make('birth_date')->required()->label('Birth date')
-                    ->timezone('Asia/Manila')
-                    ->closeOnDateSelection()->required(),
-                    TextInput::make('contact_number'),
-                    FileUpload::make('image')
-                    ->disk('public')
-                    ->directory('accounts')
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorMode(2)
-                    ->required()
+                    Section::make()
+                    ->description('Personal Information')
+                    ->icon('heroicon-m-identification')
+    ->columns([
+        'sm' => 3,
+        'xl' => 6,
+        '2xl' => 9,
+    ])
+    ->schema([
+        Select::make('account_type')
+        ->options([
+            'Student' => 'Student',
+            'Teacher' => 'Teacher',
+        ])
+        ->required()
+        ->native(false)
+        ->columnSpanFull()
+        ->label('Account Type')
+        
+        ,
+        TextInput::make('first_name')->required()->columnSpan(3),
+        TextInput::make('middle_name')->required()->columnSpan(3),
+        TextInput::make('last_name')->required()->columnSpan(3),
+        Select::make('sex')
+        ->options([
+            'Male' => 'Male',
+            'Female' => 'Female',
+        ]) ->columnSpan(3),
+      
+        DatePicker::make('birth_date')->required()->label('Birth date')
+        ->timezone('Asia/Manila')
+        ->closeOnDateSelection()->required()
+        ->columnSpan(3)
+        ->native(false)
+        ,
+        TextInput::make('contact_number')
+        ->columnSpan(3)
+        ->maxLength(10)
+        ->prefix('+63')
+
+        ,
+        FileUpload::make('image')
+        ->disk('public')
+        ->directory('accounts')
+        ->image()
+        ->imageEditor()
+        ->imageEditorMode(2)
+        ->required()
+        ->columnSpanFull()
+        ])->columnSpanFull(),
+
+                   
+
+
                 ])
                 ->modalWidth('6xl')
                 ->createAnother(false)
@@ -115,21 +161,59 @@ class ListAccounts extends Component implements HasForms, HasTable
                             return $data;
                         })
                         ->form([
-                            TextInput::make('first_name')->required(),
-                            TextInput::make('last_name')->required(),
-                            TextInput::make('middle_name')->required(),
-                            TextInput::make('sex')->required(),
-                            DatePicker::make('birth_date')->required()->label('Birth date')
-                            ->timezone('Asia/Manila')
-                            ->closeOnDateSelection()->required(),
-                            TextInput::make('contact_number'),
-                            FileUpload::make('image')
-                            ->disk('public')
-                            ->directory('accounts')
-                            ->image()
-                            ->imageEditor()
-                            ->imageEditorMode(2)
-                            ->required()
+                            Section::make()
+                    ->description('Personal Information')
+                    ->icon('heroicon-m-identification')
+    ->columns([
+        'sm' => 3,
+        'xl' => 6,
+        '2xl' => 9,
+    ])
+    ->schema([
+        Select::make('account_type')
+        ->options([
+            'Student' => 'Student',
+            'Teacher' => 'Teacher',
+        ])
+        ->required()
+        ->native(false)
+        ->columnSpanFull()
+        ->label('Account Type')
+        
+        ,
+        TextInput::make('first_name')->required()->columnSpan(3),
+        TextInput::make('middle_name')->required()->columnSpan(3),
+        TextInput::make('last_name')->required()->columnSpan(3),
+        Select::make('sex')
+        ->options([
+            'Male' => 'Male',
+            'Female' => 'Female',
+        ]) ->columnSpan(3),
+      
+        DatePicker::make('birth_date')->required()->label('Birth date')
+        ->timezone('Asia/Manila')
+        ->closeOnDateSelection()->required()
+        ->columnSpan(3)
+        ->native(false)
+        ,
+        TextInput::make('contact_number')
+        ->columnSpan(3)
+        ->maxLength(10)
+        ->prefix('+63')
+
+        ,
+        FileUpload::make('image')
+        ->disk('public')
+        ->directory('accounts')
+        ->image()
+        ->imageEditor()
+        ->imageEditorMode(2)
+        ->required()
+        ->columnSpanFull()
+        ])->columnSpanFull(),
+
+                   
+
                         ]),
                         DeleteAction::make(),
                     ]),

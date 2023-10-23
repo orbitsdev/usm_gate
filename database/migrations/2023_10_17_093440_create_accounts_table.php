@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('contact_number')->nullable();
             $table->text('image')->nullable();
+            $table->string('account_type')->nullable();
             $table->timestamps();
         });
     }
