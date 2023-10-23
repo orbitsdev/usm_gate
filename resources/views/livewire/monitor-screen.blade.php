@@ -34,6 +34,9 @@
                                     @if ($transaction->error_type == 'multiple-entry-attempt' || $transaction->error_type == 'multiple-exit-attempt')
                                         {{ $transaction->message }}
                                     @endif
+                                    @if ($transaction->error_type == 'scannining-exit-no-entry-record')
+                                        {{ $transaction->message }}
+                                    @endif
                                 </p>
                             </div>
                         </div>
@@ -92,6 +95,10 @@
                         @elseif($transaction->error_type == 'no-entry-record')
                             {{ $transaction->message }}
                         @elseif($transaction->error_type == 'card-not-found')
+                            {{ $transaction->message }}
+                        @elseif($transaction->error_type == 'invalid-exit-no-entry-found')
+                            {{ $transaction->message }}
+                        @elseif($transaction->error_type == 'card-is-expired')
                             {{ $transaction->message }}
                         @else
                             Unidentified Error
