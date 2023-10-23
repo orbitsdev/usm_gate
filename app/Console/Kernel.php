@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Models\Day;
+use App\Models\Transaction;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,6 +15,23 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        $schedule->call(function () {
+
+            Transaction::truncate();
+
+
+            // $dayRecord = Day::latest()->first();
+            // if($dayRecord){
+                
+            //     Day::whereHas('records', function($query) use($dayRecord){
+            //         $query->where('day_record_id', $dayRecord->id);
+            //     })->where('exit', 'Not Logout')->update(['status' => 'Logged out']);
+            //     info("Updated  rows");
+            // }
+        })
+        // ->everyTwentySeconds();        
+        ->daily()->at('00:00');
     }
 
     /**

@@ -194,21 +194,21 @@
                 <li>
                   <!-- Current: "bg-gray-50 text-yellow-600", Default: "text-gray-700 hover:text-yellow-600 hover:bg-gray-50" -->
                   <a href="{{route('days')}}"  class="{{(request()->routeIs('days') || request()->routeIs('day-view-record'))  ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold': ' text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}  ">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{(request()->routeIs('days') || request()->routeIs('day-view-record')) ? 'border-yellow-600': ''}} text-[0.625rem] font-medium ">H</span>
+                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{(request()->routeIs('days') || request()->routeIs('day-view-record')) ? 'border-yellow-600': ''}} text-[0.625rem] font-medium ">D</span>
                     <span class="truncate">Daily Records</span>
                   </a>
                 </li>
-                <li>
+                {{-- <li>
                   <a href="{{ route('logs') }}" class="{{ request()->routeIs('logs') ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' : 'text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}">
                     <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{ request()->routeIs('logs') ? 'border-yellow-600' : '' }} text-[0.625rem] font-medium">H</span>
                     <span class="truncate">Api & Hardware Logs</span>
                 </a>
                 
-                </li>
+                </li> --}}
                 <li>
                   <a href="{{ route('transactions') }}" class="{{ request()->routeIs('transactions') ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' : 'text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{ request()->routeIs('transactions') ? 'border-yellow-600' : '' }} text-[0.625rem] font-medium">H</span>
-                    <span class="truncate">Scanned Logs</span>
+                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{ request()->routeIs('transactions') ? 'border-yellow-600' : '' }} text-[0.625rem] font-medium">S</span>
+                    <span class="truncate">Transaction</span>
                 </a>
                 
                 </li>
