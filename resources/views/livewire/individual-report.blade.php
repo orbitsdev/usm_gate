@@ -154,13 +154,14 @@
 
         <x-filament-actions::modals />
     </x-live-wire-layout>
-    {{-- <script>
+    <script>
         document.addEventListener('livewire:initialized', () => {
-            @this.on('printTable', (event) => {
+            @this.on('printIndividualTable', (event) => {
                 window.print();
             });
         });
-    </script> --}}
+    </script>
+    
     
 
     

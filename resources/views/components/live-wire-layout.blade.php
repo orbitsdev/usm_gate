@@ -255,7 +255,13 @@
                       
               </ul>
             </li>
+
+            
            <li>
+            <a href="{{ route('transactions') }}" class="{{ request()->routeIs('transactions') ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' : 'text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}">
+              <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{ request()->routeIs('transactions') ? 'border-yellow-600' : '' }} text-[0.625rem] font-medium">S</span>
+              <span class="truncate">Developer Debugging</span>
+          </a>
               {{-- <div class="text-xs font-semibold leading-6 text-gray-400">Reports</div>
               <ul role="list" class="-mx-2 mt-2 space-y-1">
                 <li>
@@ -288,10 +294,7 @@
                 
                 </li>
                 <li>
-                  <a href="{{ route('transactions') }}" class="{{ request()->routeIs('transactions') ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' : 'text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{ request()->routeIs('transactions') ? 'border-yellow-600' : '' }} text-[0.625rem] font-medium">S</span>
-                    <span class="truncate">Transaction</span>
-                </a>
+                
                 
                 </li>
 

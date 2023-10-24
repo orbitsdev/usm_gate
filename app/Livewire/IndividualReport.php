@@ -52,6 +52,12 @@ class IndividualReport extends Component  implements HasForms
        
     }
 
+    public function print()
+    {   
+        $this->dispatch('printIndividualTable');
+    }
+    
+
     public function form(Form $form): Form
     {
         return $form

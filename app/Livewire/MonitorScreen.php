@@ -19,12 +19,12 @@ class MonitorScreen extends Component
     public function render()
     {
 
-        return view('livewire.monitor-screen', ['transaction' => Transaction::whereDate('created_at', today())->latest()->first()]);
-                //  return view('livewire.monitor-screen', ['transaction' => Transaction::where('created_at', '>', now()->subMinutes(3))->latest()->first()]);
+        // return view('livewire.monitor-screen', ['transaction' => Transaction::where('door_name','Door1')->whereDate('created_at', today())->latest()->first()]);
+        //   return view('livewire.monitor-screen', ['transaction' => Transaction::where('door_name','Door1')->where('created_at', '>', now()->subMinutes(3))->latest()->first()]);
 
-                // return view('livewire.monitor-screen', [
-                //     'transaction' => Transaction::where('created_at', '>', now()->subSeconds(20))->latest()->first()
-                // ]);
+                return view('livewire.monitor-screen', [
+                    'transaction' => Transaction::where('door_name', 'Door1')->where('created_at', '>', now()->subSeconds(10))->latest()->first()
+                ]);
                 
 
     }
