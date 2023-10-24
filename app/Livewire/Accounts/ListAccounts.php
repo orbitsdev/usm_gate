@@ -86,7 +86,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->badge()
                         ->color(fn (string $state): string => match ($state) {
                             'Student' => 'success',
-                            'Teacher' => 'primary',
+                            'Staff' => 'primary',
                             default => 'gray',
                         })
                         ->label('Account Type'),
@@ -154,6 +154,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                             Select::make('account_type')
                                 ->options([
                                     'Student' => 'Student',
+                                    'Staff' => 'Staff',
                                     'Teacher' => 'Teacher',
                                 ])
                                 ->required()
@@ -209,6 +210,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                     ->options([
 
                         'Student' => 'Student',
+                        'Staff' => 'Staff',
                         'Teacher' => 'Teacher',
                     ]),
                 SelectFilter::make('sex')
@@ -240,7 +242,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                                         Select::make('account_type')
                                             ->options([
                                                 'Student' => 'Student',
-                                                'Teacher' => 'Teacher',
+                                                'Staff' => 'Staff',
                                             ])
                                             ->required()
                                             ->native(false)
