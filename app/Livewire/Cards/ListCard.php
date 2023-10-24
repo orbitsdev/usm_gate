@@ -59,7 +59,7 @@ class ListCard extends Component implements HasForms, HasTable
                 ,
                TextColumn::make('id_number')
                ->copyable()
-                ->searchable()
+                ->searchable(isIndividual: true,isGlobal: false)
                 ->label('Card ID')
                 ->sortable(),
                  

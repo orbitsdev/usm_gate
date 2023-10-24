@@ -152,7 +152,7 @@ class CheckCardApiController extends Controller
     $cardValidFrom = Carbon::parse($card->valid_from)->startOfDay();
     $cardValidUntil = Carbon::parse($card->valid_until)->endOfDay();
 
-    $isCardValid = now()->between($cardValidFrom, $cardValidUntil);
+    $isCardValid = now()->timezone('Asia/Manila')->between($cardValidFrom, $cardValidUntil);
 
     if ($isCardValid) {
         return $this->checkCardlatestRecord($card, $day, $request, $transaction);
