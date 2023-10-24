@@ -35,19 +35,19 @@ Route::post('/check-card', [CheckCardApiController::class, 'checkCard'])->name('
 Route::post('/save-error', [ErrorController::class, 'saveError'])->name('save-error');
 Route::post('/save-scan', [ScanController::class, 'saveScan'])->name('save-scan');
 
-Route::post('/test', function(Request $request){
+Route::get('/test', function(){
 
-    $card = Card::where('id_number', $request->id_number)->first();
+    $card = Card::first();
 
-    $new_transaction = Transaction::create([
-        'card_id'=> $card->id ?? null,
-        'source'=> $request->source,
-        'door_name'=> $request->door_name,
-        'scanned_type'=> $request->scanned_type,
-    ]);
+    // $new_transaction = Transaction::create([
+    //     'card_id'=> $card->id ?? null,
+    //     'source'=> $request->source,
+    //     'door_name'=> $request->door_name,
+    //     'scanned_type'=> $request->scanned_type,
+    // ]);
     // Scanned::dispatch($card);
     
-    return response()->json(['data'=>$new_transaction,'success'=> true]); 
+    return response()->json(['data'=>$card,'success'=> true]); 
 });
 
 

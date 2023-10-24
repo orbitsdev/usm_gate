@@ -70,7 +70,15 @@ class ListDays extends Component implements HasForms, HasTable
                         ->action(fn (Collection $records) => $records->each->delete())
                 ])->label('Actions'),
 
-            ]);
+            ])
+
+            ->modifyQueryUsing(fn (Builder $query) => 
+        
+            $query->latest(),
+            
+            )
+            
+            ;
     }
 
     public function render(): View
