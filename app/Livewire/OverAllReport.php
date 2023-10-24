@@ -46,8 +46,8 @@ class OverAllReport extends Component implements HasForms
             $this->daySelected = $day->id;
          }  
 
-         $this->dayData = Day::latest()->first();
-         $this->records = Record::latest()->get();
+        //  $this->dayData = Day::latest()->first();
+        //  $this->records = Record::latest()->get();
     }
     public function exportToExcel(){
 
@@ -88,11 +88,11 @@ class OverAllReport extends Component implements HasForms
                 ])
                 ->schema([
                     Select::make('daySelected')
-                    ->options(Day::orderBy('created_at', 'desc')->pluck('created_at', 'id')->map(function ($date) {
+                    ->options(Day::latest()->whereHas('records')->orderBy('created_at', 'desc')->pluck('created_at', 'id')->map(function ($date) {
                         return $date->format('F d,  Y - l ');
                     }))
                     
-                    ->default(Day::latest()->first()->id ?? null)
+                 
                     ->searchable()
                     ->columnSpan(2)
                     ->label('Date')
@@ -101,7 +101,8 @@ class OverAllReport extends Component implements HasForms
                     ->afterStateUpdated(function (Get $get, Set $set, $state) {
                         
                         $this->dayData = Day::where('id', $state)->first();
-                        $data = Record::orderBy('created_at', 'desc')->when($state,function($query) use($state){
+
+                        $data = Record::orderBy('created_at', 'desc')->when(!empty($state),function($query) use($state){
                             $query->where('day_id', $state);
                         })
                         ->when($this->accountType != 'All' && !empty($this->accountType), function ($query) use ($get) {
