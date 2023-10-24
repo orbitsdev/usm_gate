@@ -23,7 +23,7 @@ class MonitorScreen extends Component
         //   return view('livewire.monitor-screen', ['transaction' => Transaction::where('door_name','Door1')->where('created_at', '>', now()->subMinutes(3))->latest()->first()]);
 
                 return view('livewire.monitor-screen', [
-                    'transaction' => Transaction::where('door_name', 'Door1')->where('created_at', '>', now()->subSeconds(10))->latest()->first()
+                    'transaction' => Transaction::where('door_name', 'Door 1')->where('created_at', '>', now()->subSeconds(10))->latest()->first()
                 ]);
                 
 
