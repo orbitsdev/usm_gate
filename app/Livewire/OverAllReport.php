@@ -37,14 +37,14 @@ class OverAllReport extends Component implements HasForms
         $this->form->fill();
         $this->accountType = 'All';
       
-        $day = Day::orderBy('created_at', 'desc')->first();
+        // $day = Day::orderBy('created_at', 'desc')->first();
 
-        if(!empty($day)){
+        // if(!empty($day)){
 
-            $this->dayData = Day::where('id', $day)->first();
-            $this->records = Record::latest()->where('day_id', $day->id) ->get();
-            $this->daySelected = $day->id;
-         }  
+        //     $this->dayData = Day::where('id', $day)->first();
+        //     $this->records = Record::latest()->where('day_id', $day->id) ->get();
+        //     $this->daySelected = $day->id;
+        //  }  
 
         //  $this->dayData = Day::latest()->first();
         //  $this->records = Record::latest()->get();
