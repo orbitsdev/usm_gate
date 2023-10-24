@@ -8,5 +8,5 @@
             class="h-[50dvh] w-[50dvh]" />
         </svg>
     </div>
-    <p class="text-6xl font-bold uppercase  text-white ">Scan Your Card </p>
+    <p class="text-6xl font-bold uppercase  text-white ">{{$slot}}</p>
 </div>

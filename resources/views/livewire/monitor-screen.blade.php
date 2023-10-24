@@ -115,7 +115,9 @@
                     </x-warning-image>
                 @endif
             @else
-                <x-default-display-image/>
+            <x-default-display-image>
+                Scan Your Card At Door 1
+            </x-default-display-image>
             @endif
         </div>
     </div>
