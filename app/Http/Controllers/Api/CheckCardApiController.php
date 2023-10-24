@@ -149,62 +149,90 @@ class CheckCardApiController extends Controller
     public function checkCardValidity($card, $day,  $request, $transaction)
     {
 
-        $card_setting = CardSettings::latest()->first();
+    $cardValidFrom = Carbon::parse($card->valid_from)->startOfDay();
+    $cardValidUntil = Carbon::parse($card->valid_until)->endOfDay();
+
+    $isCardValid = now()->between($cardValidFrom, $cardValidUntil);
+
+    if ($isCardValid) {
+        return $this->checkCardlatestRecord($card, $day, $request, $transaction);
+    } else {
+        $date_validity_message = 'Cannot proceed. The card is expired.';
+
+        $source = 'usm-admin';
+        $transactionrequest = $request->request_type;
+        $errortype = 'card-is-expired';
+        $transactionmessage = $date_validity_message;
+        $cardid = $card->id ?? null;
+
+        $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
+
+        return response()->json([
+            'source' => $source,
+            'transaction' => $transactionrequest,
+            'data' => $card,
+            'success' => false,
+            'error_type' => $errortype,
+            'message' => $transactionmessage,
+        ]);
+    }
+
+        // $card_setting = CardSettings::latest()->first();
 
    
-        $cardSettingValidFrom = Carbon::parse($card_setting->valid_from);
-        $cardSettingValidUntil = Carbon::parse($card_setting->valid_until);
+        // $cardSettingValidFrom = Carbon::parse($card_setting->valid_from);
+        // $cardSettingValidUntil = Carbon::parse($card_setting->valid_until);
 
-         $cardValidFrom = Carbon::parse($card->valid_from);
-        $cardValidUntil = Carbon::parse($card->valid_until);
+        //  $cardValidFrom = Carbon::parse($card->valid_from);
+        // $cardValidUntil = Carbon::parse($card->valid_until);
 
-         $cardSettingValidFromStartOfDay = $cardSettingValidFrom->startOfDay();
-        $cardSettingValidUntilEndOfDay = $cardSettingValidUntil->endOfDay();
+        //  $cardSettingValidFromStartOfDay = $cardSettingValidFrom->startOfDay();
+        // $cardSettingValidUntilEndOfDay = $cardSettingValidUntil->endOfDay();
 
-         $cardValidFromStartOfDay = $cardValidFrom->startOfDay();
-        $cardValidUntilEndOfDay = $cardValidUntil->endOfDay();
+        //  $cardValidFromStartOfDay = $cardValidFrom->startOfDay();
+        // $cardValidUntilEndOfDay = $cardValidUntil->endOfDay();
 
-        $isCardValid = now()->between($cardValidFromStartOfDay, $cardValidUntilEndOfDay);
-
-
+        // $isCardValid = now()->between($cardValidFromStartOfDay, $cardValidUntilEndOfDay);
 
 
-        if ($isCardValid) {
-            return $this->checkCardlatestRecord($card, $day,  $request, $transaction);
-        } else {
+
+
+        // if ($isCardValid) {
+        //     return $this->checkCardlatestRecord($card, $day,  $request, $transaction);
+        // } else {
            
             
-            $date_validity_message = '( checking ) Cannot Procceed Card is expired. The validity of the card is valid only from ' . $cardValidFromStartOfDay->format('F j, Y') . ' until ' . $cardValidUntilEndOfDay->format('F j, Y') . ' based on the date set in the setting from ' . $cardSettingValidFromStartOfDay->format('F j, Y');
+        //     $date_validity_message = '( checking ) Cannot Procceed Card is expired. The validity of the card is valid only from ' . $cardValidFromStartOfDay->format('F j, Y') . ' until ' . $cardValidUntilEndOfDay->format('F j, Y') . ' based on the date set in the setting from ' . $cardSettingValidFromStartOfDay->format('F j, Y');
             
 
-            $source = 'usm-admin';
-            $transactionrequest = $request->request_type;
-            $errortype = 'card-is-expired';
-            $transactionmessage = $date_validity_message;
-            $cardid = $card->id ?? null;
-            $this->updateTransaction($errortype, false, $transaction ,$transactionmessage);
+        //     $source = 'usm-admin';
+        //     $transactionrequest = $request->request_type;
+        //     $errortype = 'card-is-expired';
+        //     $transactionmessage = $date_validity_message;
+        //     $cardid = $card->id ?? null;
+        //     $this->updateTransaction($errortype, false, $transaction ,$transactionmessage);
 
-            // $log = Log::create([
-            //     'card_id' => $card->id ?? null,
-            //     'source'=> 'usm-admin',
-            //     'transaction'=> $request->request_type,
-            //     'error_type'=> 'card-expired',
-            //     'message'=> $date_validity_message,
-            // ]);
+        //     // $log = Log::create([
+        //     //     'card_id' => $card->id ?? null,
+        //     //     'source'=> 'usm-admin',
+        //     //     'transaction'=> $request->request_type,
+        //     //     'error_type'=> 'card-expired',
+        //     //     'message'=> $date_validity_message,
+        //     // ]);
 
-            return response()->json([
+        //     return response()->json([
                 
-                'source'=> $source,
-                'transaction'=> $transactionrequest,
-                'data'=> $card, 
-                'success' => false , 
-                'error_type'=> $errortype,
-                'message' =>$transactionmessage, 
-             ]);
+        //         'source'=> $source,
+        //         'transaction'=> $transactionrequest,
+        //         'data'=> $card, 
+        //         'success' => false , 
+        //         'error_type'=> $errortype,
+        //         'message' =>$transactionmessage, 
+        //      ]);
 
 
 
-        }
+        // }
 
 
 
