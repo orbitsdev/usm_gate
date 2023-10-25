@@ -32,8 +32,8 @@ class Kernel extends ConsoleKernel
             //     info("Updated  rows");
             // }
         })
-        ->everyTenSeconds();        
-        // ->daily()->at('00:00');
+        // ->everyTenSeconds();        
+        ->daily()->at('00:00');
     }
 
     /**
