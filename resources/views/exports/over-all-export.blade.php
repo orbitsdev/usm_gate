@@ -48,7 +48,7 @@
             <td align="left" width="40">
              
                 @if ($item->entry)
-                {{ $item->created_at->format('h:i:s A') }}
+                {{ $item->created_at->format('l-F d, Y h:i:s A') }}
             @else
                 None
             @endif
@@ -56,7 +56,7 @@
             </td>
             <td align="left" width="40">
                 @if ($item->entry == true && $item->exit == true)
-                {{ $item->updated_at->format('h:i:s A') }}
+                {{ $item->updated_at->format('l-F d, Y h:i:s A') }}
             @else
             -- Currently Inside -- 
             @endif

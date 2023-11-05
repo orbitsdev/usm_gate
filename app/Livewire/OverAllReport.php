@@ -60,12 +60,16 @@ class OverAllReport extends Component implements HasForms
 
         if (count($this->records) > 0) {
 
-            if ($this->dayData) {
-
-                $filename = 'DAILY-RECORD-' . $this->dayData->created_at->format('Y-m-d');
-            } else {
-
-                $filename = 'DAILY-RECORD-' . now()->format('Y-m-d');
+            if(!empty($this->date_start) && !empty($this->date_end)){
+                $filename = 'DAILY-RECORD-' . $this->date_start.'-'.$this->date_end;
+            }else if(empty($date_end) && !empty($this->date_start)){
+                $filename = 'DAILY-RECORD-' . $this->date_start;
+            }else if(empty($date_start) && !empty($this->date_end)){
+                $filename = 'DAILY-RECORD-' . $this->date_end;
+                
+            }else{
+                
+                    $filename = 'DAILY-RECORD-' . now()->format('Y-m-d');
             }
 
             // dd($filename);
