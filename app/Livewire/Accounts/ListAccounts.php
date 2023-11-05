@@ -32,6 +32,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -55,6 +56,7 @@ class ListAccounts extends Component implements HasForms, HasTable
             ->query(Account::query()->latest())
             ->columns(
                 [
+                  
                   
                     TextColumn::make('first_name')
                         ->searchable(),
@@ -92,6 +94,22 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->label('Account Type'),
 
                         TextColumn::make('id')->label('ID'),
+
+                        TextColumn::make('card')
+                        ->formatStateUsing(fn ($state) => empty($state) ? 'No Card' : 'Owned')
+                        ->label('Card Status')
+                    
+                        
+                        ->color(function(string $state){
+    
+                            if(!empty($state)){
+                                return 'success';
+                            }else{
+                                return 'gray';
+                            }
+                        })
+                     
+                        ,
                     
 
                 ],
@@ -219,6 +237,11 @@ class ListAccounts extends Component implements HasForms, HasTable
                         'Male' => 'Male',
                         'Female' => 'Female',
                     ]),
+
+
+
+
+
             ])
             ->actions(
                 [

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Cards;
 
+use Carbon\Carbon;
 use App\Models\Card;
 use Filament\Tables;
 use Livewire\Component;
@@ -64,11 +65,13 @@ class ListCard extends Component implements HasForms, HasTable
                 ->sortable(),
                  
                TextColumn::make('valid_from')
-               
+                
                ->date(),
 
                
                TextColumn::make('valid_until')
+            
+
                ->date(),
                    
 
@@ -142,6 +145,14 @@ class ListCard extends Component implements HasForms, HasTable
                 ,
                 
                 CreateAction::make('add')
+                ->mutateFormDataUsing(function (array $data): array {
+                    $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
+                    $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');
+                    // $data['valid_until'] = auth()->id();
+                    // dd($data);
+             
+                    return $data;
+                })
                 ->label('New Card')
                 ->icon('heroicon-o-sparkles')
                 ->form([
@@ -221,12 +232,15 @@ class ListCard extends Component implements HasForms, HasTable
                         ->label('Card ID')
                         ,   
                         Flatpickr::make('valid_from')
+                        
+                        ->dateFormat('F d, Y') // S
                         ->label('Valid From')
 
                         ->columnSpan(3),
                         Flatpickr::make('valid_until')
                         ->label('Card Until')
-
+                       
+                        ->dateFormat('F d, Y') // S
                         ->columnSpan(3)
                         ,
     
@@ -269,9 +283,22 @@ class ListCard extends Component implements HasForms, HasTable
                     EditAction::make()
                     ->mutateRecordDataUsing(function (Model $record, array $data): array {
                         // $data['account_id'] = auth()->id();
+
+                        $data['valid_from'] = Carbon::parse($record->valid_from)->format('F d, Y');
+                        $data['valid_until'] = Carbon::parse($record->valid_until)->format('F d, Y');
                  
                         return $data;
                     })
+
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
+                        $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');
+                        // $data['valid_until'] = auth()->id();
+                        // dd($data);
+                 
+                        return $data;
+                    })
+                    
                     ->form([
                         
                         
@@ -356,10 +383,13 @@ class ListCard extends Component implements HasForms, HasTable
                             ->label('Card ID')
                             ,   
                             Flatpickr::make('valid_from')
+                            ->dateFormat('F d, Y') //
+
                             ->label('Valid From')
-    
+                            
                             ->columnSpan(3),
                             Flatpickr::make('valid_until')
+                            ->dateFormat('F d, Y') //
                             ->label('Card Until')
     
                             ->columnSpan(3)

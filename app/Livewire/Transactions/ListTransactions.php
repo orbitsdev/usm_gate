@@ -48,11 +48,14 @@ class ListTransactions extends Component implements HasForms, HasTable
                 ->boolean()
                 ->label('Success')
                 ,
-                TextColumn::make('message')
-                ->wrap()
-                ,
-            
-                TextColumn::make('card.account')->label('Account')->formatStateUsing(function (Transaction $record) {
+
+                TextColumn::make('door_name')->searchable()->label('Door')->color('primary')->badge(),
+
+                TextColumn::make('card.id_number')->searchable()
+                ->label('Card ID'),
+
+                
+                TextColumn::make('card.account')->label('Card Owner')->formatStateUsing(function (Transaction $record) {
                     $first_name =  $record->card->account->first_name ?? '';
                     $last_name =  $record->card->account->last_name.',' ?? '';
                 
@@ -64,25 +67,37 @@ class ListTransactions extends Component implements HasForms, HasTable
                             ->orWhere('last_name', 'like', "%{$search}%");
                     });
                 }),
+
+                TextColumn::make('message')
+                ->wrap()
+                ->label('Message')
+                ,
+            
                 
                 
                 
                     
-                TextColumn::make('card.id_number')->searchable()
-                    ->label('ID number'),
+              
 
+                 
                     TextColumn::make('scanned_type')
                     ->sortable()
-                    ->label('Scanned In')
+                    ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
+                    ->label('Scanned At')
                     ,
                 TextColumn::make('error_type')
                 ->copyable()
                     ->label('Error')
+                    ->badge()
+                   
+                    ->color('danger')
                     ,
               
-                TextColumn::make('door_name')->searchable()->label('Door Name'),
+               
 
-                TextColumn::make('source')->searchable()->label('Source'),
+                TextColumn::make('source')->searchable()->label('Source')
+                ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
+                ,
                 
               
 

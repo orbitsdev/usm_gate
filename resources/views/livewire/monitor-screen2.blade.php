@@ -1,5 +1,8 @@
 <div class="relative bg-cover bg-center bg-no-repeat font-sans flex items-center justify-center h-screen " style="background-image: url('{{ asset('images/usmbg.png') }}');">
     <div class="absolute inset-0 bg-gradient-to-b from-[#13140f77] to-[#1a1a09]"></div>
+    <div class="absolute z-2 top-5 left-5">
+        @livewire('date-text')
+</div>
     <div wire:poll.1s.visible class="relative z-10">
         <div class=" rounded max-w-7xl w-full h-full text-center ">
             @if ($transaction)
@@ -29,9 +32,9 @@
                                         Cannot Define
                                     @endif
                                 </h2>
-                                <h2 class="text-2xl font-semibold  uppercase text-yellow-500 mt-2">
-                                    {{ \Carbon\Carbon::parse($transaction->updated_at)->format('l h:i:s A') }}
-                                </h2>
+                                {{-- <h2 class="text-2xl font-semibold  uppercase text-yellow-500 mt-2">
+                                    {{ \Carbon\Carbon::parse($transaction->updated_at)->format('l h:i A') }}
+                                </h2> --}}
                                 <p class="text-lg mt-4 text-gray-300 ">
                                     @if ($transaction->error_type == 'multiple-entry-attempt' || $transaction->error_type == 'multiple-exit-attempt')
                                         {{ $transaction->message }}
@@ -42,6 +45,7 @@
                                 </p>
                             </div>
                         </div>
+                        
                         
                         
                         
