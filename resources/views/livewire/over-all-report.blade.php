@@ -46,8 +46,32 @@
                 <div class="text-center " style="padding: 0px  20px ">
                     <p>Republic of The Philippines</p>
                     <p class="uppercase">University of Southern Mindanao</p>
+                    
+                    <p class="mt-10 " style="padding-top: 20px"> 
+                        @if(!empty($date_start))
+                        {{ $date_start}}
+
+                        @if(!empty($date_end))
+                        - {{$date_end}} 
+                        @endif
+                        
+                        @endif
+                        
+                        @if(empty($date_start))
+                            @if (!empty($date_end))
+                                
+                            {{$date_end}} 
+                            @endif
+                        @endif
+                        
+                        
+
+                        
+                    
+                    </p>
                     @if ($dayData)
-                        <p class="mt-10 " style="padding-top: 20px"> {{ $dayData->created_at->format('F d, Y - l ') }} </p>
+                    <p class="mt-10 " style="padding-top: 20px"> {{ $date_start -  $date_end }} </p>
+                        {{-- <p class="mt-10 " style="padding-top: 20px"> {{ $dayData->created_at->format('F d, Y - l ') }} </p> --}}
                     @else
                         {{-- <p class="mt-10 " style="padding-top: 20px"> {{ now()->format('F d, Y - l ') }} </p> --}}
                     @endif

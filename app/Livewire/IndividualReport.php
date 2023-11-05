@@ -93,31 +93,7 @@ class IndividualReport extends Component  implements HasForms
                     if (!empty($state)) {
                         $set('name', null);
                     }
-                    // $account = Account::latest()->when(!empty($state), function ($query) use ($state) {
-                    //     $query->whereHas('card.records', function ($query) use ($state) {
-                    //         $query->where('day_id', $state);
-                    //     });
-                    // })->first();
-                    
-                    // if (!empty($account)) {
-                    //     $set('name', $account->id);
-                    //     $this->records = Record::latest()->whereHas('card.account',function($query)use($account){
-                    //         $query->where('id', $account->id);
-                    //     })->get();
-                    // }
-                    
                   
-
-                   
-                    
-                    // $this->account = null;
-                  
-                    // $this->records = [];
-                    // $this->form->fill([
-                    //     'name'=> '',
-                    //     'selectedStatus'=> 'all',
-                    //     'selectedPeriod'=> 'all',
-                    // ]);
                
                     
                 }),
