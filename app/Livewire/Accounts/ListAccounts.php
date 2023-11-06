@@ -57,14 +57,22 @@ class ListAccounts extends Component implements HasForms, HasTable
             ->columns(
                 [
                   
-                  
+                    TextColumn::make('id')->label('ID'),
                     TextColumn::make('first_name')
+                    ->label('First Name')
+                    ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                         ->searchable(),
                     TextColumn::make('last_name')
+                    ->label('Last Name')
+                    ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                         ->searchable(),
                     TextColumn::make('middle_name')
+                    ->label('Middle Name')
+                    ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                         ->searchable(),
                     TextColumn::make('sex')
+                    ->label('Sex')
+                    ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                         ->searchable(),
                     TextColumn::make('birth_date')
                         ->date(),
@@ -78,27 +86,23 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->copyMessageDuration(1500),
                         TextColumn::make('address')
                        ->wrap(),
-                       ImageColumn::make('image')
-                        ->width(60)->height(60)
-                        ->url(fn (Account $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
-
-                        ->openUrlInNewTab(),
+                      
                     TextColumn::make('account_type')
                         ->searchable()
-                        ->badge()
+                      
                         ->color(fn (string $state): string => match ($state) {
                             'Student' => 'success',
                             'Staff' => 'primary',
-                            default => 'gray',
+                            default => 'info',
                         })
                         ->label('Account Type'),
 
-                        TextColumn::make('id')->label('ID'),
+                       
 
                         TextColumn::make('card')
-                        ->formatStateUsing(fn ($state) => empty($state) ? 'No Card' : 'Owned')
+                        ->formatStateUsing(fn ($state) => empty($state) ? 'No Card' : 'Has Card')
                         ->label('Card Status')
-                    
+                        ->badge()
                         
                         ->color(function(string $state){
     
@@ -110,6 +114,13 @@ class ListAccounts extends Component implements HasForms, HasTable
                         })
                      
                         ,
+
+                        ImageColumn::make('image')
+                        ->label('Profile')
+                        ->width(60)->height(60)
+                        ->url(fn (Account $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
+    
+                        ->openUrlInNewTab(),
                     
 
                 ],

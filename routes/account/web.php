@@ -12,10 +12,14 @@ use App\Livewire\Records\ListRecords;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Accounts\EditAccount;
 use App\Livewire\Accounts\CreateAccount;
+use App\Livewire\Cards\CreateCard;
+use App\Livewire\Cards\EditCard;
 use App\Livewire\Records\RealtimeListRecords;
 use App\Livewire\Transactions\ListTransactions;
 
 Route::get('/accounts', Account::class)->name('accounts');
+Route::get('/create/card', CreateCard::class)->name('create.card');
+Route::get('/edit/card/{card}', EditCard::class)->name('edit.card');
 Route::get('/cards', ListCard::class)->name('cards');
 Route::get('/days', ListDays::class)->name('days');
 Route::get('/records/{day}', ListRecords::class)->name('day-view-record');

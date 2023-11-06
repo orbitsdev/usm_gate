@@ -60,7 +60,7 @@ class ListCard extends Component implements HasForms, HasTable
                 ,
                TextColumn::make('id_number')
                ->copyable()
-                ->searchable(isIndividual: true,isGlobal: false)
+                ->searchable(isIndividual: true,isGlobal: true)
                 ->label('Card ID')
                 ->sortable(),
                  
@@ -143,127 +143,130 @@ class ListCard extends Component implements HasForms, HasTable
                 ->button('Yes')
                 ->label('Download')
                 ,
-                
-                CreateAction::make('add')
-                ->mutateFormDataUsing(function (array $data): array {
-                    $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
-                    $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');
-                    // $data['valid_until'] = auth()->id();
-                    // dd($data);
-             
-                    return $data;
-                })
-                ->label('New Card')
+                Action::make('New Card')
+                 ->label('New Card')
                 ->icon('heroicon-o-sparkles')
-                ->form([
+                ->url(fn (): string => route('create.card'))
+                // CreateAction::make('add')
+                // ->mutateFormDataUsing(function (array $data): array {
+                //     $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
+                //     $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');
+                //     // $data['valid_until'] = auth()->id();
+                //     // dd($data);
+             
+                //     return $data;
+                // })
+                // ->label('New Card')
+                // ->icon('heroicon-o-sparkles')
+                // ->form([
 
-                    Section::make()
-                    ->description('Card Information')
-                    ->icon('heroicon-m-identification')
-                    ->columns([
-                        'sm' => 3,
-                        'xl' => 6,
-                        '2xl' => 9,
-                    ])
-                    ->schema([
-                        Select::make('account_id')
-                        ->label('Select Account')
-                        ->relationship(
-                                name: 'account',
-                                modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
-                            )
-                            ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
-                            ->searchable(['account.first_name', 'account.last_name'])
-                            ->preload()
-                            ->label('Account')
-                            ->columnSpanFull()
+                //     Section::make()
+                //     ->description('Card Information')
+                //     ->icon('heroicon-m-identification')
+                //     ->columns([
+                //         'sm' => 3,
+                //         'xl' => 6,
+                //         '2xl' => 9,
+                //     ])
+                //     ->schema([
+                //         Select::make('account_id')
+                //         ->label('Select Account')
+                //         ->relationship(
+                //                 name: 'account',
+                //                 modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
+                //             )
+                //             ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
+                //             ->searchable(['account.first_name', 'account.last_name'])
+                //             ->preload()
+                //             ->label('Account')
+                //             ->columnSpanFull()
 
-                            // ->createOptionForm([
-                            //     Section::make()
-                            //     ->description('Personal Information')
-                            //     ->icon('heroicon-m-user')
-                            //     ->columns([
-                            //         'sm' => 3,
-                            //         'xl' => 6,
-                            //         '2xl' => 9,
-                            //     ])
-                            //     ->schema([
-                            //         Select::make('account_type')
-                            //             ->options([
-                            //                 'Student' => 'Student',
-                            //                 'Teacher' => 'Teacher',
-                            //             ])
-                            //             ->required()
-                            //             ->native(false)
-                            //             ->columnSpanFull()
-                            //             ->label('Account Type'),
-                            //         TextInput::make('first_name')->required()->columnSpan(3),
-                            //         TextInput::make('middle_name')->required()->columnSpan(3),
-                            //         TextInput::make('last_name')->required()->columnSpan(3),
-                            //         Select::make('sex')
-                            //             ->options([
-                            //                 'Male' => 'Male',
-                            //                 'Female' => 'Female',
-                            //             ])->columnSpan(3),
+                //             // ->createOptionForm([
+                //             //     Section::make()
+                //             //     ->description('Personal Information')
+                //             //     ->icon('heroicon-m-user')
+                //             //     ->columns([
+                //             //         'sm' => 3,
+                //             //         'xl' => 6,
+                //             //         '2xl' => 9,
+                //             //     ])
+                //             //     ->schema([
+                //             //         Select::make('account_type')
+                //             //             ->options([
+                //             //                 'Student' => 'Student',
+                //             //                 'Teacher' => 'Teacher',
+                //             //             ])
+                //             //             ->required()
+                //             //             ->native(false)
+                //             //             ->columnSpanFull()
+                //             //             ->label('Account Type'),
+                //             //         TextInput::make('first_name')->required()->columnSpan(3),
+                //             //         TextInput::make('middle_name')->required()->columnSpan(3),
+                //             //         TextInput::make('last_name')->required()->columnSpan(3),
+                //             //         Select::make('sex')
+                //             //             ->options([
+                //             //                 'Male' => 'Male',
+                //             //                 'Female' => 'Female',
+                //             //             ])->columnSpan(3),
         
-                            //         DatePicker::make('birth_date')->required()->label('Birth date')
-                            //             ->timezone('Asia/Manila')
-                            //             ->closeOnDateSelection()->required()
-                            //             ->columnSpan(3)
-                            //             ->native(false),
-                            //         TextInput::make('contact_number')
-                            //             ->columnSpan(3)
-                            //             ->maxLength(10)
-                            //             ->prefix('+63'),
-                            //         FileUpload::make('image')
-                            //             ->disk('public')
-                            //             ->directory('accounts')
-                            //             ->image()
-                            //             ->imageEditor()
-                            //             ->imageEditorMode(2)
-                            //             ->required()
-                            //             ->columnSpanFull()
-                            //     ])->columnSpanFull(),
-                            // ])
-                            ,
+                //             //         DatePicker::make('birth_date')->required()->label('Birth date')
+                //             //             ->timezone('Asia/Manila')
+                //             //             ->closeOnDateSelection()->required()
+                //             //             ->columnSpan(3)
+                //             //             ->native(false),
+                //             //         TextInput::make('contact_number')
+                //             //             ->columnSpan(3)
+                //             //             ->maxLength(10)
+                //             //             ->prefix('+63'),
+                //             //         FileUpload::make('image')
+                //             //             ->disk('public')
+                //             //             ->directory('accounts')
+                //             //             ->image()
+                //             //             ->imageEditor()
+                //             //             ->imageEditorMode(2)
+                //             //             ->required()
+                //             //             ->columnSpanFull()
+                //             //     ])->columnSpanFull(),
+                //             // ])
+                //             ,
                             
-                        TextInput::make('id_number')->required()->unique(ignoreRecord: true)
-                        ->columnSpan(3)
-                        ->label('Card ID')
-                        ,   
-                        Flatpickr::make('valid_from')
+                //         TextInput::make('id_number')->required()->unique(ignoreRecord: true)
+                //         ->columnSpan(3)
+                //         ->label('Card ID')
+                //         ,   
+                //         Flatpickr::make('valid_from')
                         
-                        ->dateFormat('F d, Y') // S
-                        ->label('Valid From')
+                //         ->dateFormat('F d, Y') // S
+                //         ->label('Valid From')
 
-                        ->columnSpan(3),
-                        Flatpickr::make('valid_until')
-                        ->label('Card Until')
+                //         ->columnSpan(3),
+                //         Flatpickr::make('valid_until')
+                //         ->label('Card Until')
                        
-                        ->dateFormat('F d, Y') // S
-                        ->columnSpan(3)
-                        ,
+                //         ->dateFormat('F d, Y') // S
+                //         ->columnSpan(3)
+                //         ,
     
-                        Select::make('status')
-                        ->label('Card Status')
-                        ->options([
-                            'Active' => 'Active',
-                            'InActive' => 'Inactive',
-                            'Blocked' => 'Blocked',
-                            'Expired' => 'Expired',
-                        ])
-                        ->default('Active')
-                        ->columnSpanFull()
-                        ->required()
-                    ]),
+                //         Select::make('status')
+                //         ->label('Card Status')
+                //         ->options([
+                //             'Active' => 'Active',
+                //             'InActive' => 'Inactive',
+                //             'Blocked' => 'Blocked',
+                //             'Expired' => 'Expired',
+                //         ])
+                //         ->default('Active')
+                //         ->columnSpanFull()
+                //         ->required()
+                //     ]),
 
                    
-                    // TextInput::make('middle_name'),
-                    // TextInput::make('sex'),
+                //     // TextInput::make('middle_name'),
+                //     // TextInput::make('sex'),
 
-                ])
-                ->modalWidth('6xl')
-                ->createAnother(false)
+                // ])
+                // ->modalWidth('6xl')
+                // ->createAnother(false)
 
 
 
@@ -280,136 +283,141 @@ class ListCard extends Component implements HasForms, HasTable
             ])
             ->actions([
                 ActionGroup::make([
-                    EditAction::make()
-                    ->mutateRecordDataUsing(function (Model $record, array $data): array {
-                        // $data['account_id'] = auth()->id();
-
-                        $data['valid_from'] = Carbon::parse($record->valid_from)->format('F d, Y');
-                        $data['valid_until'] = Carbon::parse($record->valid_until)->format('F d, Y');
-                 
-                        return $data;
-                    })
-
-                    ->mutateFormDataUsing(function (array $data): array {
-                        $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
-                        $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');
-                        // $data['valid_until'] = auth()->id();
-                        // dd($data);
-                 
-                        return $data;
-                    })
+                    Action::make('Edit')
+                    ->label('Edit')
+                   ->icon('heroicon-o-pencil-square')
+                   ->url(fn ($record): string => route('edit.card', ['card' => $record])),
                     
-                    ->form([
+                    // EditAction::make()
+                    // ->mutateRecordDataUsing(function (Model $record, array $data): array {
+                    //     // $data['account_id'] = auth()->id();
+
+                    //     $data['valid_from'] = Carbon::parse($record->valid_from)->format('F d, Y');
+                    //     $data['valid_until'] = Carbon::parse($record->valid_until)->format('F d, Y');
+                 
+                    //     return $data;
+                    // })
+
+                    // ->mutateFormDataUsing(function (array $data): array {
+                    //     $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
+                    //     $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');
+                    //     // $data['valid_until'] = auth()->id();
+                    //     // dd($data);
+                 
+                    //     return $data;
+                    // })
+                    
+                    // ->form([
                         
                         
                             
-                        Section::make()
-                        ->description('Card Information')
-                        ->icon('heroicon-m-identification')
-                        ->columns([
-                            'sm' => 3,
-                            'xl' => 6,
-                            '2xl' => 9,
-                        ])
-                        ->schema([
-                            Select::make('account_id')
-                            ->label('Select Account')
-                            ->relationship(
-                                    name: 'account',
-                                    modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
-                                )
-                                ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
-                                ->searchable(['account.first_name', 'account.last_name'])
-                                ->preload()
-                                ->label('Account')
-                                ->columnSpanFull()
-                                // ->hidden(function (Model $record){
-                                //     return $record->account;
-                                // })
+                    //     Section::make()
+                    //     ->description('Card Information')
+                    //     ->icon('heroicon-m-identification')
+                    //     ->columns([
+                    //         'sm' => 3,
+                    //         'xl' => 6,
+                    //         '2xl' => 9,
+                    //     ])
+                    //     ->schema([
+                    //         Select::make('account_id')
+                    //         ->label('Select Account')
+                    //         ->relationship(
+                    //                 name: 'account',
+                    //                 modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
+                    //             )
+                    //             ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
+                    //             ->searchable(['account.first_name', 'account.last_name'])
+                    //             ->preload()
+                    //             ->label('Account')
+                    //             ->columnSpanFull()
+                    //             // ->hidden(function (Model $record){
+                    //             //     return $record->account;
+                    //             // })
                              
 
     
-                                // ->createOptionForm([
-                                //     Section::make()
-                                //     ->description('Personal Information')
-                                //     ->icon('heroicon-m-user')
-                                //     ->columns([
-                                //         'sm' => 3,
-                                //         'xl' => 6,
-                                //         '2xl' => 9,
-                                //     ])
-                                //     ->schema([
-                                //         Select::make('account_type')
-                                //             ->options([
-                                //                 'Student' => 'Student',
-                                //                 'Teacher' => 'Teacher',
-                                //             ])
-                                //             ->required()
-                                //             ->native(false)
-                                //             ->columnSpanFull()
-                                //             ->label('Account Type'),
-                                //         TextInput::make('first_name')->required()->columnSpan(3),
-                                //         TextInput::make('middle_name')->required()->columnSpan(3),
-                                //         TextInput::make('last_name')->required()->columnSpan(3),
-                                //         Select::make('sex')
-                                //             ->options([
-                                //                 'Male' => 'Male',
-                                //                 'Female' => 'Female',
-                                //             ])->columnSpan(3),
+                    //             // ->createOptionForm([
+                    //             //     Section::make()
+                    //             //     ->description('Personal Information')
+                    //             //     ->icon('heroicon-m-user')
+                    //             //     ->columns([
+                    //             //         'sm' => 3,
+                    //             //         'xl' => 6,
+                    //             //         '2xl' => 9,
+                    //             //     ])
+                    //             //     ->schema([
+                    //             //         Select::make('account_type')
+                    //             //             ->options([
+                    //             //                 'Student' => 'Student',
+                    //             //                 'Teacher' => 'Teacher',
+                    //             //             ])
+                    //             //             ->required()
+                    //             //             ->native(false)
+                    //             //             ->columnSpanFull()
+                    //             //             ->label('Account Type'),
+                    //             //         TextInput::make('first_name')->required()->columnSpan(3),
+                    //             //         TextInput::make('middle_name')->required()->columnSpan(3),
+                    //             //         TextInput::make('last_name')->required()->columnSpan(3),
+                    //             //         Select::make('sex')
+                    //             //             ->options([
+                    //             //                 'Male' => 'Male',
+                    //             //                 'Female' => 'Female',
+                    //             //             ])->columnSpan(3),
             
-                                //         DatePicker::make('birth_date')->required()->label('Birth date')
-                                //             ->timezone('Asia/Manila')
-                                //             ->closeOnDateSelection()->required()
-                                //             ->columnSpan(3)
-                                //             ->native(false),
-                                //         TextInput::make('contact_number')
-                                //             ->columnSpan(3)
-                                //             ->maxLength(10)
-                                //             ->prefix('+63'),
-                                //         FileUpload::make('image')
-                                //             ->disk('public')
-                                //             ->directory('accounts')
-                                //             ->image()
-                                //             ->imageEditor()
-                                //             ->imageEditorMode(2)
-                                //             ->required()
-                                //             ->columnSpanFull()
-                                //     ])->columnSpanFull(),
-                                // ])
-                                ,
+                    //             //         DatePicker::make('birth_date')->required()->label('Birth date')
+                    //             //             ->timezone('Asia/Manila')
+                    //             //             ->closeOnDateSelection()->required()
+                    //             //             ->columnSpan(3)
+                    //             //             ->native(false),
+                    //             //         TextInput::make('contact_number')
+                    //             //             ->columnSpan(3)
+                    //             //             ->maxLength(10)
+                    //             //             ->prefix('+63'),
+                    //             //         FileUpload::make('image')
+                    //             //             ->disk('public')
+                    //             //             ->directory('accounts')
+                    //             //             ->image()
+                    //             //             ->imageEditor()
+                    //             //             ->imageEditorMode(2)
+                    //             //             ->required()
+                    //             //             ->columnSpanFull()
+                    //             //     ])->columnSpanFull(),
+                    //             // ])
+                    //             ,
                                 
-                            TextInput::make('id_number')->required()->unique(ignoreRecord: true)
-                            ->columnSpan(3)
-                            ->label('Card ID')
-                            ,   
-                            Flatpickr::make('valid_from')
-                            ->dateFormat('F d, Y') //
+                    //         TextInput::make('id_number')->required()->unique(ignoreRecord: true)
+                    //         ->columnSpan(3)
+                    //         ->label('Card ID')
+                    //         ,   
+                    //         Flatpickr::make('valid_from')
+                    //         ->dateFormat('F d, Y') //
 
-                            ->label('Valid From')
+                    //         ->label('Valid From')
                             
-                            ->columnSpan(3),
-                            Flatpickr::make('valid_until')
-                            ->dateFormat('F d, Y') //
-                            ->label('Card Until')
+                    //         ->columnSpan(3),
+                    //         Flatpickr::make('valid_until')
+                    //         ->dateFormat('F d, Y') //
+                    //         ->label('Card Until')
     
-                            ->columnSpan(3)
-                            ,
+                    //         ->columnSpan(3)
+                    //         ,
         
-                            Select::make('status')
-                            ->label('Card Status')
-                            ->options([
-                                'Active' => 'Active',
-                                'Inactive' => 'Inactive',
-                                'Blocked' => 'Blocked',
-                                'Expired' => 'Expired',
-                            ])
-                            ->default('Active')
-                            ->columnSpanFull()
-                            ->required()
-                        ]),
-                    ])
-                    ->modalWidth('6xl')
-                    ,
+                    //         Select::make('status')
+                    //         ->label('Card Status')
+                    //         ->options([
+                    //             'Active' => 'Active',
+                    //             'Inactive' => 'Inactive',
+                    //             'Blocked' => 'Blocked',
+                    //             'Expired' => 'Expired',
+                    //         ])
+                    //         ->default('Active')
+                    //         ->columnSpanFull()
+                    //         ->required()
+                    //     ]),
+                    // ])
+                    // ->modalWidth('6xl')
+                    // ,
                     DeleteAction::make(),
                 ]),
             ],
