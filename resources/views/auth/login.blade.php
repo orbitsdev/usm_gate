@@ -40,7 +40,7 @@
                 @endif --}}
 
               
-                <button type="submit" class="bg-black py-2 px-4 rounded-lg text-white  w-full "> Login</button>
+                <button type="submit" class="bg-black py-2 px-4 rounded-lg text-white  w-full mt-2"> Login</button>
             </div>
         </form>
     </x-authentication-card>
