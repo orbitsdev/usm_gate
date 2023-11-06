@@ -30,22 +30,7 @@
                 Submit
             </button>
         </form> --}}
-        <p>
-
-            {{$date_start}}
-        </p>
-        <p>
-
-            {{$date_end}}
-        </p>
-        <p>
-
-            {{$time_start}}
-        </p>
-        <p>
-
-            {{$time_end}}
-        </p>
+        
         {{ $this->form }}
         <div class=" flex justify-start w-full mt-6 ">
             <x-button rose  wire:click="exportToExcel" style="background: #03A340" icon="newspaper"
@@ -61,11 +46,26 @@
                 <div class="text-center " style="padding: 0px  20px ">
                     <p>Republic of The Philippines</p>
                     <p class="uppercase">University of Southern Mindanao</p>
-                    @if ($dayData)
+                    @if(!empty($date_start))
+                    {{ $date_start}}
+
+                    @if(!empty($date_end))
+                    - {{$date_end}} 
+                    @endif
+                    
+                    @endif
+                    
+                    @if(empty($date_start))
+                        @if (!empty($date_end))
+                            
+                        {{$date_end}} 
+                        @endif
+                    @endif
+                    {{-- @if ($dayData)
                         <p class="mt-10 " style="padding-top: 20px"> {{ $dayData->created_at->format('F d, Y - l ') }} </p>
                     @else
-                        {{-- <p class="mt-10 " style="padding-top: 20px"> {{ now()->format('F d, Y - l ') }} </p> --}}
-                    @endif
+                       
+                    @endif --}}
                 </div>
                 <div class="ml-10">
                     <img src="{{ asset('images/usm-seal.png') }}" alt="" style="width: 60px; height: 60px">

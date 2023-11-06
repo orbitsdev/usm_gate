@@ -16,6 +16,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
@@ -136,13 +137,14 @@ class OverAllReport extends Component implements HasForms
 
                         //     }),
 
-                        Flatpickr::make('date_start')
+                        DatePicker::make('date_start')
+                            ->native(false)
                             ->live()
                             ->columnSpan(2)
-                            ->dateFormat('F d, Y')
+                           
                             ->afterStateUpdated(function (Get $get, Set $set, $state) {
 
-                                $this->date_start = $state;
+                                $this->date_start = Carbon::parse($state)->isoFormat('MMMM DD, YYYY');
 
                                 if (!empty($state)) {
                                     $this->accountType = $get('accountType');
@@ -164,25 +166,25 @@ class OverAllReport extends Component implements HasForms
                                             // Apply date_start filter only if date_start is selected and date_end is not selected
                                             $query->whereDate('created_at', Carbon::parse($get('date_start'))->format('Y-m-d'));
                                         })
-                                        ->when($get('period') != 'all', function ($query) use ($get, $state) {
-                                            // Apply date range filter
-                                            $startDate = !empty($get('date_start')) ? Carbon::parse($get('date_start'))->startOfDay() : null;
-                                            $endDate = !empty($get('date_end')) ? Carbon::parse($get('date_end'))->endOfDay() : null;
+                                        // ->when($get('period') != 'all', function ($query) use ($get, $state) {
+                                        //     // Apply date range filter
+                                        //     $startDate = !empty($get('date_start')) ? Carbon::parse($get('date_start'))->startOfDay() : null;
+                                        //     $endDate = !empty($get('date_end')) ? Carbon::parse($get('date_end'))->endOfDay() : null;
                             
-                                            if (!empty($startDate) || !empty($endDate)) {
-                                                if ($startDate && $endDate) {
-                                                    $query->whereBetween('created_at', [$startDate, $endDate]);
-                                                } elseif ($startDate) {
-                                                    $query->where('created_at', '>=', $startDate);
-                                                } elseif ($endDate) {
-                                                    $query->where('created_at', '<=', $endDate);
-                                                }
+                                        //     if (!empty($startDate) || !empty($endDate)) {
+                                        //         if ($startDate && $endDate) {
+                                        //             $query->whereBetween('created_at', [$startDate, $endDate]);
+                                        //         } elseif ($startDate) {
+                                        //             $query->where('created_at', '>=', $startDate);
+                                        //         } elseif ($endDate) {
+                                        //             $query->where('created_at', '<=', $endDate);
+                                        //         }
                             
-                                                // Apply time filter
-                                                $timeCondition = $get('period') == 'am' ? '<' : '>=';
-                                                $query->whereTime('created_at', $timeCondition, '12:00:00');
-                                            }
-                                        })
+                                        //         // Apply time filter
+                                        //         $timeCondition = $get('period') == 'am' ? '<' : '>=';
+                                        //         $query->whereTime('created_at', $timeCondition, '12:00:00');
+                                        //     }
+                                        // })
                                         ->get();
 
                                     $this->records = $data;
@@ -193,12 +195,13 @@ class OverAllReport extends Component implements HasForms
                             ->label('Date Start')
                             ,
 
-                        Flatpickr::make('date_end')
-                            ->dateFormat('F d, Y')
+                      
+                            DatePicker::make('date_end')
+                            ->native(false)
                             ->live()
                             ->columnSpan(2)
                             ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                                $this->date_end = $state;
+                                $this->date_end = Carbon::parse($state)->isoFormat('MMMM DD, YYYY');
                                 $this->accountType = $get('accountType');
 
                                 $data = Record::orderBy('created_at', 'desc')
@@ -219,25 +222,25 @@ class OverAllReport extends Component implements HasForms
                                         $query->whereDate('created_at', Carbon::parse($get('date_end'))->format('Y-m-d'));
                                     })
 
-                                    ->when($get('period') != 'all', function ($query) use ($get, $state) {
-                                        // Apply date range filter
-                                        $startDate = !empty($get('date_start')) ? Carbon::parse($get('date_start'))->startOfDay() : null;
-                                        $endDate = !empty($get('date_end')) ? Carbon::parse($get('date_end'))->endOfDay() : null;
+                                    // ->when($get('period') != 'all', function ($query) use ($get, $state) {
+                                    //     // Apply date range filter
+                                    //     $startDate = !empty($get('date_start')) ? Carbon::parse($get('date_start'))->startOfDay() : null;
+                                    //     $endDate = !empty($get('date_end')) ? Carbon::parse($get('date_end'))->endOfDay() : null;
                         
-                                        if (!empty($startDate) || !empty($endDate)) {
-                                            if ($startDate && $endDate) {
-                                                $query->whereBetween('created_at', [$startDate, $endDate]);
-                                            } elseif ($startDate) {
-                                                $query->where('created_at', '>=', $startDate);
-                                            } elseif ($endDate) {
-                                                $query->where('created_at', '<=', $endDate);
-                                            }
+                                    //     if (!empty($startDate) || !empty($endDate)) {
+                                    //         if ($startDate && $endDate) {
+                                    //             $query->whereBetween('created_at', [$startDate, $endDate]);
+                                    //         } elseif ($startDate) {
+                                    //             $query->where('created_at', '>=', $startDate);
+                                    //         } elseif ($endDate) {
+                                    //             $query->where('created_at', '<=', $endDate);
+                                    //         }
                         
-                                            // Apply time filter
-                                            $timeCondition = $get('period') == 'am' ? '<' : '>=';
-                                            $query->whereTime('created_at', $timeCondition, '12:00:00');
-                                        }
-                                    })
+                                    //         // Apply time filter
+                                    //         $timeCondition = $get('period') == 'am' ? '<' : '>=';
+                                    //         $query->whereTime('created_at', $timeCondition, '12:00:00');
+                                    //     }
+                                    // })
                                     ->get();
 
                                 $this->records = $data;
@@ -245,49 +248,49 @@ class OverAllReport extends Component implements HasForms
                             ->label('Date End'),
                             
 
-                        Select::make('period')
-                            ->options([
-                                'all' => 'All',
-                                'am' => 'AM',
-                                'pm' => 'PM',
-                            ])
-                            ->label('Time period')
-                            ->live()
-                            ->columnSpan(2)
-                            ->default('all')
-                            ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                                $this->accountType = $get('account_type');
-                                $this->period = $state;
+                        // Select::make('period')
+                        //     ->options([
+                        //         'all' => 'All',
+                        //         'am' => 'AM',
+                        //         'pm' => 'PM',
+                        //     ])
+                        //     ->label('Time period')
+                        //     ->live()
+                        //     ->columnSpan(2)
+                        //     ->default('all')
+                        //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        //         $this->accountType = $get('account_type');
+                        //         $this->period = $state;
 
-                                $data = Record::orderBy('created_at', 'desc')
-                                    ->when($this->accountType != 'All' && !empty($this->accountType), function ($query) {
-                                        $query->whereHas('card.account', function ($query) {
-                                            $query->where('account_type', $this->accountType);
-                                        });
-                                    })
-                                    ->when(!empty($get('date_start')) || !empty($get('date_end')), function ($query) use ($get, $state) {
-                                        // Apply date range filter
-                                        $startDate = !empty($get('date_start')) ? Carbon::parse($get('date_start'))->startOfDay() : null;
-                                        $endDate = !empty($get('date_end')) ? Carbon::parse($get('date_end'))->endOfDay() : null;
+                        //         $data = Record::orderBy('created_at', 'desc')
+                        //             ->when($this->accountType != 'All' && !empty($this->accountType), function ($query) {
+                        //                 $query->whereHas('card.account', function ($query) {
+                        //                     $query->where('account_type', $this->accountType);
+                        //                 });
+                        //             })
+                        //             ->when(!empty($get('date_start')) || !empty($get('date_end')), function ($query) use ($get, $state) {
+                        //                 // Apply date range filter
+                        //                 $startDate = !empty($get('date_start')) ? Carbon::parse($get('date_start'))->startOfDay() : null;
+                        //                 $endDate = !empty($get('date_end')) ? Carbon::parse($get('date_end'))->endOfDay() : null;
 
-                                        if (!empty($startDate) || !empty($endDate)) {
-                                            if ($startDate && $endDate) {
-                                                $query->whereBetween('created_at', [$startDate, $endDate]);
-                                            } elseif ($startDate) {
-                                                $query->where('created_at', '>=', $startDate);
-                                            } elseif ($endDate) {
-                                                $query->where('created_at', '<=', $endDate);
-                                            }
+                        //                 if (!empty($startDate) || !empty($endDate)) {
+                        //                     if ($startDate && $endDate) {
+                        //                         $query->whereBetween('created_at', [$startDate, $endDate]);
+                        //                     } elseif ($startDate) {
+                        //                         $query->where('created_at', '>=', $startDate);
+                        //                     } elseif ($endDate) {
+                        //                         $query->where('created_at', '<=', $endDate);
+                        //                     }
 
-                                            // Apply time filter
-                                            $timeCondition = $state == 'am' ? '<' : '>=';
-                                            $query->whereTime('created_at', $timeCondition, '12:00:00');
-                                        }
-                                    })
-                                    ->get();
+                        //                     // Apply time filter
+                        //                     $timeCondition = $state == 'am' ? '<' : '>=';
+                        //                     $query->whereTime('created_at', $timeCondition, '12:00:00');
+                        //                 }
+                        //             })
+                        //             ->get();
 
-                                $this->records = $data;
-                            }),
+                        //         $this->records = $data;
+                        //     }),
 
 
 
@@ -323,25 +326,25 @@ class OverAllReport extends Component implements HasForms
                                                 Carbon::parse($get('date_end'))->endOfDay(),
                                             ]);
                                         })
-                                        ->when($get('period') != 'all', function ($query) use ($get, $state) {
-                                            // Apply date range filter
-                                            $startDate = !empty($get('date_start')) ? Carbon::parse($get('date_start'))->startOfDay() : null;
-                                            $endDate = !empty($get('date_end')) ? Carbon::parse($get('date_end'))->endOfDay() : null;
+                                        // ->when($get('period') != 'all', function ($query) use ($get, $state) {
+                                        //     // Apply date range filter
+                                        //     $startDate = !empty($get('date_start')) ? Carbon::parse($get('date_start'))->startOfDay() : null;
+                                        //     $endDate = !empty($get('date_end')) ? Carbon::parse($get('date_end'))->endOfDay() : null;
                             
-                                            if (!empty($startDate) || !empty($endDate)) {
-                                                if ($startDate && $endDate) {
-                                                    $query->whereBetween('created_at', [$startDate, $endDate]);
-                                                } elseif ($startDate) {
-                                                    $query->where('created_at', '>=', $startDate);
-                                                } elseif ($endDate) {
-                                                    $query->where('created_at', '<=', $endDate);
-                                                }
+                                        //     if (!empty($startDate) || !empty($endDate)) {
+                                        //         if ($startDate && $endDate) {
+                                        //             $query->whereBetween('created_at', [$startDate, $endDate]);
+                                        //         } elseif ($startDate) {
+                                        //             $query->where('created_at', '>=', $startDate);
+                                        //         } elseif ($endDate) {
+                                        //             $query->where('created_at', '<=', $endDate);
+                                        //         }
                             
-                                                // Apply time filter
-                                                $timeCondition = $get('period') == 'am' ? '<' : '>=';
-                                                $query->whereTime('created_at', $timeCondition, '12:00:00');
-                                            }
-                                        })
+                                        //         // Apply time filter
+                                        //         $timeCondition = $get('period') == 'am' ? '<' : '>=';
+                                        //         $query->whereTime('created_at', $timeCondition, '12:00:00');
+                                        //     }
+                                        // })
                                         ->get();
 
                                     $this->records = $data;
