@@ -30,7 +30,22 @@
                 Submit
             </button>
         </form> --}}
-     
+        <p>
+
+            {{$date_start}}
+        </p>
+        <p>
+
+            {{$date_end}}
+        </p>
+        <p>
+
+            {{$time_start}}
+        </p>
+        <p>
+
+            {{$time_end}}
+        </p>
         {{ $this->form }}
         <div class=" flex justify-start w-full mt-6 ">
             <x-button rose  wire:click="exportToExcel" style="background: #03A340" icon="newspaper"

@@ -35,6 +35,10 @@ class IndividualReport extends Component  implements HasForms
 
     public $date_start;
     public $date_end;
+    public $time_start;
+    public $time_end;
+    public $period;
+    public $debug;
 
 
     public function mount()
@@ -47,10 +51,10 @@ class IndividualReport extends Component  implements HasForms
     {
         if (count($this->records) > 0) {
             $filename = '';
-    
+
             if (!empty($this->account)) {
                 $filename = $this->account->first_name . '-' . $this->account->last_name;
-    
+
                 if (!empty($this->date_start) && !empty($this->date_end)) {
                     $rangeday = 'DAILY-RECORD-' . $this->date_start . '-' . $this->date_end;
                 } else if (empty($this->date_end) && !empty($this->date_start)) {
@@ -58,16 +62,16 @@ class IndividualReport extends Component  implements HasForms
                 } else if (empty($this->date_start) && !empty($this->date_end)) {
                     $rangeday = 'DAILY-RECORD-' . $this->date_end;
                 }
-    
+
                 $filename .= '-' . $rangeday;
             } else {
                 $filename = 'individualreport';
             }
-    
+
             return Excel::download(new IndividualReportExport($this->records), $filename . '.xlsx');
         }
     }
-    
+
 
     public function print()
     {
@@ -162,116 +166,315 @@ class IndividualReport extends Component  implements HasForms
 
                         // })->searchable(),
 
+                        //     Select::make('name')
+                        //     ->options(function (Get $get, Set $set, $state) {
+
+                        //         return Account::when(!empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
+                        //             $query->whereHas('card.records', function ($query) use ($get) {
+                        //                 $query->whereBetween('created_at', [
+                        //                     Carbon::parse($get('date_start'))->startOfDay(),
+                        //                     Carbon::parse($get('date_end'))->endOfDay(),
+                        //                 ]);
+                        //             });
+                        //         })
+                        //         ->whereHas('card.records')->select(DB::raw("CONCAT(last_name, ' ', first_name, ' ', middle_name, ' - ', account_type) AS full_name"), 'id')->pluck('full_name', 'id')->toArray();
+                        //     })
+                        //     ->columnSpan(2)
+                        //     ->searchable()
+                        //     ->label('Full name')
+                        //     ->live()
+                        //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        //         $this->account = Account::where('id', $state)->first();
+                        //         if (!empty($state) && !empty($get('date_start')) && !empty($get('date_end'))) {
+
+
+                        //             $this->records = Record::orderBy('created_at', 'desc')
+                        //                 ->when($state, function ($query) use ($state) {
+                        //                     $query->whereHas('card', function ($query) use ($state) {
+                        //                         $query->where('account_id', $state);
+                        //                     });
+                        //                 })
+                        //                 ->when(!empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
+                        //                     // Apply date range filter
+                        //                     $query->whereBetween('created_at', [
+                        //                         Carbon::parse($get('date_start'))->startOfDay(),
+                        //                         Carbon::parse($get('date_end'))->endOfDay(),
+                        //                     ]);
+                        //                 })
+                        //                 ->get();
+                        //         } else {
+                        //             $this->records = [];
+                        //         }
+                        //     })->searchable(),
+
+                        //     Flatpickr::make('date_start')
+
+
+                        //     ->live()
+                        //     ->columnSpan(2)
+                        //     ->dateFormat('F d, Y')
+                        //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        //         $this->date_start = $state;
+
+                        //         if (!empty($get('name')) && (!empty($state) || !empty($get('date_end')))) {
+                        //             // Only query data if name is selected and either date_start or date_end is not empty
+                        //             $data = Record::orderBy('created_at', 'desc')
+                        //                 ->when($state && !empty($get('date_end')), function ($query) use ($state, $get) {
+                        //                     // Apply date range filter using date_start and date_end
+                        //                     $query->whereBetween('created_at', [
+                        //                         Carbon::parse($state)->startOfDay(),
+                        //                         Carbon::parse($get('date_end'))->endOfDay(),
+                        //                     ]);
+                        //                 })
+                        //                 ->when(empty($get('date_end')) && !empty($state), function ($query) use ($state) {
+                        //                     // Apply date_start filter only if date_end is empty and date_start is not empty
+                        //                     $query->whereDate('created_at', Carbon::parse($state)->format('Y-m-d'));
+                        //                 })
+                        //                 ->when(empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
+                        //                     // Apply date_end filter only if date_start is empty and date_end is not empty
+                        //                     $query->whereDate('created_at', Carbon::parse($get('date_end'))->format('Y-m-d'));
+                        //                 })
+                        //                 ->get();
+
+                        //             $this->records = $data;
+                        //         } else {
+                        //             $this->records = [];
+                        //         }
+                        //     }),
+
+                        // Flatpickr::make('date_end')
+
+                        //     ->dateFormat('F d, Y')
+                        //     ->live()
+                        //     ->columnSpan(2)
+                        //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        //         $this->date_end = $state;
+
+                        //         if (!empty($get('name')) && (!empty($state) || !empty($get('date_start')))) {
+                        //             // Only query data if name is selected and either date_start or date_end is not empty
+                        //             $data = Record::orderBy('created_at', 'desc')
+                        //                 ->when($state && !empty($get('date_start')), function ($query) use ($state, $get) {
+                        //                     // Apply date range filter using date_start and date_end
+                        //                     $query->whereBetween('created_at', [
+                        //                         Carbon::parse($get('date_start'))->startOfDay(),
+                        //                         Carbon::parse($state)->endOfDay(),
+                        //                     ]);
+                        //                 })
+                        //                 ->when(empty($get('date_start')) && !empty($state), function ($query) use ($state) {
+                        //                     // Apply date_end filter only if date_start is empty and date_end is not empty
+                        //                     $query->whereDate('created_at', Carbon::parse($state)->format('Y-m-d'));
+                        //                 })
+                        //                 ->when(empty($get('date_end')) && !empty($get('date_start')), function ($query) use ($get) {
+                        //                     // Apply date_start filter only if date_end is empty and date_start is not empty
+                        //                     $query->whereDate('created_at', Carbon::parse($get('date_start'))->format('Y-m-d'));
+                        //                 })
+                        //                 ->get();
+
+                        //             $this->records = $data;
+                        //         } else {
+                        //             $this->records = [];
+                        //         }
+                        //     }),
+
+
+
+
+
                         Select::make('name')
-                        ->options(function (Get $get, Set $set, $state) {
 
-                            return Account::when(!empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
-                                $query->whereHas('card.records', function ($query) use ($get) {
-                                    $query->whereBetween('created_at', [
-                                        Carbon::parse($get('date_start'))->startOfDay(),
-                                        Carbon::parse($get('date_end'))->endOfDay(),
-                                    ]);
-                                });
+                            ->options(function (Get $get, Set $set, $state) {
+                                return Account::when(!empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
+                                    $query->whereHas('card.records', function ($query) use ($get) {
+                                        $query->whereBetween('created_at', [
+                                            Carbon::parse($get('date_start'))->startOfDay(),
+                                            Carbon::parse($get('date_end'))->endOfDay(),
+                                        ]);
+                                    });
+                                })
+                                    ->whereHas('card.records')->select(DB::raw("CONCAT(last_name, ' ', first_name, ' ', middle_name, ' - ', account_type) AS full_name"), 'id')->pluck('full_name', 'id')->toArray();
                             })
-                            ->whereHas('card.records')->select(DB::raw("CONCAT(last_name, ' ', first_name, ' ', middle_name, ' - ', account_type) AS full_name"), 'id')->pluck('full_name', 'id')->toArray();
-                        })
-                        ->columnSpan(2)
-                        ->searchable()
-                        ->label('Full name')
-                        ->live()
-                        ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $this->account = Account::where('id', $state)->first();
-                            if (!empty($state) && !empty($get('date_start')) && !empty($get('date_end'))) {
-                              
-                    
-                                $this->records = Record::orderBy('created_at', 'desc')
-                                    ->when($state, function ($query) use ($state) {
-                                        $query->whereHas('card', function ($query) use ($state) {
-                                            $query->where('account_id', $state);
-                                        });
-                                    })
-                                    ->when(!empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
-                                        // Apply date range filter
-                                        $query->whereBetween('created_at', [
-                                            Carbon::parse($get('date_start'))->startOfDay(),
-                                            Carbon::parse($get('date_end'))->endOfDay(),
-                                        ]);
-                                    })
-                                    ->get();
-                            } else {
-                                $this->records = [];
-                            }
-                        })->searchable(),
-                    
-                        Flatpickr::make('date_start')
-                       
 
-                        ->live()
-                        ->columnSpan(2)
-                        ->dateFormat('F d, Y')
-                        ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $this->date_start = $state;
+                            ->columnSpan(2)
+                            ->searchable()
+                            ->label('Full name')
+                            ->live()
+                            ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                                $this->account = Account::where('id', $state)->first();
+                                if (!empty($state) && (!empty($get('date_start')) || !empty($get('date_end')))) {
+                                    $data = Record::orderBy('created_at', 'desc')
+                                        ->when($state, function ($query) use ($state) {
+                                            $query->whereHas('card', function ($query) use ($state) {
+                                                $query->where('account_id', $state);
+                                            });
+                                        })
+                                        ->when(!empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
+                                            $query->whereBetween('created_at', [
+                                                Carbon::parse($get('date_start'))->startOfDay(),
+                                                Carbon::parse($get('date_end'))->endOfDay(),
+                                            ]);
+                                        })
+                                        // ->when(!empty($get('period')), function ($query) use ($get) {
+                                        //     // Apply period filter
+                                        //     $timeCondition = $get('period') == 'am' ? '<' : '>=';
+                                        //     $query->whereTime('created_at', $timeCondition, '12:00:00');
+                                        // })
+                                        ->get();
+                                    $this->records = $data;
+                                } else {
+                                    $this->records = [];
+                                }
+                            }),
+
+                        Flatpickr::make('date_start')
+                            // ... Other options
+                            ->live()
+                            ->columnSpan(2)
+                            ->dateFormat('F d, Y')
+                            ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                                $this->date_start = $state;
+                                if (!empty($get('name')) && (!empty($state) || !empty($get('date_end')))) {
+                                    $data = Record::orderBy('created_at', 'desc')
+                                        ->when($state && !empty($get('date_end')), function ($query) use ($state, $get) {
+                                            $query->whereBetween('created_at', [
+                                                Carbon::parse($state)->startOfDay(),
+                                                Carbon::parse($get('date_end'))->endOfDay(),
+                                            ]);
+                                        })
+                                        ->when(empty($get('date_end')) && !empty($state), function ($query) use ($state) {
+                                            $query->whereDate('created_at', Carbon::parse($state)->format('Y-m-d'));
+                                        })
+                                        ->when(empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
+                                            $query->whereDate('created_at', Carbon::parse($get('date_end'))->format('Y-m-d'));
+                                        })
+
+                                        ->get();
+                                    $this->records = $data;
+                                } else {
+                                    $this->records = [];
+                                }
+                            })
+                            ->label('Date Start')
+                            ,
+
+                        Flatpickr::make('date_end')
+                            // ... Other options
+                            ->dateFormat('F d, Y')
+                            ->live()
+                            ->columnSpan(2)
+                            ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                                $this->date_end = $state;
+                                if (!empty($get('name')) && (!empty($state) || !empty($get('date_start')))) {
+                                    $data = Record::orderBy('created_at', 'desc')
+                                        ->when($state && !empty($get('date_start')), function ($query) use ($state, $get) {
+                                            $query->whereBetween('created_at', [
+                                                Carbon::parse($get('date_start'))->startOfDay(),
+                                                Carbon::parse($state)->endOfDay(),
+                                            ]);
+                                        })
+                                        ->when(empty($get('date_start')) && !empty($state), function ($query) use ($state) {
+                                            $query->whereDate('created_at', Carbon::parse($state)->format('Y-m-d'));
+                                        })
+                                        ->when(empty($get('date_end')) && !empty($get('date_start')), function ($query) use ($get) {
+                                            $query->whereDate('created_at', Carbon::parse($get('date_start'))->format('Y-m-d'));
+                                        })
+
+                                        ->get();
+                                    $this->records = $data;
+                                } else {
+                                    $this->records = [];
+                                }
+                            })->label('Date End'),
+
+
+
+                        //     Flatpickr::make('time_start')->time()
+                        //     ->live()
+                        //     ->columnSpan(2)
+                        //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        //         $this->time_start = $state;
+                        //             $data= Record::orderBy('created_at', 'desc')
+                        //         ->when(!empty($get('date_start')) , function ($query)  use($state, $get) {
+                        //             dd($state, 'date start onlye');
+                        //              $query->whereDate('created_at', '>=', $this->date_start);
+                        //         })
+                        //         ->when(!empty($get('date_end')), function ($query) use($state, $get)  {
+                        //             dd($state, 'date end only');
+
+                        //             $query->whereDate('created_at', '<=', $this->date_end);
+                        //         })
+                        //         ->when(!empty($get('date_start')) || !empty($this->time_end), function ($query) use($state, $get) {
+                                    
+                        //             dd($state, 'has date range');
+                        //             $query->where(function ($subQuery) {
+                        //                 if (!empty($this->time_start)) {
+                        //                     $subQuery->whereTime('created_at', '>=', $this->time_start);
+                        //                 }
                     
-                            if (!empty($get('name')) && (!empty($state) || !empty($get('date_end')))) {
-                                // Only query data if name is selected and either date_start or date_end is not empty
-                                $data = Record::orderBy('created_at', 'desc')
-                                    ->when($state && !empty($get('date_end')), function ($query) use ($state, $get) {
-                                        // Apply date range filter using date_start and date_end
-                                        $query->whereBetween('created_at', [
-                                            Carbon::parse($state)->startOfDay(),
-                                            Carbon::parse($get('date_end'))->endOfDay(),
-                                        ]);
-                                    })
-                                    ->when(empty($get('date_end')) && !empty($state), function ($query) use ($state) {
-                                        // Apply date_start filter only if date_end is empty and date_start is not empty
-                                        $query->whereDate('created_at', Carbon::parse($state)->format('Y-m-d'));
-                                    })
-                                    ->when(empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
-                                        // Apply date_end filter only if date_start is empty and date_end is not empty
-                                        $query->whereDate('created_at', Carbon::parse($get('date_end'))->format('Y-m-d'));
-                                    })
-                                    ->get();
-                    
-                                $this->records = $data;
-                            } else {
-                                $this->records = [];
-                            }
-                        }),
-                    
-                    Flatpickr::make('date_end')
-                      
-                        ->dateFormat('F d, Y')
-                        ->live()
-                        ->columnSpan(2)
-                        ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $this->date_end = $state;
-                    
-                            if (!empty($get('name')) && (!empty($state) || !empty($get('date_start')))) {
-                                // Only query data if name is selected and either date_start or date_end is not empty
-                                $data = Record::orderBy('created_at', 'desc')
-                                    ->when($state && !empty($get('date_start')), function ($query) use ($state, $get) {
-                                        // Apply date range filter using date_start and date_end
-                                        $query->whereBetween('created_at', [
-                                            Carbon::parse($get('date_start'))->startOfDay(),
-                                            Carbon::parse($state)->endOfDay(),
-                                        ]);
-                                    })
-                                    ->when(empty($get('date_start')) && !empty($state), function ($query) use ($state) {
-                                        // Apply date_end filter only if date_start is empty and date_end is not empty
-                                        $query->whereDate('created_at', Carbon::parse($state)->format('Y-m-d'));
-                                    })
-                                    ->when(empty($get('date_end')) && !empty($get('date_start')), function ($query) use ($get) {
-                                        // Apply date_start filter only if date_end is empty and date_start is not empty
-                                        $query->whereDate('created_at', Carbon::parse($get('date_start'))->format('Y-m-d'));
-                                    })
-                                    ->get();
-                    
-                                $this->records = $data;
-                            } else {
-                                $this->records = [];
-                            }
-                        }),
-                    
+                        //                 if (!empty($this->time_end)) {
+                        //                     $subQuery->whereTime('created_at', '<=', $this->time_end);
+                        //                 }
+                        //             });
+                        //         })
+                        //         ->get();
+                        //         $this->records = $data;
+
+                        //     //   dd($this->records);
+                                
+
+                              
+                            
+                        //     }),
+                        
+                        // Flatpickr::make('time_end')->time()
+                        //     ->live()
+                        //     ->columnSpan(2)
+                        //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        //         $this->time_end = $state;
+                               
+                               
+                        //     }),
+                        
+
+
+                        // Flatpickr::make('time_end')->time()
+                        //     ->live()
+                        //     ->columnSpan(2)
+                        //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        //         $this->time_end = $state;
+
+                        //         $this->date_end = $get('date_end');
+                        //         if (!empty($get('name')) && (!empty($get('date_start')) || !empty($get('date_end')) )) {
+                        //             $data = Record::orderBy('created_at', 'desc')
+                        //                 ->when(!empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
+                        //                     $query->whereBetween('created_at', [
+                        //                         Carbon::parse($get('date_start'))->startOfDay(),
+                        //                         Carbon::parse($get('date_end'))->endOfDay(),
+                        //                     ]);
+                        //                 })
+                        //                 ->when(empty($get('date_start')) && !empty($get('date_end')), function ($query) use ($get) {
+                        //                     $query->whereDate('created_at', Carbon::parse($get('date_end'))->format('Y-m-d'));
+                        //                 })
+                        //                 ->when(empty($get('date_end')) && !empty($get('date_start')), function ($query) use ($get) {
+                        //                     $query->whereDate('created_at', Carbon::parse($get('date_start'))->format('Y-m-d'));
+                        //                 })
+                        //                 ->when(!empty($state), function ($query) use ($get, $state) {
+                        //                     $endTime = Carbon::parse($get('date_end') . ' ' . $state)->toDateTimeString();
+                        //                     $query->where('created_at', '<=', $endTime);
+                        //                 })
+                        //                 ->get();
+
+                        //             $this->records = $data;
+                        //         } else {
+                        //             $this->records = [];
+                        //         }
+                        //     }),
+
+
+
+
+
+
+
 
 
 

@@ -189,7 +189,9 @@ class OverAllReport extends Component implements HasForms
                                 } else {
                                     $this->records  = [];
                                 }
-                            }),
+                            })
+                            ->label('Date Start')
+                            ,
 
                         Flatpickr::make('date_end')
                             ->dateFormat('F d, Y')
@@ -239,7 +241,9 @@ class OverAllReport extends Component implements HasForms
                                     ->get();
 
                                 $this->records = $data;
-                            }),
+                            })
+                            ->label('Date End'),
+                            
 
                         Select::make('period')
                             ->options([
@@ -253,6 +257,7 @@ class OverAllReport extends Component implements HasForms
                             ->default('all')
                             ->afterStateUpdated(function (Get $get, Set $set, $state) {
                                 $this->accountType = $get('account_type');
+                                $this->period = $state;
 
                                 $data = Record::orderBy('created_at', 'desc')
                                     ->when($this->accountType != 'All' && !empty($this->accountType), function ($query) {
