@@ -285,6 +285,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                                             ->options([
                                                 'Student' => 'Student',
                                                 'Staff' => 'Staff',
+                                                'Teacher' => 'Teacher',
                                             ])
                                             ->required()
                                             ->native(false)
