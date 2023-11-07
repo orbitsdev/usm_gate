@@ -40,7 +40,7 @@ use App\Exports\NoAssignedAccountCardsExport;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
-
+use Filament\Tables\Filters\Layout;
 class ListCard extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
@@ -63,7 +63,7 @@ class ListCard extends Component implements HasForms, HasTable
                             $query->where('first_name', 'like', "%{$search}%")
                                 ->orWhere('last_name', 'like', "%{$search}%");
                         });
-                    }),
+                    } ,isIndividual: true, isGlobal: true),
                 TextColumn::make('id_number')
                     ->copyable()
                     ->searchable(isIndividual: true, isGlobal: true)
@@ -222,7 +222,9 @@ class ListCard extends Component implements HasForms, HasTable
                         'Blocked' => 'Blocked',
                         'Expired' => 'Expired',
                     ])
-            ])
+                    ],
+          
+            )
             ->actions(
                 [
                     ActionGroup::make([
@@ -453,7 +455,9 @@ class ListCard extends Component implements HasForms, HasTable
                     ->label('Status'),
 
 
-            ]);
+            ])
+            // ->groupsInDropdownOnDesktop()
+            ;
     }
 
     public function render(): View

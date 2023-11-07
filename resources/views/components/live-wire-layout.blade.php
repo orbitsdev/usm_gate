@@ -145,8 +145,10 @@
         </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
+         
             <li>
               <ul role="list" class="-mx-2 space-y-1">
+                <div class="text-xs font-semibold leading-6 text-gray-400">Management</div>
                 <li>
                   <!-- Current: "bg-gray-50 text-yellow-600", Default: "text-gray-700 hover:text-yellow-600 hover:bg-gray-50" -->
                   <a href="{{route('accounts')}}"  class="{{request()->routeIs('accounts') ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold': ' text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}  ">

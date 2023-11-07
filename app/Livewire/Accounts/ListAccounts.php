@@ -36,7 +36,7 @@ use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
-
+use Filament\Tables\Filters\Layout;
 class ListAccounts extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
@@ -55,10 +55,13 @@ class ListAccounts extends Component implements HasForms, HasTable
         return $table
             ->query(Account::query()->latest())
             ->columns(
+
+                
                 [
                   
-                    TextColumn::make('id')->label('ID'),
+                 
                     TextColumn::make('first_name')
+                   
                     ->label('First Name')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                         ->searchable(),
@@ -121,6 +124,8 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->url(fn (Account $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
     
                         ->openUrlInNewTab(),
+
+                        TextColumn::make('id')->label('ID'),
                     
 
                 ],
@@ -234,7 +239,9 @@ class ListAccounts extends Component implements HasForms, HasTable
             ])
 
 
-            ->filters([
+            ->filters(
+                
+                [
                 SelectFilter::make('account_type')
                     ->options([
 
@@ -253,7 +260,8 @@ class ListAccounts extends Component implements HasForms, HasTable
 
 
 
-            ])
+                ],
+                )
             ->actions(
                 [
                     ActionGroup::make([
@@ -337,7 +345,9 @@ class ListAccounts extends Component implements HasForms, HasTable
                     ->label('Account'),
 
 
-            ]);
+            ])
+         
+            ;
     }
 
     public function render(): View
