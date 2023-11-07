@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Day;
+use App\Models\Log;
 use App\Models\Card;
 use App\Models\Record;
 use App\Events\Scanned;
@@ -37,9 +38,24 @@ Route::post('/save-scan', [ScanController::class, 'saveScan'])->name('save-scan'
 
 Route::get('/test', function(){
 
-    $card = Card::first();
 
-    return response()->json(['data'=>$card,'success'=> true]); 
+    $log = Log::create([
+        'card_id' => 1,
+        'source' => 'java',
+        'transaction' => 'test',
+        'error_type' => 'none',
+        'message' => 'none',
+    ]);
+
+    // $table->foreignId('card_id')->nullable();
+    // $table->string('source')->nullable();
+    // $table->string('transaction')->nullable();
+    // $table->string('error_type')->nullable();
+    // $table->text('message')->nullable();
+
+    // $card = Card::first();
+
+    return response()->json(['data'=>$log,'success'=> true]); 
 });
 
 

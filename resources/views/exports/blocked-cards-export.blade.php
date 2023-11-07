@@ -22,12 +22,9 @@
             <td align="left" width="40">{{ $item?->id_number}}</td>
             <td align="left" width="40">{{ \Carbon\Carbon::parse($item->valid_from)->format('m/d/Y') }}</td>
             <td align="left" width="40">{{ \Carbon\Carbon::parse($item->valid_until)->format('m/d/Y') }}</td>
+            
+            
             <td align="left" width="40">{{ $item?->status}}</td>
-         
-          
-  
-
-
         </tr>
         @endforeach
     </tbody>

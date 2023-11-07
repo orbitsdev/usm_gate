@@ -36,7 +36,7 @@ class CheckCardApiController extends Controller
             $source = 'usm-admin';
             $transactionrequest = $request->request_type;
             $errortype = 'not-found';
-            $transactionmessage = '(checking) Cannot Procceed Card Not Found';
+            $transactionmessage = '(checking) "Cannot proceed. Card not found';
             // $log = Log::create([  'source'=> 'usm-admin',  'transaction'=> $request->request_type, 'error_type'=> 'not-found', 'message'=> '(checking) Cannot Procceed Card Not Found',]);
             return response()->json(['source'=> $source, 'transaction'=> $transactionrequest, 'data'=> $card, 'success' => false , 'error_type'=> $errortype, 'message' => $transactionmessage]);
         }
@@ -84,7 +84,7 @@ class CheckCardApiController extends Controller
             $source = 'usm-admin';
             $transactionrequest = $request->request_type;
             $errortype = 'card-doesnt-have-account-assigned';
-            $transactionmessage = 'No acccount was assigned to card';
+            $transactionmessage = 'The gate failed to open as no account was assigned to the card';
             $cardid = $card->id ?? null;
 
             $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
@@ -122,7 +122,7 @@ class CheckCardApiController extends Controller
             $source = 'usm-admin';
             $transactionrequest = $request->request_type;
             $errortype = 'card-not-active';
-            $transactionmessage = '( checking ) Cannot Procceed Card is ' . $card->status;
+            $transactionmessage = '( checking ) User Card is ' . $card->status;
             $cardid = $card->id ?? null;
 
             $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
@@ -157,7 +157,7 @@ class CheckCardApiController extends Controller
     if ($isCardValid) {
         return $this->checkCardlatestRecord($card, $day, $request, $transaction);
     } else {
-        $date_validity_message = 'Cannot proceed. The card is expired.';
+        $date_validity_message = 'The gate failed to open. User cannot proceed because the card has expired';
 
         $source = 'usm-admin';
         $transactionrequest = $request->request_type;
@@ -315,7 +315,7 @@ class CheckCardApiController extends Controller
                     $source = 'usm-admin';
                     $transactionrequest = $request->request_type;
                     $errortype = null;
-                    $transactionmessage = 'Success! Card Doesnt Have Entry Record';
+                    $transactionmessage = 'The gate is open, but the user\'s card doesn\'t have an entry record';
                     $cardid = $card->id ?? null;
                     
                     $this->updateTransaction($errortype, true, $transaction , $transactionmessage);
@@ -333,7 +333,7 @@ class CheckCardApiController extends Controller
                     $source = 'usm-admin';
                     $transactionrequest = $request->request_type;
                     $errortype = 'multiple-entry-attempt';
-                    $transactionmessage = 'Access Granted! You are attempting to enter multiple times. Just a friendly reminder to use it responsibly.';
+                    $transactionmessage = 'The gate is open, and the user is trying to use the card repeatedly at the entry';
                     $cardid = $card->id ?? null;
 
                     $this->updateTransaction($errortype, true, $transaction, $transactionmessage );
@@ -368,7 +368,7 @@ class CheckCardApiController extends Controller
                     $source = 'usm-admin';
                     $transactionrequest = $request->request_type;
                     $errortype = 'invalid-exit-no-entry-found';
-                    $transactionmessage = 'Cannot Procceed Invalid exit without entry';
+                    $transactionmessage = 'The gate failed to open.  User is trying to use the card at the exit without having an entry record.';
 
                     $cardid = $card->id ?? null;
 
@@ -403,7 +403,7 @@ class CheckCardApiController extends Controller
                     $source = 'usm-admin';
                     $transactionrequest = $request->request_type;
                     $errortype = null;
-                    $transactionmessage = '( checking ) Success! Card Ready To Login Again';
+                    $transactionmessage = 'Gate was open';
 
                     $cardid = $card->id ?? null;
 
@@ -429,7 +429,7 @@ class CheckCardApiController extends Controller
                 $source = 'usm-admin';
                 $transactionrequest = $request->request_type;
                 $errortype = null;
-                $transactionmessage = 'Success card doesnt have latest record today';
+                $transactionmessage = 'The gate is open, but it doesn\'t have the latest record for today';
 
                 $cardid = $card->id ?? null;
                 
@@ -455,7 +455,7 @@ class CheckCardApiController extends Controller
             $source = 'usm-admin';
             $transactionrequest = $request->request_type;
             $errortype = null;
-            $transactionmessage = '( checking ) Success! Card Doesnt Have Record ';
+            $transactionmessage = 'Success! The card doesn\'t have a record.';
 
             $this->updateTransaction(null, true, $transaction, $transactionmessage);
             if($request->request_type=='saving'){
@@ -490,7 +490,7 @@ class CheckCardApiController extends Controller
                 $source = 'usm-admin';
                 $transactionrequest = $request->request_type;
                 $errortype = null;
-                $transactionmessage = 'Success, the card has no exit record yet';
+                $transactionmessage = 'Gate is open';
 
                 $this->updateTransaction(null, true, $transaction, $transactionmessage);
 
@@ -503,7 +503,7 @@ class CheckCardApiController extends Controller
                     $source = 'usm-admin';
                     $transactionrequest = $request->request_type;
                     $errortype = 'scannining-exit-no-entry-record';
-                    $transactionmessage = 'No Entry Record we update it for you to exit ';
+                    $transactionmessage = 'The gate was open, User\'s card does not have an entry record. The system will automatically put entry record';
                     $cardid = $card->id ?? null;
 
                     $card_latest_record->update([
@@ -527,7 +527,7 @@ class CheckCardApiController extends Controller
                     $source = 'usm-admin';
                     $transactionrequest = $request->request_type;
                     $errortype = 'multiple-exit-attempt';
-                    $transactionmessage = 'Multiple exit attempts. Please exit now. If you are trying to enter, please proceed to the entry';
+                    $transactionmessage = 'Gate is open. User attempting to use the card multiples times at the exit. If user is trying to enter, please proceed to the entry side';
                     $cardid = $card->id ?? null;
 
                     $card_latest_record->update([
@@ -567,7 +567,7 @@ class CheckCardApiController extends Controller
             $source = 'usm-admin';
             $transactionrequest = $request->request_type;
             $errortype = 'no-entry-record';
-            $transactionmessage = 'The card doesn\'t have an entry record.';
+            $transactionmessage = 'The gate failed to open because the card doesn\'t have an entry record.';
             $cardid = $card->id ?? null;
 
             // $log = Log::create([

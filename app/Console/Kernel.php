@@ -17,23 +17,26 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        $schedule->call(function () {
+        // $schedule->call(function () {
 
-            Transaction::truncate();
-            // Log::truncate();
+        //     Transaction::truncate();
+        //     // Log::truncate();
 
 
-            // $dayRecord = Day::latest()->first();
-            // if($dayRecord){
+        //     // $dayRecord = Day::latest()->first();
+        //     // if($dayRecord){
                 
-            //     Day::whereHas('records', function($query) use($dayRecord){
-            //         $query->where('day_record_id', $dayRecord->id);
-            //     })->where('exit', 'Not Logout')->update(['status' => 'Logged out']);
-            //     info("Updated  rows");
-            // }
-        })
-        // ->everyTenSeconds();        
-        ->daily()->at('00:00');
+        //     //     Day::whereHas('records', function($query) use($dayRecord){
+        //     //         $query->where('day_record_id', $dayRecord->id);
+        //     //     })->where('exit', 'Not Logout')->update(['status' => 'Logged out']);
+        //     //     info("Updated  rows");
+        //     // }
+        // })
+        // // ->everyTenSeconds();        
+        // ->daily()->at('00:00');
+
+        $schedule->command('app:clear-gate-transaction')->daily()->at('00:00')->runInBackground();
+        $schedule->command('app:update-card-validity')->daily()->at('00:00')->runInBackground();
     }
 
     /**
