@@ -94,7 +94,7 @@ class ListRecords extends Component implements HasForms, HasTable
 
                             return $record->updated_at->format('h:i:s A');
                         } else {
-                            return '-- Currently Inside -- ';
+                            return '-- No Exit -- ';
                         }
                     })
                     ->badge()

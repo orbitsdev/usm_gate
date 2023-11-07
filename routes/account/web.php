@@ -14,9 +14,11 @@ use App\Livewire\Accounts\EditAccount;
 use App\Livewire\Accounts\CreateAccount;
 use App\Livewire\Cards\CreateCard;
 use App\Livewire\Cards\EditCard;
+use App\Livewire\Dashboard;
 use App\Livewire\Records\RealtimeListRecords;
 use App\Livewire\Transactions\ListTransactions;
 
+Route::get('/usm/dashboard', Dashboard::class)->name('usm.dashboard');
 Route::get('/accounts', Account::class)->name('accounts');
 Route::get('/create/card', CreateCard::class)->name('create.card');
 Route::get('/edit/card/{card}', EditCard::class)->name('edit.card');

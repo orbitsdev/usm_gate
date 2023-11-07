@@ -58,7 +58,7 @@
                 @if ($item->entry == true && $item->exit == true)
                 {{ $item->updated_at->format('h:i:s A') }}
             @else
-            -- Currently Inside -- 
+            -- No Exit -- 
             @endif
             </td>
             
