@@ -1,20 +1,23 @@
 <?php
 
 use App\Livewire\Account;
+use App\Livewire\Dashboard;
+use App\Exports\AccountExport;
+use App\Http\Controllers\DownloadController;
 use App\Livewire\Days\ListDays;
 use App\Livewire\Logs\ListLogs;
 use App\Livewire\MonitorScreen;
 use App\Livewire\OverAllReport;
+use App\Livewire\Cards\EditCard;
 use App\Livewire\Cards\ListCard;
 use App\Livewire\MonitorScreen2;
+use App\Livewire\Cards\CreateCard;
 use App\Livewire\IndividualReport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Livewire\Records\ListRecords;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Accounts\EditAccount;
 use App\Livewire\Accounts\CreateAccount;
-use App\Livewire\Cards\CreateCard;
-use App\Livewire\Cards\EditCard;
-use App\Livewire\Dashboard;
 use App\Livewire\Records\RealtimeListRecords;
 use App\Livewire\Transactions\ListTransactions;
 
@@ -32,5 +35,24 @@ Route::get('/monitor', MonitorScreen::class)->name('monitor');
 Route::get('/monitor2', MonitorScreen2::class)->name('monitor2');
 Route::get('/individual-report', IndividualReport::class)->name('individual-report');
 Route::get('/overall-report', OverAllReport::class)->name('overall-report');
+
+
+// Route::prefix('download')->name('download.')->group(function(){
+//     Route::get('/total-accounts', [DownloadController::class ,'totalAccount'])->name('total-account');
+// });
+
+Route::prefix('download')->name('download.')->controller(DownloadController::class)->group(function () {
+    Route::get('/total-accounts', 'totalAccounts')->name('total-account');
+    Route::get('/total-teachers-accounts', 'totalTeachers')->name('total-teachers');
+    Route::get('/total-students-accounts', 'totalStudents')->name('total-students');
+    Route::get('/total-staffs-accounts', 'totalStaffs')->name('total-staffs');
+    Route::get('/total-cards', 'totalCards')->name('total-cards');
+    Route::get('/total-acive-cards', 'totalActiveCards')->name('total-active-cards');
+    Route::get('/total-inacive-cards', 'totalInactiveCards')->name('total-inactive-cards');
+    Route::get('/total-expired-cards', 'totalExpiredCards')->name('total-expired-cards');
+    Route::get('/total-blocked-cards', 'totalBlockedCards')->name('total-blocked-cards');
+    Route::get('/total-no-account-cards', 'totalNoAccountCards')->name('total-no-account-cards');
+});
+
 // Route::get('/accounts/create', CreateAccount::class)->name('account.create');
 // Route::get('/accounts/edit/{account}', EditAccount::class)->name('account.edit'); 

@@ -7,4 +7,8 @@
         <h3 class=" ml-3 text-gray-600 text-lg">{{$title}}</h3>
     </div>
     <p class="text-3xl font-bold">{{$value}}</p>
+    <div class="flex justify-end items-center">
+        {{ $download ?? '' }}
+
+    </div>
 </div>

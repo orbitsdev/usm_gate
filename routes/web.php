@@ -27,4 +27,6 @@ Route::middleware([
         //     return view('dashboard');
         return redirect('/accounts');
     })->name('dashboard');
+
+  
 });
