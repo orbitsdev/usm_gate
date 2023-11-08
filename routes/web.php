@@ -25,7 +25,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', function () {
         //     return view('dashboard');
-        return redirect('/accounts');
+        return redirect()->route('usm.dashboard');
     })->name('dashboard');
 
   

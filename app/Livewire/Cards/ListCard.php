@@ -185,7 +185,9 @@ class ListCard extends Component implements HasForms, HasTable
                     ->outlined()
                     ->button()
                     ->label('Import')
-                    ->modalHeading("Import to Create or Update Cards"),
+                    ->modalHeading("Import to Create or Update Cards")
+                    ->modalDescription('Please ensure to adhere to the correct file format when importing Excel data. Your cooperation in following the specified format is greatly appreciated for seamless processing.')
+                    ,
 
 
                 Action::make('Export')->button()->action(function (array $data) {

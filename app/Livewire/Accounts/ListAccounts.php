@@ -150,7 +150,8 @@ class ListAccounts extends Component implements HasForms, HasTable
                 ->outlined()
                 ->button()
                 ->label('Import')
-                ->modalHeading("Import to Create or Update Accounts. Format Must Follow. You Can Click 'Download' to See the Reference.")
+                ->modalHeading("Import to Create or Update Accounts.")
+                ->modalDescription('Please ensure to adhere to the correct file format when importing Excel data. Your cooperation in following the specified format is greatly appreciated for seamless processing.')
 
             
                 ,

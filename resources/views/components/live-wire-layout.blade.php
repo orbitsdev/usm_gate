@@ -97,7 +97,7 @@
                   </ul>
                 </li>
                 <li>
-                  <div class="text-xs font-semibold leading-6 text-gray-400">YourCardss</div>
+                  <div class="text-sm text-gray-400 uppercase font-semibold">YourCardss</div>
                   <ul role="list" class="-mx-2 mt-2 space-y-1">
                     <li>
                       <!-- Current: "bg-gray-50 text-yellow-600", Default: "text-gray-700 hover:text-yellow-600 hover:bg-gray-50" -->
@@ -163,7 +163,7 @@
                     Dashboard
                   </a>
                 </li>
-                <div class="text-xs font-semibold leading-6 text-gray-400">Management</div>
+                <div class="text-sm text-gray-400 uppercase font-semibold">Management</div>
                 <li>
                   <!-- Current: "bg-gray-50 text-yellow-600", Default: "text-gray-700 hover:text-yellow-600 hover:bg-gray-50" -->
                   <a href="{{route('accounts')}}"  class="{{request()->routeIs('accounts') ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold': ' text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}  ">
@@ -221,7 +221,7 @@
                      Daily Records
                   </a>
                 </li>      
-                   <div class="text-xs font-semibold leading-6 text-gray-400">Reports</div>
+                   <div class="text-sm text-gray-400 uppercase font-semibold">Reports</div>
                 <li>
                   <a href="{{route('overall-report')}}"  class="{{request()->routeIs('overall-report') ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold': ' text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}  ">
                  
@@ -302,7 +302,7 @@
               <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border {{ request()->routeIs('transactions') ? 'border-yellow-600' : '' }} text-[0.625rem] font-medium">S</span>
               <span class="truncate">Gate Transaction</span>
           </a> --}}
-              {{-- <div class="text-xs font-semibold leading-6 text-gray-400">Reports</div>
+              {{-- <div class="text-sm text-gray-400 uppercase font-semibold">Reports</div>
               <ul role="list" class="-mx-2 mt-2 space-y-1">
                 <li>
               
