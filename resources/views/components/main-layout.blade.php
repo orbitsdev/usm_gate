@@ -14,6 +14,13 @@
         <!-- Scripts -->
         @filamentStyles
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="{{asset('js/gsap.min.js')}}"></script>
+        <script src="{{asset('js/ScrollTrigger.min.js')}}"></script>
+      
+        
+        <style>
+
+        </style>
 
         <!-- Styles -->
         @livewireStyles

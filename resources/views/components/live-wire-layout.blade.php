@@ -431,5 +431,6 @@
         </div>
       </main>
     </div>
+    <script src="{{asset('js/gsapcode.js')}}"></script>
   </div>
   
