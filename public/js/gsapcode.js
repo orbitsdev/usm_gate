@@ -54,10 +54,16 @@ percentage_animation_timeline
 }, "<0.2")
 
 
+// ScrollTrigger.batch('.stats-card',{
+//     start: "top center",
+//     batchMax:3,
+//     onEnter: batch => gsap.from(batch, {opacity:0, y:100, stagger:0.2})
+// });
+
 gsap.from(".stats-card",  {
     opacity: 0,
-    y: 120,
-    scale: 0.8,
+    y:200,
+    scale: 0.50,
     duration: 2,
-    ease: 'back(1)",'
+    ease: 'back(2)",'
 });

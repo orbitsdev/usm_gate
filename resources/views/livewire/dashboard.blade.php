@@ -12,7 +12,7 @@
             {{-- <div> --}}
             <div class="container my-6 mx-auto md:px-6  ">
                 <!-- Section: Design Block -->
-                <section class="mb-32 text-center">
+                <section class="mb-14 text-center">
                     <h2 class="mb-20 text-3xl font-bold capitalize text-gray-500 percentage-title">Accounts Percentage</h2>
 
                     <div class="grid lg:grid-cols-3 lg:gap-x-12 parent-percentage">
