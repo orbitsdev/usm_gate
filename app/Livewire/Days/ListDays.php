@@ -60,8 +60,8 @@ class ListDays extends Component implements HasForms, HasTable
 
                 Filter::make('created_at')
                     ->form([
-                        DatePicker::make('created_from'),
-                        DatePicker::make('created_until'),
+                        DatePicker::make('created_from')->label('Date From'),
+                        DatePicker::make('created_until')->label('Date Until'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query

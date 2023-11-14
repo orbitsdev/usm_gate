@@ -3,11 +3,11 @@
 use App\Livewire\Account;
 use App\Livewire\Dashboard;
 use App\Exports\AccountExport;
-use App\Http\Controllers\DownloadController;
 use App\Livewire\Days\ListDays;
 use App\Livewire\Logs\ListLogs;
 use App\Livewire\MonitorScreen;
 use App\Livewire\OverAllReport;
+use App\Livewire\ProfileScreen;
 use App\Livewire\Cards\EditCard;
 use App\Livewire\Cards\ListCard;
 use App\Livewire\MonitorScreen2;
@@ -18,9 +18,11 @@ use App\Livewire\Records\ListRecords;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Accounts\EditAccount;
 use App\Livewire\Accounts\CreateAccount;
+use App\Http\Controllers\DownloadController;
 use App\Livewire\Records\RealtimeListRecords;
 use App\Livewire\Transactions\ListTransactions;
 
+Route::get('/account/profile', ProfileScreen::class)->name('account.profile');
 Route::get('/usm/dashboard', Dashboard::class)->name('usm.dashboard');
 Route::get('/accounts', Account::class)->name('accounts');
 Route::get('/create/card', CreateCard::class)->name('create.card');

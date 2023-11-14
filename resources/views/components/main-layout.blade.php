@@ -14,6 +14,8 @@
         <!-- Scripts -->
         @filamentStyles
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <wireui:scripts />
+
         <script src="{{asset('js/gsap.min.js')}}"></script>
         <script src="{{asset('js/ScrollTrigger.min.js')}}"></script>
       
@@ -24,8 +26,10 @@
 
         <!-- Styles -->
         @livewireStyles
+        
     </head>
     <body class="font-sans antialiased" id="smooth-content">
+
         {{-- <x-banner />
 
         <div class="min-h-screen bg-gray-100">
@@ -51,5 +55,6 @@
         {{$slot}}
         @filamentScripts
         @livewireScripts
+        <x-dialog z-index="z-50" blur="md" align="center" />
     </body>
 </html>

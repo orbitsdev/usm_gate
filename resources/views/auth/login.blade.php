@@ -11,15 +11,19 @@
             @csrf
     
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-label  class="text-gray-600 mb-0.5" for="email" value="{{ __('Email') }}"> Email </x-label>
+                <input id="email" class="border border-[#5f5e5e28] w-full rounded focus:border-[#FDDC01] focus:ring-0" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             </div>
     
             <div>
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block w-full" type="password" name="password" required autocomplete="current-password" />
+
+                <x-label  class="text-gray-600 mb-0.5" for="password" value="{{ __('password') }}"> Password </x-label>
+                <input id="password" class="border border-[#5f5e5e28] w-full rounded focus:border-[#FDDC01] focus:ring-0" type="password" name="password" required autocomplete="current-password" />
             </div>
-    
+            
+            {{-- <div class="">   
+                <input type="text" name="" id="" class="border border-[#5f5e5e28] w-full rounded focus:border-[#FDDC01] focus:ring-0">
+            </div> --}}
             <div class="flex items-center">
                 <label for="remember_me" class="flex items-center">
                     <x-checkbox 
