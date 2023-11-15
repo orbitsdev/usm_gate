@@ -41,7 +41,7 @@
         <div class="print-container  bg-white w-full ">
             <div class="flex justify-center p-6">
                 <div class="mr-10">
-                    <img src="{{ asset('images/usm-seal.png') }}" alt="" style="width: 60px; height: 60px">
+                    <img src="{{ asset('images/usm-kidapawan-logo.png') }}" alt="" style="width: 60px; height: 60px">
                 </div>
                 <div class="text-center " style="padding: 0px  20px ">
                     <p>Republic of The Philippines</p>
@@ -68,7 +68,7 @@
                     @endif --}}
                 </div>
                 <div class="ml-10">
-                    <img src="{{ asset('images/usm-seal.png') }}" alt="" style="width: 60px; height: 60px">
+                    <img src="{{ asset('images/usm-kidapawan-logo.png') }}" alt="" style="width: 60px; height: 60px">
                 </div>
             </div>
     

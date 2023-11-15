@@ -141,7 +141,7 @@
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
         <div class="flex h-16 shrink-0 items-center">
-          <img class="h-12 w-12" src="{{asset('images/usm-seal.png')}}" alt="Your Company"> <span class="font-bold ml-4 text-lg  text-gray-700">USM ATTENDANCE</span>
+          <img class="h-12 w-12" src="{{asset('images/usm-kidapawan-logo.png')}}" alt="Your Company"> <span class="font-bold ml-4 text-lg  text-gray-700">USM ATTENDANCE</span>
         </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -420,6 +420,8 @@
                 <div x-show="isOpen" @click.away="isOpen = false" class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                     <!-- Active: "bg-gray-50", Not Active: "" -->
                     <a href="{{route('account.profile')}}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">Update Account </a>
+                    <a href="{{ route('monitor') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">Monitor Gates</a>
+
                     <form method="POST" action="{{ route('logout') }}" x-data>
                         @csrf
 

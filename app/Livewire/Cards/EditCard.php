@@ -71,12 +71,13 @@ class EditCard extends Component implements HasForms, HasActions
                         ->label('Card ID')
                         ,   
                         DatePicker::make('valid_from')
+                        ->required()
                         ->native(false)
-
-                        ->label('Valid From')
                         
                         ->columnSpan(3),
                         DatePicker::make('valid_until')
+                        ->required()
+
                         ->label('Card Until')
                         ->native(false)
 

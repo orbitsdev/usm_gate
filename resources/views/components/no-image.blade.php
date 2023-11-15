@@ -1,7 +1,8 @@
-<div>
+
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     version="1.1" viewBox="0 0 256 256" xml:space="preserve"
-    class="h-[50dvh] w-[50dvh]  ">
+    class="w-full h-full lg:max-w-[600px] lg:max-h-[450px] md:max-w-[500px] md:max-h-[350px] max-w-[400px] max-h-[250px] rounded-md object-cover"
+    >
     <defs>
     </defs>
     <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
@@ -20,4 +21,3 @@
             transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
     </g>
 </svg>
-</div>

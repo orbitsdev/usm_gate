@@ -168,14 +168,16 @@ class CreateCard extends Component implements HasForms, HasActions
                             ->label('Card ID'),
                         DatePicker::make('valid_from')
                         ->native(false)
-                        
+                        ->required()
+
                             ->label('Valid From')
 
                             ->columnSpan(3),
                         DatePicker::make('valid_until')
+                        ->required()
                         ->native(false)
-                            ->label('Card Until')
-
+                            ->label('Valid Until')
+                                                        
                             ->columnSpan(3),
 
                         Select::make('status')

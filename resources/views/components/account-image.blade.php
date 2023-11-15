@@ -1,1 +1,1 @@
-<img src="{{$url}}"   alt="Attendee Image"  class="rounded-lg mx-auto mb-6 h-[50dvh] w-[50dvh] object-cover border-4 border-white shadow-lg">
+<img src="{{$url}}"  alt="Attendee Image"  class="w-full h-full lg:max-w-[600px] lg:max-h-[450px] md:max-w-[500px] md:max-h-[350px] max-w-[400px] max-h-[250px] rounded-md object-cover">

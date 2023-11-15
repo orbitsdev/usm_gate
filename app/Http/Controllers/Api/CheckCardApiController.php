@@ -122,7 +122,7 @@ class CheckCardApiController extends Controller
             $source = 'usm-admin';
             $transactionrequest = $request->request_type;
             $errortype = 'card-not-active';
-            $transactionmessage = '( checking ) User Card is ' . $card->status;
+            $transactionmessage = 'Card is ' . $card->status;
             $cardid = $card->id ?? null;
 
             $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
