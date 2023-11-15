@@ -9,6 +9,8 @@ use Filament\Tables\Table;
 use App\Exports\AccountExport;
 use App\Imports\AccountImport;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\Layout;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -36,7 +38,7 @@ use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Filters\Layout;
+
 class ListAccounts extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
@@ -257,7 +259,28 @@ class ListAccounts extends Component implements HasForms, HasTable
                         'Female' => 'Female',
                     ]),
 
-
+                    Filter::make('account')
+                  
+                    ->form([
+                        Select::make('card-status')
+                            ->options([
+                                'has-card' => 'Has Card',
+                                'no-card' => 'No Card',
+                            ])
+                            ->label('Card Status'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['card-status'] === 'has-card',
+                                fn (Builder $query) => $query->has('card'),
+                            )
+                            ->when(
+                                $data['card-status'] === 'no-card',
+                                fn (Builder $query) => $query->doesntHave('card'),
+                            );
+                    }),
+                
 
 
 

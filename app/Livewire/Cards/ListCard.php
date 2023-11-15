@@ -12,6 +12,8 @@ use App\Imports\CardsImport;
 use App\Exports\CardExpiredExport;
 use App\Exports\BlockedCardsExport;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\Layout;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
 use App\Exports\InactiveCardsExport;
@@ -40,7 +42,7 @@ use App\Exports\NoAssignedAccountCardsExport;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
-use Filament\Tables\Filters\Layout;
+
 class ListCard extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
@@ -223,8 +225,34 @@ class ListCard extends Component implements HasForms, HasTable
                         'Inactive' => 'Inactive',
                         'Blocked' => 'Blocked',
                         'Expired' => 'Expired',
+                    ]),
+
+                    Filter::make('card')
+                    ->form([
+                        Select::make('account-status')
+                            ->options([
+                                'not-used' => 'Not Used',
+                                'used' => 'Used',
+                            ])
+                            ->label('Card Availabilty')
+
                     ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['account-status'] === 'not-used',
+                                fn (Builder $query) => $query->whereDoesntHave('account'),
+                            )
+                            ->when(
+                                $data['account-status'] === 'used',
+                                fn (Builder $query) => $query->whereHas('account'),
+                            );
+                    })
+                
                     ],
+
+                   
+                    
           
             )
             ->actions(
