@@ -40,7 +40,7 @@ class MonitorScreen extends Component
                     ->whereIn('id', function ($query) {
                         $query->select(DB::raw('MAX(id)'))
                             ->from('transactions')
-                            ->where('created_at', '>', now()->subSeconds(12))
+                            ->where('created_at', '>', now()->subSeconds(15))
                             ->groupBy('door_name');
                     })
                     ->latest()

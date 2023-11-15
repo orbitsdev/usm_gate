@@ -20,7 +20,7 @@
                         [ {{ $transaction->card->account->account_type ?? '' }} ]
                     </h2>
                     <div class="lg:mt-4 md:mt-3 sm:mt-2">
-                        <h2 class="lg:text-5xl md:text-4xl sm:text-3xl font-bold uppercase  text-green-500  ">
+                        <h2 class="lg:text-5xl md:text-4xl sm:text-3xl font-bold uppercase {{ $transaction->scanned_type == 'entry' ? 'text-green-500' : ($transaction->scanned_type == 'exit' ? 'text-red-500' : 'text-gray-500') }}   ">
 
                             @if ($transaction->scanned_type == 'entry')
                 Entering
