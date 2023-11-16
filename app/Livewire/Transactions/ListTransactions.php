@@ -6,6 +6,7 @@ use Filament\Tables;
 use Livewire\Component;
 use Filament\Tables\Table;
 use App\Models\Transaction;
+use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
@@ -49,9 +50,13 @@ class ListTransactions extends Component implements HasForms, HasTable
                 ->label('Success')
                 ,
 
-                TextColumn::make('door_name')->searchable()->label('Door')->color('primary')->badge(),
+                TextColumn::make('door_name')
+                ->searchable(isIndividual: true, isGlobal: false)
+                ->label('Door')->color('primary')->badge(),
+               
 
-                TextColumn::make('card.id_number')->searchable()
+                TextColumn::make('card.id_number')
+                ->searchable(isIndividual: true, isGlobal: true)
                 ->label('Card ID'),
 
                 
@@ -66,11 +71,22 @@ class ListTransactions extends Component implements HasForms, HasTable
                         $query->where('first_name', 'like', "%{$search}%")
                             ->orWhere('last_name', 'like', "%{$search}%");
                     });
-                }),
-
+                }
+            ,isIndividual: true, isGlobal: true
+            ),
+            TextColumn::make('error_type')
+                ->copyable()
+                    ->label('Error')
+                    ->badge()
+                    ->color('danger')
+                    ->searchable(
+                        isIndividual: true, isGlobal: false
+                    )
+                    ,
                 TextColumn::make('message')
                 ->wrap()
                 ->label('Message')
+               
                 ,
             
                 
@@ -80,20 +96,16 @@ class ListTransactions extends Component implements HasForms, HasTable
               
 
                  
+                 
+                
+              
                     TextColumn::make('scanned_type')
+                    ->badge()
+                    ->color('gray')
                     ->sortable()
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                     ->label('Scanned At')
                     ,
-                TextColumn::make('error_type')
-                ->copyable()
-                    ->label('Error')
-                    ->badge()
-                   
-                    ->color('danger')
-                    ,
-              
-               
 
                 TextColumn::make('source')->searchable()->label('Source')
                 ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
@@ -103,10 +115,10 @@ class ListTransactions extends Component implements HasForms, HasTable
 
 
                 TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->date('M d, Y  h:i:s A'),
               
                 TextColumn::make('updated_at')
-                    ->dateTime(),
+                ->date('M d, Y  h:i:s A'),
                     
             ])
             ->filters([
@@ -122,6 +134,39 @@ class ListTransactions extends Component implements HasForms, HasTable
                         ->action(fn (Collection $records) => $records->each->delete())
                 ])->label('Actions'),
             ])
+            ->groups([
+                Group::make('card_id')
+                ->titlePrefixedWithLabel(false)
+              ->getTitleFromRecordUsing(function (Transaction $record) {
+                  $card = $record->card ?? null;
+                  $account = optional($card)->account ?? null;
+          
+                  return $account
+                      ? $account->first_name . ' ' . $account->last_name
+                      : 'Unknown';
+              })
+              ->label('Card Owner'),
+                Group::make('card.id_number')
+                ->label('Card ID')
+                
+                // ->titlePrefixedWithLabel(false)
+                ->collapsible()
+                ,
+                Group::make('door_name')
+                ->titlePrefixedWithLabel(false)
+                ->label('Door Name')
+                ,
+                Group::make('error_type')
+                ->titlePrefixedWithLabel(false)
+                ->label('Error Type')
+                ,
+                
+
+              
+            
+
+
+            ])
             ->modifyQueryUsing(fn (Builder $query) => 
             // $query->whereHas('patient.animal.user', function($query){
             //     $query->where('id', auth()->user()->id);
@@ -130,6 +175,7 @@ class ListTransactions extends Component implements HasForms, HasTable
             $query->latest(),
             
             )
+            
             ->poll('2s');
     }
 
