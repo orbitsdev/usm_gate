@@ -32,7 +32,7 @@ class AccountImport implements  ToModel, WithHeadingRow
                 // Convert Excel serialized date to DateTime object
                 $birth_date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($birth_date);
             }
-            dd($account);
+          
             if($account){
                
                 $account->update([
@@ -48,7 +48,7 @@ class AccountImport implements  ToModel, WithHeadingRow
                 $account->save();
             }else{
 
-
+                dd('not exist');
                 $existingaccount = Account::where([
                     'first_name' => $row['first_name'],
                     'last_name' => $row['last_name'],
