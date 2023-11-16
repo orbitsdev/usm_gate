@@ -17,7 +17,9 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -37,8 +39,9 @@ class ListDays extends Component implements HasForms, HasTable
 
                 TextColumn::make('created_at')
                     ->label('Date')
-
-                    ->date('F j, Y - l'),
+                    ->date('F j, Y - l')
+                    ->searchable(isIndividual: true, isGlobal: false)
+                    ,
                   
                 TextColumn::make('records_count')
                 ->counts('records')
@@ -76,6 +79,7 @@ class ListDays extends Component implements HasForms, HasTable
                     })
             ])
             ->actions([
+               
                 Action::make('View Records')
                 ->label('View Records')
                 ->color('gray')
@@ -83,36 +87,47 @@ class ListDays extends Component implements HasForms, HasTable
                 ->outlined()
                 ->icon('heroicon-o-document-text')->button()
                     ->url(fn ($record): string => route('day-view-record', ['day' => $record->id])),
+                  
+                    Action::make('Download')
+                    ->icon('heroicon-m-arrow-down-tray')
+                    ->label('Download')
+                    ->color('info')
+                    ->button()
+                    ->outlined()
                     
-                Action::make('Download')
-                ->icon('heroicon-m-arrow-down-tray')
-                ->label('Download')
-                ->color('info')
+    
+                 
+                    ->action(function($record){
+                        
+                        $filename = $record->created_at->format('F-d-Y');
+                        $records = Record::where('day_id', $record->id)->get();
+                        if(count($records)>0){
+                            return Excel::download(new OverAllExport($records), $filename . '.xlsx');
+                        }
+                    }),
+                    Action::make('download-no-exit')
+                    ->icon('heroicon-m-arrow-down-tray')
+                    ->label('No Exit Records')
+                    ->color('info')
+                    ->button()
+                    ->outlined()
+                    
+                 
+                    ->action(function($record){
+                        
+                        $filename = $record->created_at->format('F-d-Y').'-NO-EXIT';
+                        $records = Record::where('day_id', $record->id)->where('exit',false)->get();
+                        if(count($records)>0){
+                            return Excel::download(new OverAllExport($records), $filename . '.xlsx');
+                        }
+                    }),
+                    ActionGroup::make([
+                       
+                        DeleteAction::make()
+                    ]),
+              
 
-                ->button()
-                ->outlined()
-                ->action(function($record){
-                    
-                    $filename = $record->created_at->format('F-d-Y');
-                    $records = Record::where('day_id', $record->id)->get();
-                    if(count($records)>0){
-                        return Excel::download(new OverAllExport($records), $filename . '.xlsx');
-                    }
-                }),
-                Action::make('download-no-exit')
-                ->icon('heroicon-m-arrow-down-tray')
-                ->label('No Exit Records')
-                ->color('info')
-                ->button()
-                ->outlined()
-                ->action(function($record){
-                    
-                    $filename = $record->created_at->format('F-d-Y').'-NO-EXIT';
-                    $records = Record::where('day_id', $record->id)->where('exit',false)->get();
-                    if(count($records)>0){
-                        return Excel::download(new OverAllExport($records), $filename . '.xlsx');
-                    }
-                })
+                
 
             ])
             ->bulkActions([

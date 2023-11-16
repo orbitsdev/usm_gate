@@ -54,7 +54,7 @@ class EditCard extends Component implements HasForms, HasActions
                     ])
                     ->schema([
                         Select::make('account_id')
-                        ->label('Select Account')
+                       
                         ->relationship(
                                 name: 'account',
                                 modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
@@ -62,7 +62,7 @@ class EditCard extends Component implements HasForms, HasActions
                             ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) .', '. ucfirst(optional($record)->first_name)  )
                             ->searchable(['account.first_name', 'account.last_name'])
                             ->preload()
-                            ->label('Account')
+                            ->label('Select Account')
                             ->columnSpanFull(),
                           
                             

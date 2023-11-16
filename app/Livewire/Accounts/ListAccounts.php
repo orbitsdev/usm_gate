@@ -367,10 +367,15 @@ class ListAccounts extends Component implements HasForms, HasTable
                 Group::make('account_type')
                     ->titlePrefixedWithLabel(false)
                     ->getTitleFromRecordUsing(fn (Account $record): string => $record->account_type ?  ucfirst($record->account_type) : '')
-                    ->label('Account'),
+                    ->label('Account')
+                    ->collapsible()
+                    ,
+
+
 
 
             ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->latest())
          
             ;
     }

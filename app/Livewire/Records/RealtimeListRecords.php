@@ -7,6 +7,7 @@ use Filament\Tables;
 use App\Models\Record;
 use Livewire\Component;
 use Filament\Tables\Table;
+use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
@@ -29,6 +30,7 @@ class RealtimeListRecords extends Component implements HasForms, HasTable
         $this->day = Day::latest()->first();
 
       
+      
 
        
     //    if($this->day){
@@ -48,11 +50,19 @@ class RealtimeListRecords extends Component implements HasForms, HasTable
                 TextColumn::make('day.created_at')->date(),
                 TextColumn::make('card.account')->label('Account')->formatStateUsing(function ($record){ 
                     return $record->card->account->first_name . ' ' . $record->card->account->last_name;
-                })->searchable(),
+                })
+                ->searchable(query: function (Builder $query, string $search): Builder {
+                    return $query->whereHas('card.account', function ($query) use ($search) {
+                        $query->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%");
+                    });},
+                    isIndividual: true, isGlobal: true
+                ),
 
-                TextColumn::make('card.id_number')->label('Card ID')->searchable(),
-                TextColumn::make('door_entered')->label('Door Entered')->searchable(),
-                TextColumn::make('door_exit')->label('Door Exited')->searchable(),
+                TextColumn::make('card.id_number')->label('Card ID')
+                ->searchable(isIndividual: true, isGlobal: true),
+                TextColumn::make('door_entered')->label('Entered Source ')->searchable(),
+                TextColumn::make('door_exit')->label('Exited Source')->searchable(),
 
                 // TextColumn::make('entry')
                 //    ->formatStateUsing(fn($state)=> $state ? 'In' : 'None'),
@@ -88,7 +98,7 @@ class RealtimeListRecords extends Component implements HasForms, HasTable
 
                             return $record->updated_at->format('h:i:s A');
                         }else{
-                            return '-- Currently Inside -- ';
+                            return '-- NO EXIT -- ';
                         }
                        
         
@@ -113,6 +123,30 @@ class RealtimeListRecords extends Component implements HasForms, HasTable
                         ->action(fn (Collection $records) => $records->each->delete())
                 ])->label('Actions'),
             ])
+            ->groups([
+                Group::make('card_id')
+                ->titlePrefixedWithLabel(false)
+              ->getTitleFromRecordUsing(function (Record $record) {
+                  $card = $record->card ?? null;
+                  $account = optional($card)->account ?? null;
+          
+                  return $account
+                      ? $account->first_name . ' ' . $account->last_name
+                      : 'Unknown';
+              })
+              ->label('Card Owner'),
+                Group::make('card.id_number')
+                ->label('Card ID')
+                
+                // ->titlePrefixedWithLabel(false)
+                ->collapsible()
+                ,
+
+              
+            
+
+
+            ])
             ->modifyQueryUsing(fn (Builder $query) => 
             // $query->whereHas('patient.animal.user', function($query){
             //     $query->where('id', auth()->user()->id);
@@ -123,6 +157,7 @@ class RealtimeListRecords extends Component implements HasForms, HasTable
             })->latest(),
             
             )
+            
             ->poll('1s');
             
     }

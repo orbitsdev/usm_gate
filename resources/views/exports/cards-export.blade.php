@@ -27,10 +27,10 @@
             <td align="left" width="40">{{ $item?->status}}</td>
             <td align="left" width="80">
 
-                @if($item->account)
+                @if(!empty($item->account))
                     {{$item->account->last_name.',' ?? ''}}   {{$item->account->first_name ?? ''}} {{$item->account->middle_name}} 
                 @else
-                None
+
                 @endif
 
             </td>

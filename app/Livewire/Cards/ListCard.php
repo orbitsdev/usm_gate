@@ -483,10 +483,13 @@ class ListCard extends Component implements HasForms, HasTable
                 Group::make('status')
                     ->titlePrefixedWithLabel(false)
                     ->getTitleFromRecordUsing(fn (Card $record): string => $record->status ?  ucfirst($record->status) : '')
-                    ->label('Status'),
+                    ->label('Status')
+                    ->collapsible()
+                    ,
 
 
             ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->latest())
             // ->groupsInDropdownOnDesktop()
             ;
     }
