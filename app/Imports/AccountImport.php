@@ -48,7 +48,7 @@ class AccountImport implements  ToModel, WithHeadingRow
                 $account->save();
             }else{
 
-                dd('not exist');
+               
                 $existingaccount = Account::where([
                     'first_name' => $row['first_name'],
                     'last_name' => $row['last_name'],
@@ -56,7 +56,7 @@ class AccountImport implements  ToModel, WithHeadingRow
                 ])->first();
 
                 if(empty($existingaccount)){
-                 
+                    dd('not emoty');
                     return new Account([
                         'first_name' => $row['first_name'],
                         'last_name' => $row['last_name'],
