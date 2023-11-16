@@ -163,6 +163,23 @@
                     Dashboard
                   </a>
                 </li>
+                @can('developer')
+                <li>
+                  <!-- Current: "bg-gray-50 text-yellow-600", Default: "text-gray-700 hover:text-yellow-600 hover:bg-gray-50" -->
+                  <a href="{{route('user-management')}}"  class="{{request()->routeIs('user-management') ? 'bg-gray-50 text-yellow-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold': ' text-gray-700 hover:text-yellow-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold' }}  ">
+                    
+                  
+
+                      
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                      </svg>
+                      
+                      
+                    Manage Admin 
+                  </a>
+                </li>
+                @endcan
                 <div class="text-sm text-gray-400 uppercase font-semibold">Management</div>
                 <li>
                   <!-- Current: "bg-gray-50 text-yellow-600", Default: "text-gray-700 hover:text-yellow-600 hover:bg-gray-50" -->
@@ -421,6 +438,10 @@
                     <!-- Active: "bg-gray-50", Not Active: "" -->
                     <a href="{{route('account.profile')}}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">Update Account </a>
                     <a href="{{ route('monitor') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">Monitor Gates</a>
+                    @can('developer')
+                      
+                    <a href="{{ route('user-management') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">Manage Admin</a>
+                    @endcan
 
                     <form method="POST" action="{{ route('logout') }}" x-data>
                         @csrf

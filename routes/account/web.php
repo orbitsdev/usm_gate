@@ -21,6 +21,7 @@ use App\Livewire\Accounts\CreateAccount;
 use App\Http\Controllers\DownloadController;
 use App\Livewire\Records\RealtimeListRecords;
 use App\Livewire\Transactions\ListTransactions;
+use App\Livewire\Users\ListUsers;
 
 Route::get('/account/profile', ProfileScreen::class)->name('account.profile');
 Route::get('/usm/dashboard', Dashboard::class)->name('usm.dashboard');
@@ -37,6 +38,8 @@ Route::get('/monitor', MonitorScreen::class)->name('monitor');
 Route::get('/monitor2', MonitorScreen2::class)->name('monitor2');
 Route::get('/individual-report', IndividualReport::class)->name('individual-report');
 Route::get('/overall-report', OverAllReport::class)->name('overall-report');
+
+Route::get('/users-management', ListUsers::class)->name('user-management')->middleware('can:developer');
 
 
 // Route::prefix('download')->name('download.')->group(function(){
