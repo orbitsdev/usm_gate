@@ -93,6 +93,7 @@ class CardsImport implements ToModel, WithHeadingRow
             }
             DB::commit();
         } catch (QueryException $e) {
+            dd($e->getMessage());
             DB::rollBack();
         }
     }
