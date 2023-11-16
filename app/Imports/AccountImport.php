@@ -56,8 +56,7 @@ class AccountImport implements  ToModel, WithHeadingRow
                 ])->first();
 
                 if(empty($existingaccount)){
-                    dd('not emoty');
-                    return new Account([
+                    $new_account  = Account::create([
                         'first_name' => $row['first_name'],
                         'last_name' => $row['last_name'],
                         'middle_name' => $row['middle_name'],
@@ -66,7 +65,11 @@ class AccountImport implements  ToModel, WithHeadingRow
                         'address' => $row['address'],
                         'contact_number' => $row['contact_number'],
                         'account_type' => $row['account_type'], 
-                     ]);
+                    ]);
+                    dd($new_account);
+                    return $new_account;
+                   
+
                 }else{
                     $existingaccount->update([
                         'first_name' => $row['first_name'],
