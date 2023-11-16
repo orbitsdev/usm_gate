@@ -60,17 +60,18 @@ class ListAccounts extends Component implements HasForms, HasTable
 
                 
                 [
-                  
                  
+                    TextColumn::make('last_name')
+                    ->label('Last Name')
+                    ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
+                    ->searchable(isIndividual: true, isGlobal: true),
                     TextColumn::make('first_name')
                    
                     ->label('First Name')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
-                        ->searchable(),
-                    TextColumn::make('last_name')
-                    ->label('Last Name')
-                    ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
-                        ->searchable(),
+                    ->searchable(isIndividual: true, isGlobal: true),
+                  
+                      
                     TextColumn::make('middle_name')
                     ->label('Middle Name')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
@@ -94,7 +95,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                       
                     TextColumn::make('account_type')
                         ->searchable()
-                      
+                        ->badge()
                         ->color(fn (string $state): string => match ($state) {
                             'Student' => 'success',
                             'Staff' => 'primary',
@@ -127,8 +128,10 @@ class ListAccounts extends Component implements HasForms, HasTable
     
                         ->openUrlInNewTab(),
 
-                        TextColumn::make('id')->label('ID'),
-                    
+                     
+                        TextColumn::make('id')->label('ID')
+                        ->searchable(isIndividual: true, isGlobal: true)
+                        ,
 
                 ],
 
@@ -224,8 +227,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                                 ->disk('public')
                                 ->directory('accounts')
                                 ->image()
-                                ->imageEditor()
-                                ->imageEditorMode(2)
+                                // ->imageEditor()
                                 ->required()
                                 ->columnSpanFull()
                         ])->columnSpanFull(),
@@ -341,8 +343,8 @@ class ListAccounts extends Component implements HasForms, HasTable
                                             ->disk('public')
                                             ->directory('accounts')
                                             ->image()
-                                            ->imageEditor()
-                                            ->imageEditorMode(2)
+                                            // ->imageEditor()
+                                            // ->imageEditorMode(2)
                                             ->required()
                                             ->columnSpanFull()
                                     ])->columnSpanFull(),

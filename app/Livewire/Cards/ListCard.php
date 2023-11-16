@@ -71,15 +71,21 @@ class ListCard extends Component implements HasForms, HasTable
                     ->searchable(isIndividual: true, isGlobal: true)
                     ->label('Card ID')
                     ->sortable(),
-
+                    TextColumn::make('id')->label('ID')
+                    ->searchable(isIndividual: true, isGlobal: true)
+    
+                    ,
+                
                 TextColumn::make('valid_from')
-
+                    ->badge()
+                    ->color('gray')
                     ->date(),
 
 
                 TextColumn::make('valid_until')
 
-
+                    ->badge()
+                    ->color('gray')
                     ->date(),
 
 
@@ -105,7 +111,7 @@ class ListCard extends Component implements HasForms, HasTable
                         default => 'heroicon-o-clock'
                     }),
 
-                TextColumn::make('id')->label('ID'),
+               
 
             ],)
             ->headerActions([
