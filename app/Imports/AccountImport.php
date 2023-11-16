@@ -4,10 +4,11 @@ namespace App\Imports;
 
 use Carbon\Carbon;
 use App\Models\Account;
-use Illuminate\Support\Facades\DB;
+
 use Illuminate\Database\QueryException;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Facades\DB;
 
 class AccountImport implements  ToModel, WithHeadingRow
 {

@@ -5,7 +5,7 @@ namespace App\Imports;
 use Carbon\Carbon;
 use App\Models\Card;
 use App\Models\Account;
-use Illuminate\Support\Facades\DB;
+use DB;
 use Illuminate\Database\QueryException;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
