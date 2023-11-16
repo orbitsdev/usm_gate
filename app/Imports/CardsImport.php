@@ -19,6 +19,7 @@ class CardsImport implements ToModel, WithHeadingRow
 
             DB::beginTransaction();
             $data = Card::where('id', $row['id'])->first();
+            dd($row);
             $accountExist = Account::where('id', $row['account_id'])->first();
 
           
