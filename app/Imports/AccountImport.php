@@ -15,28 +15,122 @@ class AccountImport implements  ToModel, WithHeadingRow
     {
 
 
-        try{
+        // try{
             
         
-            DB::beginTransaction();
+        //     DB::beginTransaction();
 
-            $account = Account::where('id', $row['id'])->first();
+        //     $account = Account::where('id', $row['id'])->first();
 
-            $birth_date = $row['birth_date'];
+        //     $birth_date = $row['birth_date'];
 
-            if (is_string($birth_date)) {
+        //     if (is_string($birth_date)) {
               
-                // Convert string to Carbon instance with the format 'm/d/Y'
-                $birth_date = Carbon::createFromFormat('m/d/Y', $birth_date)->format('Y-m-d');
-            } elseif (is_numeric($birth_date)) {
+        //         // Convert string to Carbon instance with the format 'm/d/Y'
+        //         $birth_date = Carbon::createFromFormat('m/d/Y', $birth_date)->format('Y-m-d');
+        //     } elseif (is_numeric($birth_date)) {
              
-                // Convert Excel serialized date to DateTime object
-                $birth_date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($birth_date);
-            }
+        //         // Convert Excel serialized date to DateTime object
+        //         $birth_date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($birth_date);
+        //     }
           
-            if($account){
+        //     if($account){
                
-                $account->update([
+        //         $account->update([
+        //             'first_name' => $row['first_name'],
+        //             'last_name' => $row['last_name'],
+        //             'middle_name' => $row['middle_name'],
+        //             'sex' => $row['sex'],
+        //             'birth_date' => $birth_date,
+        //             'address' => $row['address'],
+        //             'contact_number' => $row['contact_number'],
+        //             'account_type' => $row['account_type'], 
+        //         ]);
+        //         $account->save();
+        //     }else{
+
+               
+        //         $existingaccount = Account::where([
+        //             'first_name' => $row['first_name'],
+        //             'last_name' => $row['last_name'],
+        //             'middle_name' => $row['middle_name'],
+        //         ])->first();
+
+        //         if(empty($existingaccount)){
+        //             $new_account  = Account::create([
+        //                 'first_name' => $row['first_name'],
+        //                 'last_name' => $row['last_name'],
+        //                 'middle_name' => $row['middle_name'],
+        //                 'sex' => $row['sex'],
+        //                 'birth_date' => $birth_date,
+        //                 'address' => $row['address'],
+        //                 'contact_number' => $row['contact_number'],
+        //                 'account_type' => $row['account_type'], 
+        //             ]);
+                   
+        //             return $new_account;
+                   
+
+        //         }else{
+        //             $existingaccount->update([
+        //                 'first_name' => $row['first_name'],
+        //                 'last_name' => $row['last_name'],
+        //                 'middle_name' => $row['middle_name'],
+        //                 'sex' => $row['sex'],
+        //                 'birth_date' => $birth_date,
+        //                 'address' => $row['address'],
+        //                 'contact_number' => $row['contact_number'],
+        //                 'account_type' => $row['account_type'], 
+        //             ]);
+        //             $existingaccount->save();
+        //         }
+               
+        //     }
+        //     DB::commit();
+
+        // }catch(\Exception $e){
+        //     dd($e->getMessage());
+        //     DB::rollback();
+        // }
+
+        $account = Account::where('id', $row['id'])->first();
+
+        $birth_date = $row['birth_date'];
+
+        if (is_string($birth_date)) {
+          
+            // Convert string to Carbon instance with the format 'm/d/Y'
+            $birth_date = Carbon::createFromFormat('m/d/Y', $birth_date)->format('Y-m-d');
+        } elseif (is_numeric($birth_date)) {
+         
+            // Convert Excel serialized date to DateTime object
+            $birth_date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($birth_date);
+        }
+      
+        if($account){
+           
+            $account->update([
+                'first_name' => $row['first_name'],
+                'last_name' => $row['last_name'],
+                'middle_name' => $row['middle_name'],
+                'sex' => $row['sex'],
+                'birth_date' => $birth_date,
+                'address' => $row['address'],
+                'contact_number' => $row['contact_number'],
+                'account_type' => $row['account_type'], 
+            ]);
+            $account->save();
+        }else{
+
+           
+            $existingaccount = Account::where([
+                'first_name' => $row['first_name'],
+                'last_name' => $row['last_name'],
+                'middle_name' => $row['middle_name'],
+            ])->first();
+
+            if(empty($existingaccount)){
+                $new_account  = Account::create([
                     'first_name' => $row['first_name'],
                     'last_name' => $row['last_name'],
                     'middle_name' => $row['middle_name'],
@@ -46,51 +140,24 @@ class AccountImport implements  ToModel, WithHeadingRow
                     'contact_number' => $row['contact_number'],
                     'account_type' => $row['account_type'], 
                 ]);
-                $account->save();
-            }else{
-
                
-                $existingaccount = Account::where([
+                return $new_account;
+               
+
+            }else{
+                $existingaccount->update([
                     'first_name' => $row['first_name'],
                     'last_name' => $row['last_name'],
                     'middle_name' => $row['middle_name'],
-                ])->first();
-
-                if(empty($existingaccount)){
-                    $new_account  = Account::create([
-                        'first_name' => $row['first_name'],
-                        'last_name' => $row['last_name'],
-                        'middle_name' => $row['middle_name'],
-                        'sex' => $row['sex'],
-                        'birth_date' => $birth_date,
-                        'address' => $row['address'],
-                        'contact_number' => $row['contact_number'],
-                        'account_type' => $row['account_type'], 
-                    ]);
-                   
-                    return $new_account;
-                   
-
-                }else{
-                    $existingaccount->update([
-                        'first_name' => $row['first_name'],
-                        'last_name' => $row['last_name'],
-                        'middle_name' => $row['middle_name'],
-                        'sex' => $row['sex'],
-                        'birth_date' => $birth_date,
-                        'address' => $row['address'],
-                        'contact_number' => $row['contact_number'],
-                        'account_type' => $row['account_type'], 
-                    ]);
-                    $existingaccount->save();
-                }
-               
+                    'sex' => $row['sex'],
+                    'birth_date' => $birth_date,
+                    'address' => $row['address'],
+                    'contact_number' => $row['contact_number'],
+                    'account_type' => $row['account_type'], 
+                ]);
+                $existingaccount->save();
             }
-            DB::commit();
-
-        }catch(\Exception $e){
-            dd($e->getMessage());
-            DB::rollback();
+           
         }
     }
 
