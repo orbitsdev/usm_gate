@@ -19,6 +19,7 @@ class AccountImport implements  ToModel, WithHeadingRow
             
         
             DB::beginTransaction();
+
             $account = Account::where('id', $row['id'])->first();
 
             $birth_date = $row['birth_date'];
@@ -85,11 +86,11 @@ class AccountImport implements  ToModel, WithHeadingRow
                 }
                
             }
-            DB::commit(); 
+            DB::commit();
 
-        }catch(QueryException $e){
+        }catch(\Exception $e){
             dd($e->getMessage());
-            DB::rollBack(); 
+            DB::rollback();
         }
     }
 
