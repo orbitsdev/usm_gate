@@ -52,7 +52,7 @@ class CardsImport implements ToModel, WithHeadingRow
             
             // Now $validFrom and $validUntil are either formatted strings or DateTime objects
             
-            dd($data);
+          
             if ($data) {
                 // Update existing card
                 $data->update([
@@ -93,7 +93,7 @@ class CardsImport implements ToModel, WithHeadingRow
             }
             DB::commit();
         } catch (QueryException $e) {
-            dd($e->getMessage());
+           
             DB::rollBack();
         }
     }
