@@ -66,7 +66,7 @@ class AccountImport implements  ToModel, WithHeadingRow
                         'contact_number' => $row['contact_number'],
                         'account_type' => $row['account_type'], 
                     ]);
-                    dd($new_account);
+                   
                     return $new_account;
                    
 
