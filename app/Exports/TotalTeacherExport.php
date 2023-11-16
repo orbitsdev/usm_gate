@@ -11,7 +11,7 @@ class TotalTeacherExport implements FromView
     public function view(): View
     {
         return view('exports.account-export', [
-            'collection' =>Account::where('account_type', 'Teacher')->get()
+            'collection' =>Account::where('account_type', 'Teacher')->latest()->get()
         ]);
     }
 }

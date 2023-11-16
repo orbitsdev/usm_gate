@@ -11,7 +11,7 @@ class TotalInactiveCardExport implements FromView
     public function view(): View
     {
         return view('exports.cards-export', [
-            'collection' => Card::where('status', 'Inactive')->get()
+            'collection' => Card::where('status', 'Inactive')->latest()->get()
         ]);
     }
 }

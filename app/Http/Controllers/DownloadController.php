@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Exports\AccountExport;
-use App\Exports\TotalActiveCardExport;
-use App\Exports\TotalBlockedCardExport;
 use App\Exports\TotalCardExport;
-use App\Exports\TotalExpiredCardExport;
-use App\Exports\TotalInactiveCardExport;
-use App\Exports\TotalNoAccountCardExport;
 use App\Exports\TotalStaffExport;
 use App\Exports\TotalStudentExport;
 use App\Exports\TotalTeacherExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TotalActiveCardExport;
+use App\Exports\TotalBlockedCardExport;
+use App\Exports\TotalExpiredCardExport;
+use App\Exports\TotalInactiveCardExport;
+use App\Exports\TotalAccountNoCardExport;
+use App\Exports\TotalNoAccountCardExport;
 
 class DownloadController extends Controller
 {
@@ -22,6 +23,10 @@ class DownloadController extends Controller
     public function totalAccounts(){
         $filename = now()->format('Y-m-d');
         return Excel::download(new AccountExport, $filename.'-ACCOUNTS.xlsx');
+    }
+    public function totalAccountsNoCard(){
+        $filename = now()->format('Y-m-d');
+        return Excel::download(new TotalAccountNoCardExport, $filename.'-NO-CARD-ACCOUNTS.xlsx');
     }
     public function totalTeachers(){
         $filename = now()->format('Y-m-d');
@@ -62,5 +67,7 @@ class DownloadController extends Controller
         $filename = now()->format('Y-m-d');
         return Excel::download(new TotalNoAccountCardExport, $filename.'-NO-ACCOUNT-CARDS.xlsx');
     }
+
+
 
 }

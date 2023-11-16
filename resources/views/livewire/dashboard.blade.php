@@ -16,7 +16,7 @@
                     <h2 class="mb-20 text-3xl font-bold capitalize text-gray-500 percentage-title">Accounts Percentage</h2>
 
                     <div class="grid lg:grid-cols-3 lg:gap-x-12 parent-percentage">
-                        <x-percentage-card :color="'bg-green-100 text-primary'" title="Teachers" :value="number_format(($total_teachers / $total_accounts) * 100, 2) . '%'"
+                        <x-percentage-card :color="'bg-green-100 text-primary'" title="Teachers" :value="number_format(($total_teachers / max($total_accounts, 1)) * 100, 2) . '%'"
                             description="Educators shaping minds among registered accounts.">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="h-7 w-7">
@@ -25,7 +25,7 @@
                             </svg>
                         </x-percentage-card>
 
-                        <x-percentage-card :color="'bg-blue-100 text-primary'" title="Students" :value="number_format(($total_students / $total_accounts) * 100, 2) . '%'"
+                        <x-percentage-card :color="'bg-blue-100 text-primary'" title="Students" :value="number_format(($total_students / max($total_accounts, 1)) * 100, 2) . '%'"
                             description="Enthusiastic students contributing to the learning community.">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="h-7 w-7">
@@ -34,7 +34,7 @@
                             </svg>
                         </x-percentage-card>
 
-                        <x-percentage-card :color="'bg-warning-100 text-primary'" title="Staffs" :value="number_format(($total_staffs / $total_accounts) * 100, 2) . '%'"
+                        <x-percentage-card :color="'bg-warning-100 text-primary'" title="Staffs" :value="number_format(($total_staffs / max($total_accounts, 1)) * 100, 2) . '%'"
                             description="Dedicated staff contributing to the platform's success.">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="h-7 w-7">
@@ -62,6 +62,21 @@
 
                 <x-slot name="download">
                     {{ $this->downloadTotalAccounts }}
+                </x-slot>
+            </x-statcard>
+            <x-statcard title="Accounts No Card" :value="$total_accounts_no_card">
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6  ">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+
+
+                <x-slot name="download">
+                    {{ $this->downloadTotalNoCardAccounts }}
                 </x-slot>
             </x-statcard>
 

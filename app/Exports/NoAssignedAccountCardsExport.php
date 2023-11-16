@@ -11,8 +11,8 @@ class NoAssignedAccountCardsExport implements FromView
 {
     public function view(): View
     {
-        return view('exports.no-account-cards-export', [
-            'collection' => Card::whereDoesntHave('account')->get()
+        return view('exports.cards-export', [
+            'collection' => Card::whereDoesntHave('account')->latest()->get()
         ]);
     }
 }

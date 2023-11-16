@@ -12,8 +12,8 @@ class BlockedCardsExport implements FromView
 
     public function view(): View
     {
-        return view('exports.blocked-cards-export', [
-            'collection' => Card::where('status', 'Blocked')->get()
+        return view('exports.cards-export', [
+            'collection' => Card::where('status', 'Blocked')->latest()->get()
         ]);
     }
 }

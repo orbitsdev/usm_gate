@@ -45,6 +45,7 @@ Route::get('/overall-report', OverAllReport::class)->name('overall-report');
 
 Route::prefix('download')->name('download.')->controller(DownloadController::class)->group(function () {
     Route::get('/total-accounts', 'totalAccounts')->name('total-account');
+    Route::get('/total-accounts-no-card', 'totalAccountsNoCard')->name('total-account-no-card');
     Route::get('/total-teachers-accounts', 'totalTeachers')->name('total-teachers');
     Route::get('/total-students-accounts', 'totalStudents')->name('total-students');
     Route::get('/total-staffs-accounts', 'totalStaffs')->name('total-staffs');

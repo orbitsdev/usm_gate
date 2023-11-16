@@ -62,17 +62,23 @@
                 <img src="{{ asset('images/usm-kidapawan-logo.png') }}" alt="USM Kidapawan Logo"
                     class="mb-8 w-[260px] h-[260px]">
 
+                    <p class="text-8xl text-center max-w-5xl mb-8 font-serif font-extrabold uppercase  leading-relaxed">
+                        Welcome To
+                    </p>
+                    
                 <h1 class="text-7xl font-bold mb-4 max-w-7xl text-center  ">University of Southern Mindanao</h1>
                 <h1 class="text-6xl font-bold mb-4 max-w-6xl text-center uppercase  text-gray-200">( Kidapawan Campus )
                 </h1>
 
+
+{{-- 
                 <p class="text-2xl text-center max-w-5xl mb-8  font-serif   capitalize mt-6 leading-relaxed">
 
 
                     "Embark on your academic adventure at the University of Southern Mindanao, Kidapawan Campus! Uncover
                     endless opportunities, immerse yourself in our lively community, and let's shape a future full of
                     possibilities together. Your journey begins here!"
-                </p>
+                </p> --}}
 
                 {{-- <div class="p-4 rounded-md">
                 <p class="text-sm text-gray-400">

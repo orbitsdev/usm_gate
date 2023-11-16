@@ -12,7 +12,7 @@ class TotalCardExport implements FromView
     public function view(): View
     {
         return view('exports.cards-export', [
-            'collection' => Card::all()
+            'collection' => Card::latest()->get()
         ]);
     }
 }

@@ -41,6 +41,13 @@ class Dashboard extends Component implements HasForms, HasActions
         ->icon('heroicon-m-arrow-down-tray')
         ->url(fn (): string => route('download.total-account'));
     }
+    public function downloadTotalNoCardAccounts(): Action
+    {
+        return Action::make('Download')
+        ->color('gray')
+        ->icon('heroicon-m-arrow-down-tray')
+        ->url(fn (): string => route('download.total-account-no-card'));
+    }
     public function downloadTotalTeachers(): Action
     {
         return Action::make('Download')
@@ -121,6 +128,7 @@ class Dashboard extends Component implements HasForms, HasActions
             
         return view('livewire.dashboard',[
             'total_accounts' => Account::count(),
+            'total_accounts_no_card' => Account::whereDoesntHave('card')->count(),
             'total_teachers' => Account::where('account_type', 'Teacher')->count(),
             'total_students' => Account::where('account_type', 'Student')->count(),
             'total_staffs' => Account::where('account_type', 'Staff')->count(),

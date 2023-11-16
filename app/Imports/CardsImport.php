@@ -48,6 +48,7 @@ class CardsImport implements ToModel, WithHeadingRow
             } elseif (is_numeric($validUntil)) {
                 $validUntil = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($validUntil);
             }
+          
             
             // Now $validFrom and $validUntil are either formatted strings or DateTime objects
             
@@ -67,6 +68,7 @@ class CardsImport implements ToModel, WithHeadingRow
                 $existingData = Card::where('id_number', $row['id_number'])->first();
                 
                 if (!$existingData) {
+                    
                     // If no existing card, create a new one
                     return new Card([
                         'account_id' => $account,
@@ -76,13 +78,15 @@ class CardsImport implements ToModel, WithHeadingRow
                         'status' => $row['status'],
                     ]);
                 } else {
-                    $existingData->update([
-                        'account_id' => $account,
-                        'valid_from' => $validFrom,
-                        'valid_until' => $validUntil,
-                        'status' => $row['status'],
-                    ]);
-                    $existingData->save();
+                   
+                  
+                    // $existingData->update([
+                    //     'account_id' => $account,
+                    //     'valid_from' => $validFrom,
+                    //     'valid_until' => $validUntil,
+                    //     'status' => $row['status'],
+                    // ]);
+                    // $existingData->save();
                     // Handle the case where a card with the same ID number already exists
                     // You can log an error or perform any other necessary action
                 }

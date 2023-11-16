@@ -18,15 +18,20 @@
     <tbody>
         @foreach($collection as $item)
         <tr>
-            <td align="left" width="40">{{ $item?->id }}</td>
-            <td align="left" width="40">{{ $item?->first_name }}</td>
-            <td align="left" width="40">{{ $item?->last_name }}</td>
-            <td align="left" width="40">{{ $item?->middle_name }}</td>
-            <td align="left" width="40">{{ $item?->sex }}</td>
-            <td align="left" width="40">{{ $item?->birth_date }}</td>
-            <td align="left" width="100">{{ $item?->address }}</td>
-            <td align="left" width="40">{{ $item?->contact_number }}</td>
-            <td align="left" width="40">{{ $item?->account_type }}</td>
+            <td align="left" width="40">{{ $item?->id  ?? ''}}</td>
+            <td align="left" width="40">{{ $item?->first_name?? '' }}</td>
+            <td align="left" width="40">{{ $item?->last_name?? '' }}</td>
+            <td align="left" width="40">{{ $item?->middle_name?? '' }}</td>
+            <td align="left" width="40">{{ $item?->sex?? '' }}</td>
+            <td align="left" width="40">
+                
+             {{-- {{ $item?->birth_date??'' }} --}}
+
+             {{ $item->birth_date ? \Carbon\Carbon::parse($item->birth_date)->format('m/d/Y') : '' }}
+             </td>
+            <td align="left" width="100">{{ $item?->address?? '' }}</td>
+            <td align="left" width="40">{{ $item?->contact_number??'' }}</td>
+            <td align="left" width="40">{{ $item?->account_type??'' }}</td>
           
           
             

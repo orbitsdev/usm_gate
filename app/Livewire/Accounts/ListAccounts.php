@@ -136,7 +136,7 @@ class ListAccounts extends Component implements HasForms, HasTable
             ->headerActions([   
 
                 Action::make('Import ')->button()->action(function (array $data): void {
-
+                  
                     $file  = Storage::disk('public')->path($data['file']);
                    
                     Excel::import(new AccountImport, $file);
@@ -152,8 +152,8 @@ class ListAccounts extends Component implements HasForms, HasTable
                 ->outlined()
                 ->button()
                 ->label('Import')
-                ->modalHeading("Import to Create or Update Accounts.")
-                ->modalDescription('Please ensure to adhere to the correct file format when importing Excel data. Your cooperation in following the specified format is greatly appreciated for seamless processing.')
+                ->modalHeading("Create or Update Accounts.")
+                ->modalDescription('Important Reminder: Please use the correct Excel file format when importing data. If you\'re updating details, ensure that the provided \'ID\' exists in the system; otherwise, it will create a new record. Your cooperation in adhering to this format and verifying the \'ID\' is crucial for a seamless data processing experience. Thank you for your attention to these guidelines')
 
             
                 ,

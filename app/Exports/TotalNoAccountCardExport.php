@@ -11,7 +11,7 @@ class TotalNoAccountCardExport implements FromView
     public function view(): View
     {
         return view('exports.cards-export', [
-            'collection' => Card::whereDoesntHave('account')->get()
+            'collection' => Card::whereDoesntHave('account')->latest()->get()
         ]);
     }
 }
