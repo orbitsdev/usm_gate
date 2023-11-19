@@ -52,9 +52,19 @@
     <div wire:poll.1s class=" h-full z-10  ">
 
         @if (count($transactions) > 0)
-            <div class=" relative gap-x-1 grid grid-cols-{{ min(3, count($transactions)) }} h-full z-10">
-                @foreach ($transactions as $transaction)
+            {{-- <div class="relative grid gap-x-1  grid-cols-3 h-full z-10"> --}}
+            {{-- <div class="relative grid gap-x-1  grid-cols-{{ min(3, count($transactions)) }} h-full z-10"> --}}
+                {{-- <div class="relative grid gap-x-1 grid-cols-{{ min(3, count($transactions)) }} h-full z-10">
+                    @foreach ($transactions as $transaction)
                     <x-user-profile :transaction="$transaction" />
+                    @endforeach
+                </div> --}}
+                
+            <div class="relative grid grid-cols-2 h-full z-10 gap-4">
+            {{-- <div class="grid  grid-cols-{{ min(3, count($transactions)) }} relative  h-full z-10 gap-4"> --}}
+                
+                @foreach ($transactions as $transaction)
+                    <x-user-profile :transaction="$transaction" class="col-span-1" />
                 @endforeach
             </div>
         @else
