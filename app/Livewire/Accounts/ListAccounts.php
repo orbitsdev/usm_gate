@@ -99,6 +99,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->color(fn (string $state): string => match ($state) {
                             'Student' => 'success',
                             'Staff' => 'primary',
+                            'Guest' => 'gray',
                             default => 'info',
                         })
                         ->label('Account Type'),
@@ -196,6 +197,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                                     'Student' => 'Student',
                                     'Staff' => 'Staff',
                                     'Teacher' => 'Teacher',
+                                    'Guest' => 'Guest',
                                 ])
                                 ->required()
                                 ->native(false)
@@ -253,6 +255,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                         'Student' => 'Student',
                         'Staff' => 'Staff',
                         'Teacher' => 'Teacher',
+                        'Guest' => 'Guest',
                     ]),
                 SelectFilter::make('sex')
                     ->options([
@@ -312,6 +315,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                                                 'Student' => 'Student',
                                                 'Staff' => 'Staff',
                                                 'Teacher' => 'Teacher',
+                                                'Guest' => 'Guest',
                                             ])
                                             ->required()
                                             ->native(false)

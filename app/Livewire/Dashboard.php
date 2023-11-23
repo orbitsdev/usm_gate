@@ -62,6 +62,13 @@ class Dashboard extends Component implements HasForms, HasActions
         ->icon('heroicon-m-arrow-down-tray')
         ->url(fn (): string => route('download.total-students'));
     }
+    public function downloadTotalGuests(): Action
+    {
+        return Action::make('Download')
+        ->color('gray')
+        ->icon('heroicon-m-arrow-down-tray')
+        ->url(fn (): string => route('download.total-guests'));
+    }
     public function downloadTotalStaffs(): Action
     {
         return Action::make('Download')
@@ -132,6 +139,7 @@ class Dashboard extends Component implements HasForms, HasActions
             'total_teachers' => Account::where('account_type', 'Teacher')->count(),
             'total_students' => Account::where('account_type', 'Student')->count(),
             'total_staffs' => Account::where('account_type', 'Staff')->count(),
+            'total_guest' => Account::where('account_type', 'Guest')->count(),
             'total_cards' =>Card::count(),
             'total_active_cards' => Card::where('status', 'Active')->count(),
             'total_inactive_cards' =>  Card::where('status', 'Inactive')->count(),

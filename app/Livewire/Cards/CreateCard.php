@@ -120,6 +120,7 @@ class CreateCard extends Component implements HasForms, HasActions
                                                             'Student' => 'Student',
                                                             'Staff' => 'Staff',
                                                             'Teacher' => 'Teacher',
+                                                            'Guest' => 'Guest',
                                                         ])
                                                         ->required()
                                                         ->native(false)

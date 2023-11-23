@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exports\AccountExport;
 use App\Exports\TotalCardExport;
+use App\Exports\TotalGuestExport;
 use App\Exports\TotalStaffExport;
 use App\Exports\TotalStudentExport;
 use App\Exports\TotalTeacherExport;
@@ -35,6 +36,10 @@ class DownloadController extends Controller
     public function totalStudents(){
         $filename = now()->format('Y-m-d');
         return Excel::download(new TotalStudentExport, $filename.'-Students-ACCOUNTS.xlsx');
+    }
+    public function totalGuests(){
+        $filename = now()->format('Y-m-d');
+        return Excel::download(new TotalGuestExport, $filename.'-Guests-ACCOUNTS.xlsx');
     }
     public function totalStaffs(){
         $filename = now()->format('Y-m-d');
@@ -67,6 +72,7 @@ class DownloadController extends Controller
         $filename = now()->format('Y-m-d');
         return Excel::download(new TotalNoAccountCardExport, $filename.'-NO-ACCOUNT-CARDS.xlsx');
     }
+   
 
 
 

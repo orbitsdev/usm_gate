@@ -52,6 +52,7 @@ Route::prefix('download')->name('download.')->controller(DownloadController::cla
     Route::get('/total-teachers-accounts', 'totalTeachers')->name('total-teachers');
     Route::get('/total-students-accounts', 'totalStudents')->name('total-students');
     Route::get('/total-staffs-accounts', 'totalStaffs')->name('total-staffs');
+    Route::get('/total-guest-accounts', 'totalGuests')->name('total-guests');
     Route::get('/total-cards', 'totalCards')->name('total-cards');
     Route::get('/total-acive-cards', 'totalActiveCards')->name('total-active-cards');
     Route::get('/total-inacive-cards', 'totalInactiveCards')->name('total-inactive-cards');
