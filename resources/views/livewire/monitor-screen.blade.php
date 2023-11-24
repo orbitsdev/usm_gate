@@ -66,6 +66,7 @@
                     @endforeach
                 </div>
                 
+                
         @else
             <div class="flex flex-col items-center justify-center h-screen text-white relative">
                 <img src="{{ asset('images/usm-kidapawan-logo.png') }}" alt="USM Kidapawan Logo"
