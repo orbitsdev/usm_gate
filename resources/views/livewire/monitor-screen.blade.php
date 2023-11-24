@@ -62,7 +62,7 @@
 
                 <div class="relative grid {{ count($transactions) == 3 ? 'grid-cols-3' : (count($transactions) == 2 ? 'grid-cols-2' : 'grid-cols-1') }} gap-4 h-full z-10">
                     @foreach ($transactions as $transaction)
-                        <x-user-profile :transaction="$transaction" class="" />
+                        <x-user-profile :transaction="$transaction" class="bg-red-400" />
                     @endforeach
                 </div>
                 
