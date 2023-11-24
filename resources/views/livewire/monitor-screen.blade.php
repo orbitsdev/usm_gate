@@ -50,38 +50,37 @@
         </div>
     </div> --}}
     <div wire:poll.1s class=" h-full z-10  ">
-        
+
         @if (count($transactions) > 0)
             {{-- <div class="relative grid gap-x-1  grid-cols-3 h-full z-10"> --}}
             {{-- <div class="relative grid gap-x-1  grid-cols-{{ min(3, count($transactions)) }} h-full z-10"> --}}
-                {{-- <div class="relative grid gap-x-1 grid-cols-{{ min(3, count($transactions)) }} h-full z-10">
+            {{-- <div class="relative grid gap-x-1 grid-cols-{{ min(3, count($transactions)) }} h-full z-10">
                     @foreach ($transactions as $transaction)
                     <x-user-profile :transaction="$transaction" />
                     @endforeach
                 </div> --}}
+
+                <div class="relative grid {{ count($transactions) == 3 ? 'grid-cols-3' : (count($transactions) == 2 ? 'grid-cols-2' : 'grid-cols-1') }} gap-4 h-full z-10">
+                    @foreach ($transactions as $transaction)
+                        <x-user-profile :transaction="$transaction" class="" />
+                    @endforeach
+                </div>
                 
-            <div class="relative grid grid-cols-2 h-full z-10 gap-4">
-            {{-- <div class="grid  grid-cols-{{ min(3, count($transactions)) }} relative  h-full z-10 gap-4"> --}}
-                
-                @foreach ($transactions as $transaction)
-                    <x-user-profile :transaction="$transaction" class="col-span-1" />
-                @endforeach
-            </div>
         @else
             <div class="flex flex-col items-center justify-center h-screen text-white relative">
                 <img src="{{ asset('images/usm-kidapawan-logo.png') }}" alt="USM Kidapawan Logo"
                     class="mb-8 w-[260px] h-[260px]">
 
-                    <p class="text-8xl text-center max-w-5xl mb-8 font-serif font-extrabold uppercase  leading-relaxed">
-                        Welcome To
-                    </p>
-                    
+                <p class="text-8xl text-center max-w-5xl mb-8 font-serif font-extrabold uppercase  leading-relaxed">
+                    Welcome To
+                </p>
+
                 <h1 class="text-7xl font-bold mb-4 max-w-7xl text-center  ">University of Southern Mindanao</h1>
                 <h1 class="text-6xl font-bold mb-4 max-w-6xl text-center uppercase  text-gray-200">( Kidapawan Campus )
                 </h1>
 
 
-{{-- 
+                {{-- 
                 <p class="text-2xl text-center max-w-5xl mb-8  font-serif   capitalize mt-6 leading-relaxed">
 
 

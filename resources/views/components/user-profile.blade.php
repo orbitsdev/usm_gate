@@ -1,5 +1,5 @@
   
-<div>
+<div {{ $attributes}}>
     
 
     @if ($transaction->success)
