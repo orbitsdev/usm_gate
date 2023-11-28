@@ -47,11 +47,11 @@
 
 
 
-        </div>
+        </div>                                                                                                                                          
     </div> --}}
     <div wire:poll.1s class=" h-full z-10  ">
 
-        @if (count($transactions) > 0)
+        @if (count($transactions) > 0)                                                                                          
             {{-- <div class="relative grid gap-x-1  grid-cols-3 h-full z-10"> --}}
             {{-- <div class="relative grid gap-x-1  grid-cols-{{ min(3, count($transactions)) }} h-full z-10"> --}}
             {{-- <div class="relative grid gap-x-1 grid-cols-{{ min(3, count($transactions)) }} h-full z-10">

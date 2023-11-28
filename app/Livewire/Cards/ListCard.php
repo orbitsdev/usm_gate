@@ -25,6 +25,7 @@ use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -67,10 +68,13 @@ class ListCard extends Component implements HasForms, HasTable
                         });
                     } ,isIndividual: true, isGlobal: true),
                 TextColumn::make('id_number')
-                    ->copyable()
+                 
+                ->copyable()
+                 
                     ->searchable(isIndividual: true, isGlobal: true)
                     ->label('Card ID')
                     ->sortable(),
+
                     TextColumn::make('id')->label('ID')
                     ->searchable(isIndividual: true, isGlobal: true)
     
@@ -110,6 +114,11 @@ class ListCard extends Component implements HasForms, HasTable
                         'Expired' => 'heroicon-o-x-mark',
                         default => 'heroicon-o-clock'
                     }),
+                    ViewColumn::make('')->view('tables.columns.qr')->label('QR')
+                    ->tooltip('Download')
+
+ 
+             
 
                
 

@@ -59,6 +59,7 @@ Route::prefix('download')->name('download.')->controller(DownloadController::cla
     Route::get('/total-expired-cards', 'totalExpiredCards')->name('total-expired-cards');
     Route::get('/total-blocked-cards', 'totalBlockedCards')->name('total-blocked-cards');
     Route::get('/total-no-account-cards', 'totalNoAccountCards')->name('total-no-account-cards');
+    Route::get('/qrcode/{idNumber}','qrCode')->name('qrcode');
 });
 
 // Route::get('/accounts/create', CreateAccount::class)->name('account.create');
