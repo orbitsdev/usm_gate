@@ -82,14 +82,14 @@ class DownloadController extends Controller
 
 
            
-            $card = Card::where('id_number', (int)$idNumber)->first();
+            $card = Card::where('qr_number', $idNumber)->first();
          
             if ($card) {
                 // Create an instance of DNS2D
                 $qrCode = new DNS2D();
 
                 // Generate the QR code data
-                $qrCodeData = $qrCode->getBarcodePNG(strval($card->id_number), 'QRCODE');
+                $qrCodeData = $qrCode->getBarcodePNG(strval($card->qr_number), 'QRCODE');
 
                 // $qrCodeData = $qrCode->getBarcodePNG(strval($student->id_number), 'QRCODE');
 
@@ -104,7 +104,7 @@ class DownloadController extends Controller
                     $firstName = 'NO-ACCOUNT';
                 }
 
-                $filename = strtoupper($lastName . '-' . $firstName . '-' . $card->id_number . '.png');
+                $filename = strtoupper($lastName . '-' . $firstName . '-' . $card->qr_number . '.png');
 
                 // Define the path where the QR code image will be saved temporarily
                 $filePath = 'temp/' . $filename;
