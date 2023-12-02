@@ -3,6 +3,7 @@
         <tr style="background-color: #406e40; color: white" >
             <th style="background-color: #406e40; color: white; ">Account</th>
             <th style="background-color: #406e40; color: white; ">  Card ID</th>
+            <th style="background-color: #406e40; color: white; "> QR Number</th>
             <th style="background-color: #406e40; color: white; "> Account Type</th>
             <th style="background-color: #406e40; color: white; ">Time In</th>
             <th style="background-color: #406e40; color: white; ">Time Out</th>
@@ -29,6 +30,13 @@
                 {{ $item->card->id_number }}
             @else
                 No Card Found
+            @endif
+            </td>
+            <td align="left" width="40">
+                @if (!empty($item->card))
+                {{ $item->card->qr_number }}
+            @else
+                No Qr Found
             @endif
             </td>
             <td align="left" width="40">

@@ -81,7 +81,7 @@ class CreateCard extends Component implements HasForms, HasActions
                     ->columns([
                         'sm' => 3,
                         'xl' => 6,
-                        '2xl' => 9,
+                        '2xl' => 12,
                     ])
                     ->schema([
                         Select::make('account_id')
@@ -167,6 +167,9 @@ class CreateCard extends Component implements HasForms, HasActions
                         TextInput::make('id_number')->required()->unique(ignoreRecord: true)
                             ->columnSpan(3)
                             ->label('Card ID'),
+                        TextInput::make('qr_number')->required()->unique(ignoreRecord: true)
+                            ->columnSpan(3)
+                            ->label('QR Number'),
                         DatePicker::make('valid_from')
                         ->native(false)
                         ->required()

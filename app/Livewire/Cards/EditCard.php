@@ -50,7 +50,7 @@ class EditCard extends Component implements HasForms, HasActions
                     ->columns([
                         'sm' => 3,
                         'xl' => 6,
-                        '2xl' => 9,
+                        '2xl' => 12,
                     ])
                     ->schema([
                         Select::make('account_id')
@@ -69,6 +69,10 @@ class EditCard extends Component implements HasForms, HasActions
                         TextInput::make('id_number')->required()->unique(ignoreRecord: true)
                         ->columnSpan(3)
                         ->label('Card ID')
+                        ,   
+                        TextInput::make('qr_number')->required()->unique(ignoreRecord: true)
+                        ->columnSpan(3)
+                        ->label('Qr Number')
                         ,   
                         DatePicker::make('valid_from')
                         ->required()

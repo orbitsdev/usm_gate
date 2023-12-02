@@ -139,6 +139,7 @@ class CardsImport implements ToModel, WithHeadingRow
             $data->update([
                 'account_id' => $account,
                 'id_number' => $row['id_number'],
+                'qr_number' => $row['qr_number'],
                 'valid_from' => $validFrom,
                 'valid_until' => $validUntil,
                 'status' => $row['status'],
@@ -154,6 +155,7 @@ class CardsImport implements ToModel, WithHeadingRow
                 return new Card([
                     'account_id' => $account,
                     'id_number' => $row['id_number'],
+                    'qr_number' => $row['qr_number'],
                     'valid_from' => $validFrom,
                     'valid_until' => $validUntil,
                     'status' => $row['status'],

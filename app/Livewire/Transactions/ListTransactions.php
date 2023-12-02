@@ -58,6 +58,9 @@ class ListTransactions extends Component implements HasForms, HasTable
                 TextColumn::make('card.id_number')
                 ->searchable(isIndividual: true, isGlobal: true)
                 ->label('Card ID'),
+                TextColumn::make('card.qr_number')
+                ->searchable(isIndividual: true, isGlobal: true)
+                ->label('QR Number'),
 
                 
                 TextColumn::make('card.account')->label('Card Owner')->formatStateUsing(function (Transaction $record) {

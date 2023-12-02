@@ -74,7 +74,13 @@ class ListCard extends Component implements HasForms, HasTable
                     ->searchable(isIndividual: true, isGlobal: true)
                     ->label('Card ID')
                     ->sortable(),
-
+                   
+                  
+                    TextColumn::make('id')->label('ID')
+                    ->searchable(isIndividual: true, isGlobal: true)
+    
+                    ,
+                 
                     TextColumn::make('id')->label('ID')
                     ->searchable(isIndividual: true, isGlobal: true)
     
@@ -114,8 +120,16 @@ class ListCard extends Component implements HasForms, HasTable
                         'Expired' => 'heroicon-o-x-mark',
                         default => 'heroicon-o-clock'
                     }),
+                    TextColumn::make('qr_number')
+                 
+                    ->copyable()
+                     
+                        ->searchable(isIndividual: true, isGlobal: true)
+                        ->label('QR Value')
+                        ->sortable(),
+    
                     ViewColumn::make('')->view('tables.columns.qr')->label('QR')
-                    ->tooltip('Download')
+                    ->tooltip('Download'),
 
  
              
