@@ -91,7 +91,7 @@ class CreateCard extends Component implements HasForms, HasActions
                             //     modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
                             // )
                             ->getOptionLabelFromRecordUsing(fn (Model $record) => ucfirst(optional($record)->last_name) . ', ' . ucfirst(optional($record)->first_name))
-                            ->searchable()
+                            //->searchable()
                             ->preload()
                             ->label('Select Account')
                             ->columnSpanFull()
