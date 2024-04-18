@@ -62,6 +62,7 @@ class ListAccounts extends Component implements HasForms, HasTable
 
                 [
 
+
                     TextColumn::make('last_name')
                     ->label('Last name')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
@@ -131,9 +132,12 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->openUrlInNewTab(),
 
 
-                        TextColumn::make('id')->label('ID')
-                        ->searchable(isIndividual: true, isGlobal: true)
-                        ,
+                    TextColumn::make('id')->label('ID')
+                    // ->formatStateUsing(fn($state)=>  strtoupper($state))
+                    ->searchable(isIndividual: true, isGlobal: true)
+                    ,
+
+
 
                 ],
 

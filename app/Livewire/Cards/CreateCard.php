@@ -203,7 +203,7 @@ class CreateCard extends Component implements HasForms, HasActions
 
     public function create(): void
     {
-
+        
 
         $data = $this->form->getState();
 

@@ -20,7 +20,7 @@ class CardFactory extends Factory
         return [
             'account_id' => Account::inRandomOrder()->first(),
             'id_number' => $this->faker->unique()->randomNumber(8),
-            'valid_from' => now(),  // Set to the current date
+            // 'valid_from' => now(),  // Set to the current date
             'valid_until' => now()->addYear(),  // Set to the date one year from now
             'status' => 'Active',
         ];
