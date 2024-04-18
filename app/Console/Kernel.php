@@ -18,21 +18,21 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 
         // $schedule->call(function () {
-
+        //     info("every 10 seconds");
         //     Transaction::truncate();
         //     // Log::truncate();
 
 
         //     // $dayRecord = Day::latest()->first();
         //     // if($dayRecord){
-                
+
         //     //     Day::whereHas('records', function($query) use($dayRecord){
         //     //         $query->where('day_record_id', $dayRecord->id);
         //     //     })->where('exit', 'Not Logout')->update(['status' => 'Logged out']);
         //     //     info("Updated  rows");
         //     // }
         // })
-        // // ->everyTenSeconds();        
+        // ->everyTenSeconds();
         // ->daily()->at('00:00');
 
         $schedule->command('app:clear-gate-transaction')->daily()->at('00:00')->runInBackground();
