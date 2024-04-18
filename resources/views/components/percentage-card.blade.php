@@ -7,10 +7,10 @@
         </div>
       </div>
       <div class="p-6">
-        <h3 class="mb-4 text-2xl font-bold text-primary ">
+        <h3 class="mb-4 text-2xl font-bold text-primary text-neutral-900  ">
             {{$value}}
         </h3>
-        <h5 class="mb-4 text-lg font-medium">{{$title}}</h5>
+        <h5 class="mb-4 text-lg font-medium ">{{$title}}</h5>
         <p class="text-neutral-500  capitalize">
             {{$description}}
         </p>

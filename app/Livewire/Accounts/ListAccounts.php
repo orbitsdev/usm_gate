@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\CreateAction;
@@ -58,26 +59,26 @@ class ListAccounts extends Component implements HasForms, HasTable
             ->query(Account::query()->latest())
             ->columns(
 
-                
+
                 [
-                 
+
                     TextColumn::make('last_name')
-                    ->label('Last Name')
+                    ->label('Last name')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                     ->searchable(isIndividual: true, isGlobal: true),
                     TextColumn::make('first_name')
-                   
-                    ->label('First Name')
+
+                    ->label('First name')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                     ->searchable(isIndividual: true, isGlobal: true),
-                  
-                      
+
+
                     TextColumn::make('middle_name')
-                    ->label('Middle Name')
+                    ->label('Middle name')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                         ->searchable(),
                     TextColumn::make('sex')
-                    ->label('Sex')
+                    ->label('Gender')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                         ->searchable(),
                     TextColumn::make('birth_date')
@@ -92,7 +93,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->copyMessageDuration(1500),
                         TextColumn::make('address')
                        ->wrap(),
-                      
+
                     TextColumn::make('account_type')
                         ->searchable()
                         ->badge()
@@ -104,32 +105,32 @@ class ListAccounts extends Component implements HasForms, HasTable
                         })
                         ->label('Account Type'),
 
-                       
+
 
                         TextColumn::make('card')
                         ->formatStateUsing(fn ($state) => empty($state) ? 'No Card' : 'Has Card')
                         ->label('Card Status')
                         ->badge()
-                        
+
                         ->color(function(string $state){
-    
+
                             if(!empty($state)){
                                 return 'success';
                             }else{
                                 return 'gray';
                             }
                         })
-                     
+
                         ,
 
                         ImageColumn::make('image')
                         ->label('Profile')
                         ->width(60)->height(60)
                         ->url(fn (Account $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
-    
+
                         ->openUrlInNewTab(),
 
-                     
+
                         TextColumn::make('id')->label('ID')
                         ->searchable(isIndividual: true, isGlobal: true)
                         ,
@@ -137,16 +138,16 @@ class ListAccounts extends Component implements HasForms, HasTable
                 ],
 
             )
-            ->headerActions([   
+            ->headerActions([
 
                 Action::make('Import ')->button()->action(function (array $data): void {
-                  
+
                     $file  = Storage::disk('public')->path($data['file']);
-                   
+
                     Excel::import(new AccountImport, $file);
-    
+
                     if (Storage::disk('public')->exists($data['file'])) {
-    
+
                         Storage::disk('public')->delete($data['file']);
                     }
                 })->icon('heroicon-o-arrow-up-tray')->form([
@@ -159,16 +160,16 @@ class ListAccounts extends Component implements HasForms, HasTable
                 ->modalHeading("Create or Update Accounts.")
                 ->modalDescription('Important Reminder: Please use the correct Excel file format when importing data. If you\'re updating details, ensure that the provided \'ID\' exists in the system; otherwise, it will create a new record. Your cooperation in adhering to this format and verifying the \'ID\' is crucial for a seamless data processing experience. Thank you for your attention to these guidelines')
 
-            
+
                 ,
 
                 Action::make('Export')->button()->action(function(array $data) {
-              
-                
+
+
                     // return Excel::download(new UserExport, 'invoices.xlsx');
                     $filename = now()->format('Y-m-d');
                     return Excel::download(new AccountExport, $filename.'-ACCOUNTS.xlsx');
-    
+
                 })
                 ->outlined()
                 ->button()
@@ -178,7 +179,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                 ->button('Yes')
                 ->label('Download')
                 ,
-                
+
                 CreateAction::make('add')
                 ->icon('heroicon-o-sparkles')
                 ->label('New Account')
@@ -207,6 +208,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                             TextInput::make('middle_name')->required()->columnSpan(3),
                             TextInput::make('last_name')->required()->columnSpan(3),
                             Select::make('sex')
+                            ->label('Gender')
                                 ->options([
                                     'Male' => 'Male',
                                     'Female' => 'Female',
@@ -247,7 +249,7 @@ class ListAccounts extends Component implements HasForms, HasTable
 
 
             ->filters(
-                
+
                 [
                 SelectFilter::make('account_type')
                     ->options([
@@ -257,15 +259,10 @@ class ListAccounts extends Component implements HasForms, HasTable
                         'Teacher' => 'Teacher',
                         'Guest' => 'Guest',
                     ]),
-                SelectFilter::make('sex')
-                    ->options([
 
-                        'Male' => 'Male',
-                        'Female' => 'Female',
-                    ]),
 
                     Filter::make('account')
-                  
+
                     ->form([
                         Select::make('card-status')
                             ->options([
@@ -285,11 +282,20 @@ class ListAccounts extends Component implements HasForms, HasTable
                                 fn (Builder $query) => $query->doesntHave('card'),
                             );
                     }),
-                
+
+                    SelectFilter::make('sex')
+                    ->label('Gender')
+                        ->options([
+
+                            'Male' => 'Male',
+                            'Female' => 'Female',
+                        ]),
+
 
 
 
                 ],
+                layout: FiltersLayout::AboveContent
                 )
             ->actions(
                 [
@@ -325,6 +331,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                                         TextInput::make('middle_name')->required()->columnSpan(3),
                                         TextInput::make('last_name')->required()->columnSpan(3),
                                         Select::make('sex')
+                                        ->label('Gender')
                                             ->options([
                                                 'Male' => 'Male',
                                                 'Female' => 'Female',
@@ -382,7 +389,7 @@ class ListAccounts extends Component implements HasForms, HasTable
 
             ])
             ->modifyQueryUsing(fn (Builder $query) => $query->latest())
-         
+
             ;
     }
 

@@ -22,17 +22,17 @@ use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
 use Filament\Forms\Components\DatePicker;
 
 class EditCard extends Component implements HasForms, HasActions
-{   
+{
     use InteractsWithActions;
     use InteractsWithForms;
 
     public ?array $data = [];
 
     public Card $record;
-    
+
 
     public function mount($card): void
-    {   
+    {
 
         $this->record = Card::find($card);
         $data = $this->record->attributesToArray();
@@ -54,7 +54,7 @@ class EditCard extends Component implements HasForms, HasActions
                     ])
                     ->schema([
                         Select::make('account_id')
-                       
+
                         ->relationship(
                                 name: 'account',
                                 modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
@@ -64,21 +64,21 @@ class EditCard extends Component implements HasForms, HasActions
                             ->preload()
                             ->label('Select Account')
                             ->columnSpanFull(),
-                          
-                            
+
+
                         TextInput::make('id_number')->required()->unique(ignoreRecord: true)
                         ->columnSpan(3)
                         ->label('Card ID')
-                        ,   
+                        ,
                         TextInput::make('qr_number')->required()->unique(ignoreRecord: true)
                         ->columnSpan(3)
                         ->label('Qr Number')
-                        ,   
-                        DatePicker::make('valid_from')
-                        ->required()
-                        ->native(false)
-                        
-                        ->columnSpan(3),
+                        ,
+                        // DatePicker::make('valid_from')
+                        // ->required()
+                        // ->native(false)
+
+                        // ->columnSpan(3),
                         DatePicker::make('valid_until')
                         ->required()
 
@@ -89,7 +89,7 @@ class EditCard extends Component implements HasForms, HasActions
 
                         ->columnSpan(3)
                         ,
-    
+
                         Select::make('status')
                         ->label('Card Status')
                         ->options([
@@ -113,14 +113,14 @@ class EditCard extends Component implements HasForms, HasActions
         return Action::make('submit')
         ->label('Save Update')
             ->action(function () {
-             
-                
+
+
                 $data = $this->form->getState();
                 $this->record->update($data);
 
 
                 $this->form->fill();
-                
+
                 return redirect()->route('cards');
             });
     }

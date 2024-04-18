@@ -55,11 +55,11 @@ class UpdateCardValidity extends Command
         $cards = Card::where('status', 'Active')->get();
 
         foreach ($cards as $card) {
-            $cardValidFrom = Carbon::parse($card->valid_from)->startOfDay();
             $cardValidUntil = Carbon::parse($card->valid_until)->endOfDay();
-            
-            $isCardValid = now()->timezone('Asia/Manila')->between($cardValidFrom, $cardValidUntil);
-            
+            $isCardValid = now()->timezone('Asia/Manila')->lte($cardValidUntil);
+
+            // $isCardValid = now()->timezone('Asia/Manila')->between($cardValidFrom, $cardValidUntil);
+
             // Update the card status directly based on the validity check
             $card->update(['status' => $isCardValid ? 'Active' : 'Expired']);
         }

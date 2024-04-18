@@ -20,14 +20,13 @@ class CardObserver
      */
     public function updated(Card $card): void
     {
+        $cardValidUntil = Carbon::parse($card->valid_until)->endOfDay();
+        $isCardValid = now()->timezone('Asia/Manila')->lte($cardValidUntil);
 
         if($card->status == 'Active'){
 
-            $cardValidFrom = Carbon::parse($card->valid_from)->startOfDay();    
-            $cardValidUntil = Carbon::parse($card->valid_until)->endOfDay();
-            
-            $isCardValid = now()->timezone('Asia/Manila')->between($cardValidFrom, $cardValidUntil);
-            
+
+
             if ($isCardValid && $card->status !== 'Active') {
                 // Card is still valid, update the status to 'Active'
                 $card->status = 'Active';
@@ -38,7 +37,7 @@ class CardObserver
                 $card->save();
             }
         }
-       
+
     }
 
     /**

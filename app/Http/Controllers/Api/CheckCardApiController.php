@@ -77,10 +77,10 @@ class CheckCardApiController extends Controller
 
         if(!empty($card->account)){
            return $this->checkCardIfActive($card, $day,  $request, $transaction);
-        }else{  
+        }else{
 
-            
-            
+
+
             $source = 'usm-admin';
             $transactionrequest = $request->request_type;
             $errortype = 'card-doesnt-have-account-assigned';
@@ -89,7 +89,7 @@ class CheckCardApiController extends Controller
 
             $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
 
-            // $log = Log::create([ 
+            // $log = Log::create([
             //     'card_id' => $card->id ?? null,
             //     'source'=> 'usm-admin',
             //     'transaction'=> $request->request_type,
@@ -98,13 +98,13 @@ class CheckCardApiController extends Controller
             // ]);
 
             return response()->json([
-                
+
                 'source'=> $source,
                 'transaction'=> $transactionrequest,
-                'data'=> $card, 
-                'success' => false , 
+                'data'=> $card,
+                'success' => false ,
                 'error_type'=> $errortype,
-                'message' => $transactionmessage, 
+                'message' => $transactionmessage,
              ]);
         }
 
@@ -117,8 +117,8 @@ class CheckCardApiController extends Controller
 
             return $this->checkCardValidity($card, $day, $request ,$transaction);
         } else {
-            
-                
+
+
             $source = 'usm-admin';
             $transactionrequest = $request->request_type;
             $errortype = 'card-not-active';
@@ -126,7 +126,7 @@ class CheckCardApiController extends Controller
             $cardid = $card->id ?? null;
 
             $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
-            
+
             // $log = Log::create([ 'card_id' => $card->id ?? null,
             //     'source'=> 'usm-admin',
             //     'transaction'=> $request->request_type,
@@ -135,51 +135,84 @@ class CheckCardApiController extends Controller
             // ]);
 
             return response()->json([
-                
+
                 'source'=>$source,
                 'transaction'=> $transactionrequest,
-                'data'=> $card, 
-                'success' => false , 
+                'data'=> $card,
+                'success' => false ,
                 'error_type'=> $errortype,
-                'message' => $transactionmessage, 
+                'message' => $transactionmessage,
              ]);
 
         }
     }
-    public function checkCardValidity($card, $day,  $request, $transaction)
+    public function checkCardValidity($card, $day, $request, $transaction)
     {
+        $cardValidUntil = Carbon::parse($card->valid_until)->endOfDay();
 
-    $cardValidFrom = Carbon::parse($card->valid_from)->startOfDay();
-    $cardValidUntil = Carbon::parse($card->valid_until)->endOfDay();
+        // return response()->json(['data'=> [ $cardValidUntil->format('F j, Y'), now()->timezone('Asia/Manila')->format('F j, Y ')], $isCardValid = now()->timezone('Asia/Manila')->lte($cardValidUntil)]);
 
-    $isCardValid = now()->timezone('Asia/Manila')->between($cardValidFrom, $cardValidUntil);
+        $isCardValid = now()->timezone('Asia/Manila')->lte($cardValidUntil);
 
-    if ($isCardValid) {
-        return $this->checkCardlatestRecord($card, $day, $request, $transaction);
-    } else {
-        $date_validity_message = 'The gate failed to open. User cannot proceed because the card has expired';
+        if ($isCardValid) {
+            return $this->checkCardlatestRecord($card, $day, $request, $transaction);
+        } else {
+            $date_validity_message = 'The gate failed to open. User cannot proceed because the card has expired';
 
-        $source = 'usm-admin';
-        $transactionrequest = $request->request_type;
-        $errortype = 'card-is-expired';
-        $transactionmessage = $date_validity_message;
-        $cardid = $card->id ?? null;
+            $source = 'usm-admin';
+            $transactionrequest = $request->request_type;
+            $errortype = 'card-is-expired';
+            $transactionmessage = $date_validity_message;
+            $cardid = $card->id ?? null;
 
-        $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
-
-        return response()->json([
-            'source' => $source,
-            'transaction' => $transactionrequest,
-            'data' => $card,
-            'success' => false,
-            'error_type' => $errortype,
-            'message' => $transactionmessage,
-        ]);
+            $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
+        
+            return response()->json([
+                'source' => $source,
+                'transaction' => $transactionrequest,
+                'data' => $card,
+                'success' => false,
+                'error_type' => $errortype,
+                'message' => $transactionmessage,
+            ]);
+        }
     }
+
+
+    // public function checkCardValidity($card, $day,  $request, $transaction)
+    // {
+
+    // $cardValidFrom = Carbon::parse($card->valid_from)->startOfDay();
+    // $cardValidUntil = Carbon::parse($card->valid_until)->endOfDay();
+
+    // $isCardValid = now()->timezone('Asia/Manila')->between($cardValidFrom, $cardValidUntil);
+
+    // if ($isCardValid) {
+    //     return $this->checkCardlatestRecord($card, $day, $request, $transaction);
+    // } else {
+    //     $date_validity_message = 'The gate failed to open. User cannot proceed because the card has expired';
+
+    //     $source = 'usm-admin';
+    //     $transactionrequest = $request->request_type;
+    //     $errortype = 'card-is-expired';
+    //     $transactionmessage = $date_validity_message;
+    //     $cardid = $card->id ?? null;
+
+    //     $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
+
+    //     return response()->json([
+    //         'source' => $source,
+    //         'transaction' => $transactionrequest,
+    //         'data' => $card,
+    //         'success' => false,
+    //         'error_type' => $errortype,
+    //         'message' => $transactionmessage,
+    //     ]);
+    // }
 
         // $card_setting = CardSettings::latest()->first();
 
-   
+
         // $cardSettingValidFrom = Carbon::parse($card_setting->valid_from);
         // $cardSettingValidUntil = Carbon::parse($card_setting->valid_until);
 
@@ -200,10 +233,10 @@ class CheckCardApiController extends Controller
         // if ($isCardValid) {
         //     return $this->checkCardlatestRecord($card, $day,  $request, $transaction);
         // } else {
-           
-            
+
+
         //     $date_validity_message = '( checking ) Cannot Procceed Card is expired. The validity of the card is valid only from ' . $cardValidFromStartOfDay->format('F j, Y') . ' until ' . $cardValidUntilEndOfDay->format('F j, Y') . ' based on the date set in the setting from ' . $cardSettingValidFromStartOfDay->format('F j, Y');
-            
+
 
         //     $source = 'usm-admin';
         //     $transactionrequest = $request->request_type;
@@ -221,13 +254,13 @@ class CheckCardApiController extends Controller
         //     // ]);
 
         //     return response()->json([
-                
+
         //         'source'=> $source,
         //         'transaction'=> $transactionrequest,
-        //         'data'=> $card, 
-        //         'success' => false , 
+        //         'data'=> $card,
+        //         'success' => false ,
         //         'error_type'=> $errortype,
-        //         'message' =>$transactionmessage, 
+        //         'message' =>$transactionmessage,
         //      ]);
 
 
@@ -238,7 +271,7 @@ class CheckCardApiController extends Controller
 
 
 
-    }
+    // }
 
     public function checkCardlatestRecord($card, $day, $request ,$transaction)
     {
@@ -249,10 +282,10 @@ class CheckCardApiController extends Controller
 
             return $this->cardProcessForEntry($card, $day, $request, $transaction);
             // return response()->json(['data' => $card, 'success' => true, 'request' => 'entry']);
-            
-            
+
+
         } else if ($request->scanned_type == 'exit') {
-            
+
             return $this->cardProcessForExit($card, $day, $request, $transaction);
 
         } else {
@@ -274,13 +307,13 @@ class CheckCardApiController extends Controller
             // ]);
 
             return response()->json([
-                
+
                 'source'=> $source,
                 'transaction'=> $transactionrequest,
-                'data'=> $card, 
-                'success' => false , 
+                'data'=> $card,
+                'success' => false ,
                 'error_type'=> $errortype,
-                'message' => $transactionmessage, 
+                'message' => $transactionmessage,
              ]);
 
 
@@ -293,7 +326,7 @@ class CheckCardApiController extends Controller
     {
         $today = $day->created_at->startOfDay();
         $card_latest_record = $card->records()->latest()->first();
-        
+
 
 
         if (!empty($card_latest_record)) {
@@ -301,34 +334,34 @@ class CheckCardApiController extends Controller
 
             if ($today->equalTo($latest_day_record_date)) {
 
-                
+
                 if($card_latest_record->entry == false  && $card_latest_record->exit == false){
 
-                    
+
                     if($request->request_type=='saving'){
                         $card_latest_record->entry = true;
                         $card_latest_record->door_entered = $request->door_name;
                         $card_latest_record->save();
                     }
-                    
+
 
                     $source = 'usm-admin';
                     $transactionrequest = $request->request_type;
                     $errortype = null;
                     $transactionmessage = 'The gate is open, but the user\'s card doesn\'t have an entry record';
                     $cardid = $card->id ?? null;
-                    
+
                     $this->updateTransaction($errortype, true, $transaction , $transactionmessage);
 
                     return response()->json(['transaction'=> $transactionrequest,'source'=> $source, 'data'=> $card, 'success' => true , 'error_type'=> $errortype, 'message' => $transactionmessage]);
-                    
+
                 }else if($card_latest_record->entry == true  && $card_latest_record->exit == false){
 
                     $card_latest_record->update([
                         'door_entered' => $request->door_name,
                         'created_at' => $card_latest_record->freshTimestamp(),
                     ]);
-                    
+
 
                     $source = 'usm-admin';
                     $transactionrequest = $request->request_type;
@@ -338,7 +371,7 @@ class CheckCardApiController extends Controller
 
                     $this->updateTransaction($errortype, true, $transaction, $transactionmessage );
 
-                
+
                     // $log = Log::create([
                     //     'card_id' => $card->id ?? null,
                     //     'source'=> 'usm-admin',
@@ -347,20 +380,20 @@ class CheckCardApiController extends Controller
                     //     'message'=> '( checking ) You can proceed but you must exit f Card cannot enter again until it has exited',
                     // ]);
 
-                    
-        
+
+
                     return response()->json([
-                        
+
                         'source'=> $source,
                         'transaction'=> $transactionrequest,
-                        'data'=> $card, 
-                        'success' => true , 
+                        'data'=> $card,
+                        'success' => true ,
                         'error_type'=> $errortype,
-                        'message' => $transactionmessage, 
+                        'message' => $transactionmessage,
                      ]);
-                    
-                 
-                    
+
+
+
                 }else if($card_latest_record->entry == false  && $card_latest_record->exit == true){
 
 
@@ -374,7 +407,7 @@ class CheckCardApiController extends Controller
 
                     $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
 
-                    
+
                     // $log = Log::create([
                     //     'card_id' => $card->id ?? null,
                     //     'source'=> 'usm-admin',
@@ -382,21 +415,21 @@ class CheckCardApiController extends Controller
                     //     'error_type'=> 'invalid-exit',
                     //     'message'=> '( checking ) Cannot Procceed Invalid exit without entry',
                     // ]);
-        
+
                     return response()->json([
-                        
+
                         'source'=> $source,
                         'transaction'=> $transactionrequest,
-                        'data'=> $card, 
-                        'success' => false , 
+                        'data'=> $card,
+                        'success' => false ,
                         'error_type'=> $errortype,
-                        'message' =>$transactionmessage, 
+                        'message' =>$transactionmessage,
                      ]);
-                    
+
 
                     // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN', 'data' => $card, 'success' => false, 'error_type' => 'Invalid Exit', 'message' => '( checking ) Cannot Procceed Invalid exit without entry',]);
                 }
-                
+
                 else{
 
 
@@ -410,7 +443,7 @@ class CheckCardApiController extends Controller
                     $this->updateTransaction(null, true, $transaction, $transactionmessage);
 
                     if($request->request_type=='saving'){
-                        $new_record = Record::create([ 
+                        $new_record = Record::create([
                             'day_id'=> $day->id,
                             'card_id'=> $card->id,
                             'door_entered' => $request->door_name,
@@ -421,7 +454,7 @@ class CheckCardApiController extends Controller
                     return response()->json(['transaction'=> $transactionrequest ,'source'=> $source, 'data'=> $card, 'success' => true , 'error_type'=> $errortype, 'message' => $transactionmessage]);
 
                 }
-                
+
 
 
             } else {
@@ -432,11 +465,11 @@ class CheckCardApiController extends Controller
                 $transactionmessage = 'The gate is open, but it doesn\'t have the latest record for today';
 
                 $cardid = $card->id ?? null;
-                
+
                 $this->updateTransaction(null, true, $transaction ,$transactionmessage);
 
                 if($request->request_type=='saving'){
-                    $new_record = Record::create([ 
+                    $new_record = Record::create([
                         'day_id'=> $day->id,
                         'card_id'=> $card->id,
                         'door_name'=> $request->door_name,
@@ -444,7 +477,7 @@ class CheckCardApiController extends Controller
                         'entry'=> true,
                     ]);
                 }
-                
+
                 return response()->json(['transaction'=> $transactionrequest,'source'=> $source, 'data'=> $card, 'success' => true , 'error_type'=> $errortype, 'message' => $transactionmessage]);
                 // return response()->json(['data' => $card, 'success' => true, 'request' => 'last record is not the same today']);
             }
@@ -459,7 +492,7 @@ class CheckCardApiController extends Controller
 
             $this->updateTransaction(null, true, $transaction, $transactionmessage);
             if($request->request_type=='saving'){
-                $new_record = Record::create([ 
+                $new_record = Record::create([
                     'day_id'=> $day->id,
                     'card_id'=> $card->id,
                     'door_name'=> $request->door_name,
@@ -477,7 +510,7 @@ class CheckCardApiController extends Controller
 
         $today = $day->created_at->startOfDay();
         $card_latest_record = $card->records()->latest()->first();
-    
+
         if (!empty($card_latest_record)) {
 
             if ($card_latest_record->exit == false) {
@@ -513,15 +546,15 @@ class CheckCardApiController extends Controller
                     $card_latest_record->touch();
                     $this->updateTransaction($errortype, true, $transaction, $transactionmessage);
                     return response()->json([
-                        
+
                         'source'=> $source,
                         'transaction'=> $transactionrequest,
-                        'data'=> $card, 
-                        'success' => true , 
+                        'data'=> $card,
+                        'success' => true ,
                         'error_type'=> $errortype,
-                        'message' => $transactionmessage, 
+                        'message' => $transactionmessage,
                      ]);
-                    
+
                 }else{
 
                     $source = 'usm-admin';
@@ -536,19 +569,19 @@ class CheckCardApiController extends Controller
                     $card_latest_record->touch();
                     $this->updateTransaction($errortype, true, $transaction, $transactionmessage);
                     return response()->json([
-                        
+
                         'source'=> $source,
                         'transaction'=> $transactionrequest,
-                        'data'=> $card, 
-                        'success' => true , 
+                        'data'=> $card,
+                        'success' => true ,
                         'error_type'=> $errortype,
-                        'message' => $transactionmessage, 
+                        'message' => $transactionmessage,
                      ]);
 
                 }
 
-               
-                
+
+
                 // $log = Log::create([
                 //     'card_id' => $card->id ?? null,
                 //     'source'=> 'usm-admin',
@@ -556,8 +589,8 @@ class CheckCardApiController extends Controller
                 //     'error_type'=> 'multiple-exit-attempt',
                 //     'message'=> '( checking ) Cannot Exit Over and Over Again. Enter first.',
                 // ]);
-                
-                
+
+
 
                 // Card has already exited on the same day
                 // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => 'Multiple Exit ', 'message' => '( checking ) Cannot Exit Over and Over Again. Enter first.', ]);
@@ -576,22 +609,22 @@ class CheckCardApiController extends Controller
             //     'error_type'=> 'no-entry-record',
             //     'message'=> '( checking ) No entry record found for the card',
             // ]);
-            
+
             $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
             return response()->json([
-                
+
                 'source'=> $source,
                 'transaction'=> $transactionrequest,
-                'data'=> $card, 
-                'success' => false , 
+                'data'=> $card,
+                'success' => false ,
                 'error_type'=> $errortype,
-                'message' =>$transactionmessage, 
+                'message' =>$transactionmessage,
              ]);
 
 
             // No records for the card yet, handle accordingly
             // return response()->json(['transaction'=> $request->request_type,'source'=> 'USM-ADMIN','data' => $card, 'success' => false, 'error_type' => null, 'message' => '( checking ) No entry record found for the card']);
-       
+
         }
 
 }

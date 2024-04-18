@@ -36,7 +36,7 @@ class CreateCard extends Component implements HasForms, HasActions
     {
         $this->form->fill();
     }
-  
+
     public function back(): Action
     {
         return Action::make('back')
@@ -49,23 +49,23 @@ class CreateCard extends Component implements HasForms, HasActions
         return Action::make('submit')
         ->label('Save Card')
             ->action(function () {
-             
-                
+
+
                 // dd($this->form->getState());
                 // redirect()->route('cards');
                 $data = $this->form->getState();
 
-                $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
-                $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');               
+                // $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
+                $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');
                 $record = Card::create($data);
-                
+
                 $this->form->model($record)->saveRelationships();
 
             //     Notification::make()
             // ->title('Saved successfully')
             // ->success()
             // ->send();
-                
+
             $this->form->fill();
                 return redirect()->route('cards');
             });
@@ -85,7 +85,7 @@ class CreateCard extends Component implements HasForms, HasActions
                     ])
                     ->schema([
                         Select::make('account_id')
-                          
+
                             // ->relationship(
                             //     name: 'account',
                             //     modifyQueryUsing: fn (Builder $query) => $query->whereDoesntHave('card')
@@ -104,7 +104,7 @@ class CreateCard extends Component implements HasForms, HasActions
                                             ->preload()
                                             ->label('Account')
                                             ->columnSpanFull()
-                
+
                                             ->createOptionForm([
                                                 Section::make()
                                                 ->description('Personal Information')
@@ -134,7 +134,7 @@ class CreateCard extends Component implements HasForms, HasActions
                                                             'Male' => 'Male',
                                                             'Female' => 'Female',
                                                         ])->columnSpan(3),
-                        
+
                                                     DatePicker::make('birth_date')->required()->label('Birth date')
                                                         ->timezone('Asia/Manila')
                                                         ->closeOnDateSelection()->required()
@@ -144,7 +144,7 @@ class CreateCard extends Component implements HasForms, HasActions
                                                         ->columnSpan(3)
                                                         ->maxLength(10)
                                                         ->prefix('+63'),
-                        
+
                                                         Textarea::make('address')
                                                         ->rows(3)
                                                         ->columnSpanFull(),
@@ -157,8 +157,8 @@ class CreateCard extends Component implements HasForms, HasActions
                                                         ->required()
                                                         ->columnSpanFull()
                                                 ])->columnSpanFull(),
-                        
-                                                
+
+
                                                         ],
                                                         )
                             ,
@@ -170,18 +170,18 @@ class CreateCard extends Component implements HasForms, HasActions
                         TextInput::make('qr_number')->required()->unique(ignoreRecord: true)
                             ->columnSpan(3)
                             ->label('QR Number'),
-                        DatePicker::make('valid_from')
-                        ->native(false)
-                        ->required()
+                        // DatePicker::make('valid_from')
+                        // ->native(false)
+                        // ->required()
 
-                            ->label('Valid From')
+                        //     ->label('Valid From')
 
-                            ->columnSpan(3),
+                        //     ->columnSpan(3),
                         DatePicker::make('valid_until')
                         ->required()
                         ->native(false)
                             ->label('Valid Until')
-                                                        
+
                             ->columnSpan(3),
 
                         Select::make('status')

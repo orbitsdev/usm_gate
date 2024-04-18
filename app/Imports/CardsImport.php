@@ -20,21 +20,21 @@ class CardsImport implements ToModel, WithHeadingRow
         //     DB::beginTransaction();
         //     $data = Card::where('id', $row['id'])->first();
         //     dd($row);
-            
+
         //     $accountExist = Account::where('id', $row['account_id'])->first();
 
-          
+
 
         //     $account = null;
         //     if ($accountExist) {
         //         $account = $accountExist->id;
         //     }
-         
+
         //     // $validFrom = $row['valid_from'];
         //     // $validUntil = $row['valid_from'];
         //     $validFrom = $row['valid_from'];
         //     $validUntil = $row['valid_until'];
-            
+
         //     // Check if the values are strings
         //     if (is_string($validFrom)) {
         //         // Convert string to Carbon instance with the format 'm/d/Y'
@@ -43,18 +43,18 @@ class CardsImport implements ToModel, WithHeadingRow
         //         // Convert Excel serialized date to DateTime object
         //         $validFrom = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($validFrom);
         //     }
-            
+
         //     // Repeat the same for $validUntil
         //     if (is_string($validUntil)) {
         //         $validUntil = Carbon::createFromFormat('m/d/Y', $validUntil)->format('Y-m-d');
         //     } elseif (is_numeric($validUntil)) {
         //         $validUntil = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($validUntil);
         //     }
-          
-            
+
+
         //     // Now $validFrom and $validUntil are either formatted strings or DateTime objects
-            
-          
+
+
         //     if ($data) {
         //         // Update existing card
         //         $data->update([
@@ -68,9 +68,9 @@ class CardsImport implements ToModel, WithHeadingRow
         //     } else {
         //         // Check if a card with the same ID number already exists
         //         $existingData = Card::where('id_number', $row['id_number'])->first();
-                
+
         //         if (!$existingData) {
-                    
+
         //             // If no existing card, create a new one
         //             return new Card([
         //                 'account_id' => $account,
@@ -80,8 +80,8 @@ class CardsImport implements ToModel, WithHeadingRow
         //                 'status' => $row['status'],
         //             ]);
         //         } else {
-                   
-                  
+
+
         //             // $existingData->update([
         //             //     'account_id' => $account,
         //             //     'valid_from' => $validFrom,
@@ -95,52 +95,52 @@ class CardsImport implements ToModel, WithHeadingRow
         //     }
         //     DB::commit();
         // } catch (QueryException $e) {
-           
+
         //     DB::rollBack();
         // }
 
         $data = Card::where('id', $row['id'])->first();
         $accountExist = Account::where('id', $row['account_id'])->first();
 
-          
+
 
         $account = null;
         if ($accountExist) {
             $account = $accountExist->id;
         }
-     
+
         // $validFrom = $row['valid_from'];
         // $validUntil = $row['valid_from'];
-        $validFrom = $row['valid_from'];
+        // $validFrom = $row['valid_from'];
         $validUntil = $row['valid_until'];
-        
+
         // Check if the values are strings
-        if (is_string($validFrom)) {
-            // Convert string to Carbon instance with the format 'm/d/Y'
-            $validFrom = Carbon::createFromFormat('m/d/Y', $validFrom)->format('Y-m-d');
-        } elseif (is_numeric($validFrom)) {
-            // Convert Excel serialized date to DateTime object
-            $validFrom = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($validFrom);
-        }
-        
+        // if (is_string($validFrom)) {
+        //     // Convert string to Carbon instance with the format 'm/d/Y'
+        //     $validFrom = Carbon::createFromFormat('m/d/Y', $validFrom)->format('Y-m-d');
+        // } elseif (is_numeric($validFrom)) {
+        //     // Convert Excel serialized date to DateTime object
+        //     $validFrom = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($validFrom);
+        // }
+
         // Repeat the same for $validUntil
         if (is_string($validUntil)) {
             $validUntil = Carbon::createFromFormat('m/d/Y', $validUntil)->format('Y-m-d');
         } elseif (is_numeric($validUntil)) {
             $validUntil = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($validUntil);
         }
-      
-        
+
+
         // Now $validFrom and $validUntil are either formatted strings or DateTime objects
-        
-      
+
+
         if ($data) {
             // Update existing card
             $data->update([
                 'account_id' => $account,
                 'id_number' => $row['id_number'],
                 'qr_number' => $row['qr_number'],
-                'valid_from' => $validFrom,
+                // 'valid_from' => $validFrom,
                 'valid_until' => $validUntil,
                 'status' => $row['status'],
             ]);
@@ -148,21 +148,21 @@ class CardsImport implements ToModel, WithHeadingRow
         } else {
             // Check if a card with the same ID number already exists
             $existingData = Card::where('id_number', $row['id_number'])->first();
-            
+
             if (!$existingData) {
-                
+
                 // If no existing card, create a new one
                 return new Card([
                     'account_id' => $account,
                     'id_number' => $row['id_number'],
                     'qr_number' => $row['qr_number'],
-                    'valid_from' => $validFrom,
+                    // 'valid_from' => $validFrom,
                     'valid_until' => $validUntil,
                     'status' => $row['status'],
                 ]);
             } else {
-               
-              
+
+
                 // $existingData->update([
                 //     'account_id' => $account,
                 //     'valid_from' => $validFrom,

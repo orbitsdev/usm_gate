@@ -68,32 +68,32 @@ class ListCard extends Component implements HasForms, HasTable
                         });
                     } ,isIndividual: true, isGlobal: true),
                 TextColumn::make('id_number')
-                 
+
                 ->copyable()
-                 
+
                     ->searchable(isIndividual: true, isGlobal: true)
                     ->label('Card ID')
                     ->sortable(),
-                   
-                  
+
+
                     TextColumn::make('id')->label('ID')
                     ->searchable(isIndividual: true, isGlobal: true)
-    
+
                     ,
-                 
+
                     TextColumn::make('id')->label('ID')
                     ->searchable(isIndividual: true, isGlobal: true)
-    
+
                     ,
-                
-                TextColumn::make('valid_from')
-                    ->badge()
-                    ->color('gray')
-                    ->date(),
+
+                // TextColumn::make('valid_from')
+                //     ->badge()
+                //     ->color('gray')
+                //     ->date(),
 
 
                 TextColumn::make('valid_until')
-
+                    ->label('Valid Until')
                     ->badge()
                     ->color('gray')
                     ->date(),
@@ -121,20 +121,20 @@ class ListCard extends Component implements HasForms, HasTable
                         default => 'heroicon-o-clock'
                     }),
                     TextColumn::make('qr_number')
-                 
+
                     ->copyable()
-                     
+
                         ->searchable(isIndividual: true, isGlobal: true)
                         ->label('QR Value')
                         ->sortable(),
-    
+
                     ViewColumn::make('')->view('tables.columns.qr')->label('QR')
                     ->tooltip('Download'),
 
- 
-             
 
-               
+
+
+
 
             ],)
             ->headerActions([
@@ -149,7 +149,7 @@ class ListCard extends Component implements HasForms, HasTable
                         ->icon('heroicon-o-arrow-down-tray')
                         ->requiresConfirmation()->modalHeading('Export No Account Cards')
                         ->modalHeading('Download List of No Account Cards')
-                      
+
                         ->label('No Account Cards'),
 
 
@@ -165,7 +165,7 @@ class ListCard extends Component implements HasForms, HasTable
                         ->icon('heroicon-o-arrow-down-tray')
                         ->requiresConfirmation()->modalHeading('Export Inactive Cards')
                         ->modalHeading('Download List of Blocked Cards')
-                      
+
                         ->label('Block Cards'),
 
                     Action::make('inactive-cards')->action(function (array $data) {
@@ -176,7 +176,7 @@ class ListCard extends Component implements HasForms, HasTable
                         ->icon('heroicon-o-arrow-down-tray')
                         ->requiresConfirmation()->modalHeading('Export Inactive Cards')
                         ->modalHeading('Download List of Inactive Cards')
-                      
+
                         ->label('Inactive Cards'),
 
                     Action::make('export-expired')->action(function (array $data) {
@@ -189,7 +189,7 @@ class ListCard extends Component implements HasForms, HasTable
                         ->icon('heroicon-o-arrow-down-tray')
                         ->requiresConfirmation()->modalHeading('Export Expired Cards')
                         ->modalHeading('Download List of Expired Cards')
-                      
+
                         ->label('Expired Cards'),
                 ])
                     ->label('More Options')
@@ -234,15 +234,15 @@ class ListCard extends Component implements HasForms, HasTable
                     ->icon('heroicon-o-arrow-down-tray')
                     ->requiresConfirmation()->modalHeading('Export Card')
                     ->modalHeading('Download Excel as Report or Reference')
-                  
+
                     ->label('Download'),
 
-                   
+
                 Action::make('New Card')
                     ->label('New Card')
                     ->icon('heroicon-o-sparkles')
                     ->url(fn (): string => route('create.card'))
-               
+
 
 
 
@@ -278,12 +278,12 @@ class ListCard extends Component implements HasForms, HasTable
                                 fn (Builder $query) => $query->whereHas('account'),
                             );
                     })
-                
+
                     ],
 
-                   
-                    
-          
+
+
+
             )
             ->actions(
                 [
@@ -394,7 +394,7 @@ class ListCard extends Component implements HasForms, HasTable
                         //         TextInput::make('id_number')->required()->unique(ignoreRecord: true)
                         //         ->columnSpan(3)
                         //         ->label('Card ID')
-                        //         ,   
+                        //         ,
                         //         Flatpickr::make('valid_from')
                         //         ->dateFormat('F d, Y') //
 
@@ -430,20 +430,20 @@ class ListCard extends Component implements HasForms, HasTable
             )
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                   
+
                             BulkAction::make('update-status')
                             ->label('Update Status')
                             ->icon('heroicon-m-pencil-square')
                             ->action(function (Collection $records, array $data): void {
-                               
+
                                 foreach ($records as $record) {
                                     $record->status = $data['status'];
                                     $record->save();
                                 }
                             })
-                            
+
                             ->form([
-                               
+
                                 Select::make('status')
                                         ->label('Cards Status')
                                         ->options([
@@ -461,21 +461,21 @@ class ListCard extends Component implements HasForms, HasTable
                             ->label('Update Card Validity')
                             ->icon('heroicon-m-credit-card')
                             ->action(function (Collection $records, array $data): void {
-                                
+
                                 $data['valid_from'] = Carbon::parse($data['valid_from'])->format('Y-m-d');
-                                $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');  
-                             
+                                $data['valid_until'] = Carbon::parse($data['valid_until'])->format('Y-m-d');
+
                                 foreach ($records as $record) {
                                     $record->valid_from = $data['valid_from'];
                                     $record->valid_until = $data['valid_until'];
                                     $record->save();
                                 }
                             })
-                            
+
                             ->form([
 
                                 Section::make()
-                                
+
                                 ->columns([
                                     'sm' => 3,
                                     'xl' => 6,
@@ -485,19 +485,19 @@ class ListCard extends Component implements HasForms, HasTable
                                     DatePicker::make('valid_from')
                                     ->helperText('Please take note that changes will affect all selected cards.')
                                     ->native(false)
-                                    
+
                                         ->label('Valid From')
-            
+
                                         ->columnSpan(4),
                                     DatePicker::make('valid_until')
                                     ->native(false)
                                         ->label('Card Until')
-            
+
                                         ->columnSpan(4),
                                 ]),
-                               
-                              
-                                        
+
+
+
                             ]),
 
                     BulkAction::make('delete')
