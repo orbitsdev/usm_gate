@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use App\Exports\CardsExport;
 use App\Imports\CardsImport;
 use App\Exports\CardExpiredExport;
+use Filament\Actions\StaticAction;
 use App\Exports\BlockedCardsExport;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
@@ -17,6 +18,7 @@ use Filament\Tables\Filters\Layout;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
 use App\Exports\InactiveCardsExport;
+use Filament\Support\Enums\MaxWidth;
 use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -288,6 +290,22 @@ class ListCard extends Component implements HasForms, HasTable
             ->actions(
                 [
                     ActionGroup::make([
+
+                        
+                        Action::make('view')
+                        ->color('primary')
+                        ->icon('heroicon-m-eye')
+                        ->label('View Details')
+                        ->modalContent(function (Card $record) {
+                            return view('livewire.card-details', ['record' => $record]);
+                        })
+                        ->modalHeading('Card Details')
+                        ->modalSubmitAction(false)
+                        ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                        ->disabledForm()
+                        // ->slideOver()
+                        ->modalWidth(MaxWidth::SevenExtraLarge),
+
                         Action::make('Edit')
                             ->label('Edit')
                             ->icon('heroicon-o-pencil-square')

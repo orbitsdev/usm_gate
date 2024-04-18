@@ -8,11 +8,13 @@ use Livewire\Component;
 use Filament\Tables\Table;
 use App\Exports\AccountExport;
 use App\Imports\AccountImport;
+use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\Layout;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\MaxWidth;
 use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -304,6 +306,22 @@ class ListAccounts extends Component implements HasForms, HasTable
             ->actions(
                 [
                     ActionGroup::make([
+
+                        Action::make('view')
+                        ->color('primary')
+                        ->icon('heroicon-m-eye')
+                        ->label('View Details')
+                        ->modalContent(function (Account $record) {
+                            return view('livewire.account-details', ['record' => $record]);
+                        })
+                        ->modalHeading('Account Details')
+                        ->modalSubmitAction(false)
+                        ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                        ->disabledForm()
+                        // ->slideOver()
+                        ->modalWidth(MaxWidth::SevenExtraLarge),
+
+
                         EditAction::make()
                             ->mutateRecordDataUsing(function (Model $record, array $data): array {
                                 // $data['account_id'] = auth()->id();

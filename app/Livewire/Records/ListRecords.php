@@ -8,9 +8,11 @@ use App\Models\Record;
 use Livewire\Component;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
+use Filament\Actions\StaticAction;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
@@ -20,6 +22,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Filament\Tables\Actions\Action as TAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
@@ -122,6 +125,22 @@ class ListRecords extends Component implements HasForms, HasTable
                 //     ->toggle()
             ])
             ->actions([
+
+                TAction::make('view')
+                ->button()
+                ->outlined()
+                ->color('primary')
+                ->icon('heroicon-m-eye')
+                ->label('View Details')
+                ->modalContent(function (Record $record) {
+                    return view('livewire.record-details', ['record' => $record]);
+                })
+                ->modalHeading('Record Details')
+                ->modalSubmitAction(false)
+                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                ->disabledForm()
+                // ->slideOver()
+                ->modalWidth(MaxWidth::SevenExtraLarge),
                 DeleteAction::make()->button()->outlined(),
             ])
             ->bulkActions([

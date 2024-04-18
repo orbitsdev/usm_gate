@@ -7,8 +7,11 @@ use Filament\Tables;
 use App\Models\Record;
 use Livewire\Component;
 use Filament\Tables\Table;
+use Filament\Actions\StaticAction;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
@@ -114,6 +117,22 @@ class RealtimeListRecords extends Component implements HasForms, HasTable
                 
             ])
             ->actions([
+
+                Action::make('view')
+                ->button()
+                ->outlined()
+                ->color('primary')
+                ->icon('heroicon-m-eye')
+                ->label('View Details')
+                ->modalContent(function (Record $record) {
+                    return view('livewire.record-details', ['record' => $record]);
+                })
+                ->modalHeading('Record Details')
+                ->modalSubmitAction(false)
+                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                ->disabledForm()
+                // ->slideOver()
+                ->modalWidth(MaxWidth::SevenExtraLarge),
                 //
             ])
             ->bulkActions([

@@ -27,5 +27,28 @@ class Record extends Model
     public function card(){
         return $this->belongsTo(Card::class);
     }
+
+    public function recordAt(){
+
+        if($this->entry){
+
+            return $this->created_at->format('h:i:s A');
+        }else{
+            'None';
+        }
+
+       
+    }
+    public function dayDate(){
+        return $this->day->created_at->format('F j, Y');
+    }
+    public function updateAt(){
+        if($this->entry == true && $this->exit ==true){
+
+            return $this->updated_at->format('h:i:s A');
+        }else{
+            return '-- NO EXIT -- ';
+        }
+    }
     
 }

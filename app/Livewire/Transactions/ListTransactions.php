@@ -6,13 +6,17 @@ use Filament\Tables;
 use Livewire\Component;
 use Filament\Tables\Table;
 use App\Models\Transaction;
+use Filament\Actions\StaticAction;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -128,6 +132,32 @@ class ListTransactions extends Component implements HasForms, HasTable
                 //
             ])
             ->actions([
+
+                  
+                Action::make('view')
+                ->color('primary')
+                ->icon('heroicon-m-eye')
+                ->button()
+                ->outlined()
+                ->label('Card Details')
+                ->modalContent(function (Transaction $record) {
+                    
+                    return view('livewire.card-details', ['record' => $record->card]);
+                })
+                ->modalHeading('Card Details')
+                ->modalSubmitAction(false)
+                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                ->disabledForm()
+                // ->slideOver()
+                ->modalWidth(MaxWidth::SevenExtraLarge)
+                ->hidden(function(Model $record){
+                    if(empty($record->card)){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                })
+                ,
                 DeleteAction::make()->button()->outlined(),
             ])
             ->bulkActions([

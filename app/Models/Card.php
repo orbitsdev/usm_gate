@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Record;
 use App\Models\Account;
@@ -31,4 +32,12 @@ public function transactions(){
     return $this->hasMany(Transaction::class);
 }
 
+public function validUntil(){
+    if(!empty($this->valid_until)){
+
+        return Carbon::parse($this->valid_until)->format('F j, Y');
+    }else{
+        return '';
+    }
+}
 }
