@@ -48,11 +48,11 @@ class ListTransactions extends Component implements HasForms, HasTable
                 // })
                 // ->label('Account'),
               
-                IconColumn::make('success')
-                ->sortable()
-                ->boolean()
-                ->label('Success')
-                ,
+                // IconColumn::make('success')
+                // ->sortable()
+                // ->boolean()
+                // ->label('Success')
+                // ,
 
                 TextColumn::make('door_name')
                 ->searchable(isIndividual: true, isGlobal: false)
@@ -67,28 +67,28 @@ class ListTransactions extends Component implements HasForms, HasTable
                 ->label('QR Number'),
 
                 
-                TextColumn::make('card.account')->label('Card Owner')->formatStateUsing(function (Transaction $record) {
-                    $first_name =  $record->card->account->first_name ?? '';
-                    $last_name =  $record->card->account->last_name.',' ?? '';
+            //     TextColumn::make('card.account')->label('Card Owner')->formatStateUsing(function (Transaction $record) {
+            //         $first_name =  $record->card->account->first_name ?? '';
+            //         $last_name =  $record->card->account->last_name.',' ?? '';
                 
-                    return ucfirst($last_name) . '  ' . ucfirst($first_name);
-                })
-                ->searchable(query: function (Builder $query, string $search): Builder {
-                    return $query->whereHas('card.account', function ($query) use ($search) {
-                        $query->where('first_name', 'like', "%{$search}%")
-                            ->orWhere('last_name', 'like', "%{$search}%");
-                    });
-                }
-            ,isIndividual: true, isGlobal: true
-            ),
+            //         return ucfirst($last_name) . '  ' . ucfirst($first_name);
+            //     })
+            //     ->searchable(query: function (Builder $query, string $search): Builder {
+            //         return $query->whereHas('card.account', function ($query) use ($search) {
+            //             $query->where('first_name', 'like', "%{$search}%")
+            //                 ->orWhere('last_name', 'like', "%{$search}%");
+            //         });
+            //     }
+            // ,isIndividual: true, isGlobal: true
+            // ),
             TextColumn::make('error_type')
                 ->copyable()
                     ->label('Error')
                     ->badge()
                     ->color('danger')
-                    ->searchable(
-                        isIndividual: true, isGlobal: false
-                    )
+                    // ->searchable(
+                    //     isIndividual: true, isGlobal: false
+                    // )
                     ,
                 TextColumn::make('message')
                 ->wrap()
@@ -109,7 +109,7 @@ class ListTransactions extends Component implements HasForms, HasTable
                     TextColumn::make('scanned_type')
                     ->badge()
                     ->color('gray')
-                    ->sortable()
+                    // ->sortable()
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
                     ->label('Scanned At')
                     ,
@@ -121,11 +121,11 @@ class ListTransactions extends Component implements HasForms, HasTable
               
 
 
-                TextColumn::make('created_at')
-                    ->date('M d, Y  h:i:s A'),
+                // TextColumn::make('created_at')
+                //     ->date('M d, Y  h:i:s A'),
               
-                TextColumn::make('updated_at')
-                ->date('M d, Y  h:i:s A'),
+                // TextColumn::make('updated_at')
+                // ->date('M d, Y  h:i:s A'),
                     
             ])
             ->filters([
@@ -133,7 +133,25 @@ class ListTransactions extends Component implements HasForms, HasTable
             ])
             ->actions([
 
-                  
+                        
+                Action::make('Transaction Details')
+                ->color('primary')
+                ->icon('heroicon-m-eye')
+                ->button()
+                ->outlined()
+                ->label('Transaction Details')
+                ->modalContent(function (Transaction $record) {
+                    
+                    return view('livewire.log-details', ['record' => $record]);
+                })
+                ->modalHeading('Transaction Details')
+                ->modalSubmitAction(false)
+                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                ->disabledForm()
+                // ->slideOver()
+                ->modalWidth(MaxWidth::SevenExtraLarge)
+                
+                ,
                 Action::make('view')
                 ->color('primary')
                 ->icon('heroicon-m-eye')
@@ -158,6 +176,7 @@ class ListTransactions extends Component implements HasForms, HasTable
                     }
                 })
                 ,
+              
                 DeleteAction::make()->button()->outlined(),
             ])
             ->bulkActions([
