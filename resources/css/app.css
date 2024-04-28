@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.qr-code-img {
+    height: 200px;
+    width: 200px;
+    /* Add any additional styling as needed */
+}

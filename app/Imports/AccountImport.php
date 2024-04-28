@@ -96,7 +96,11 @@ class AccountImport implements  ToModel, WithHeadingRow
 
 
 
-        $account = Account::where('id', $row['id'])->first();
+        // $account = Account::where('id', $row['id'])->first();
+      
+        $account = Account::where('unique_id', $row['account_id'] ?? null)->first();
+
+     
 
             $birth_date = $row['birth_date'];
 

@@ -41,7 +41,10 @@
                 </dd>
             </div>
 
-         
+q1  ``  
+ 
+dsd
+ 
         @if(!empty($record->card))
 
         @if($record->card->account)

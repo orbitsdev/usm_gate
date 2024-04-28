@@ -68,11 +68,11 @@ class EditCard extends Component implements HasForms, HasActions
 
                         TextInput::make('id_number')->required()->unique(ignoreRecord: true)
                         ->columnSpan(3)
-                        ->label('Card ID')
+                        ->label('RF ID')
                         ,
                         TextInput::make('qr_number')->required()->unique(ignoreRecord: true)
                         ->columnSpan(3)
-                        ->label('Qr Number')
+                        ->label('School ID')
                         ,
                         // DatePicker::make('valid_from')
                         // ->required()
@@ -82,7 +82,7 @@ class EditCard extends Component implements HasForms, HasActions
                         DatePicker::make('valid_until')
                         ->required()
 
-                        ->label('Card Until')
+                        ->label('Expiration Date')
                         ->native(false)
 
 

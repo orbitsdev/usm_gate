@@ -60,7 +60,7 @@ class ListCard extends Component implements HasForms, HasTable
                 TextColumn::make('account_id')->label('Card Owner')->formatStateUsing(function (Card $record) {
 
 
-                    return ucfirst($record->account?->last_name) . ', ' . ucfirst($record->account?->first_name) . ' ' . ucfirst($record->account?->middle_name);
+                    return ucfirst($record->account?->getFullName());
                 })
 
                     ->searchable(query: function (Builder $query, string $search): Builder {
@@ -69,24 +69,31 @@ class ListCard extends Component implements HasForms, HasTable
                                 ->orWhere('last_name', 'like', "%{$search}%");
                         });
                     } ,isIndividual: true, isGlobal: true),
+
+                    // TextColumn::make('id')->label('ID')
+                    // ->searchable(isIndividual: true, isGlobal: true)
+
+                    // ,
+
                 TextColumn::make('id_number')
 
                 ->copyable()
 
                     ->searchable(isIndividual: true, isGlobal: true)
-                    ->label('Card ID')
+                    ->label('RF ID')
                     ->sortable(),
 
 
-                    TextColumn::make('id')->label('ID')
-                    ->searchable(isIndividual: true, isGlobal: true)
+                   
 
-                    ,
+                  
+                    TextColumn::make('qr_number')
 
-                    TextColumn::make('id')->label('ID')
-                    ->searchable(isIndividual: true, isGlobal: true)
+                    ->copyable()
 
-                    ,
+                        ->searchable(isIndividual: true, isGlobal: true)
+                        ->label('SCHOOL ID')
+                        ->sortable(),
 
                 // TextColumn::make('valid_from')
                 //     ->badge()
@@ -95,7 +102,7 @@ class ListCard extends Component implements HasForms, HasTable
 
 
                 TextColumn::make('valid_until')
-                    ->label('Valid Until')
+                    ->label('Expiration Date')
                     ->badge()
                     ->color('gray')
                     ->date(),
@@ -122,15 +129,9 @@ class ListCard extends Component implements HasForms, HasTable
                         'Expired' => 'heroicon-o-x-mark',
                         default => 'heroicon-o-clock'
                     }),
-                    TextColumn::make('qr_number')
+                  
 
-                    ->copyable()
-
-                        ->searchable(isIndividual: true, isGlobal: true)
-                        ->label('QR Value')
-                        ->sortable(),
-
-                    ViewColumn::make('')->view('tables.columns.qr')->label('QR')
+                    ViewColumn::make('')->view('tables.columns.qr')->label('SCHOOL ID QR')
                     ->tooltip('Download'),
 
 

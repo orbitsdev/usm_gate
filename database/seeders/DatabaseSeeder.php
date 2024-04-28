@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PurposeSeeder::class); // Move PurposeSeeder before CardSeeder
         $this->call(CardSettingsSeeder::class);
         $this->call(CardSeeder::class);
+        $this->call(AccountTypeSeeder::class);
         // $this->call(RecordSeeder::class);
         
         // \App\Models\User::factory(10)->create();

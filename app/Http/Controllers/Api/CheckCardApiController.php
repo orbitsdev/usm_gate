@@ -17,7 +17,7 @@ class CheckCardApiController extends Controller
 {
     public function checkCard(Request $request)
     {
-        $card = Card::where('id_number', $request->id_number)->first();
+        $card = Card::where('id_number', $request->id_number)->orWhere('id_number', $request->id_number)->first();
         $transaction = Transaction::create([ 'card_id'=> $card->id ?? null, 'success' => !empty($card),  'source'=> $request->source,  'door_name'=> $request->door_name,  'scanned_type'=> $request->scanned_type, ]);
 
         if ($card) {

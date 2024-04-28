@@ -7,7 +7,7 @@
             Submit
         </button> --}}
 
-        <div class="mt-4 flex items-center ">
+        <div class="mt-6 flex items-center ">
 
             <div class="mr-4">
                 {{ $this->back }}

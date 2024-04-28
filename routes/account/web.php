@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Accounts\EditAccount;
 use App\Livewire\Accounts\CreateAccount;
 use App\Http\Controllers\DownloadController;
+use App\Livewire\AccountType\ListAccountTypes;
 use App\Livewire\Records\RealtimeListRecords;
 use App\Livewire\Transactions\ListTransactions;
 use App\Livewire\Users\ListUsers;
 
+Route::get('/account-types', ListAccountTypes::class)->name('account-types');
 Route::get('/account/profile', ProfileScreen::class)->name('account.profile');
 Route::get('/usm/dashboard', Dashboard::class)->name('usm.dashboard');
 Route::get('/accounts', Account::class)->name('accounts');

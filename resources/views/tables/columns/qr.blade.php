@@ -1,4 +1,4 @@
-<div class="">
+<div class="ml-4">
     @if(!empty($getRecord()->qr_number))
         
     <a href="{{route('download.qrcode',['idNumber'=> $getRecord()->qr_number])}}">

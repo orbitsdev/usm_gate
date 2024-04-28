@@ -112,7 +112,7 @@ class CardsImport implements ToModel, WithHeadingRow
         // $validFrom = $row['valid_from'];
         // $validUntil = $row['valid_from'];
         // $validFrom = $row['valid_from'];
-        $validUntil = $row['valid_until'];
+        $validUntil = $row['expiration_date'];
 
         // Check if the values are strings
         // if (is_string($validFrom)) {

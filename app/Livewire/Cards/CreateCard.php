@@ -7,6 +7,7 @@ use Filament\Forms;
 use App\Models\Card;
 use Livewire\Component;
 use Filament\Forms\Form;
+use App\Models\AccountType;
 use Filament\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Components\Select;
@@ -15,15 +16,15 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Concerns\InteractsWithForms;
+
 use Filament\Actions\Concerns\InteractsWithActions;
 use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
-
-use Filament\Notifications\Notification;
 
 class CreateCard extends Component implements HasForms, HasActions
 {
@@ -76,8 +77,8 @@ class CreateCard extends Component implements HasForms, HasActions
         return $form
             ->schema([
                 Section::make()
-                    ->description('Card Information')
-                    ->icon('heroicon-m-identification')
+                    ->description('Card Details')
+                    ->icon('heroicon-o-identification')
                     ->columns([
                         'sm' => 3,
                         'xl' => 6,
@@ -104,8 +105,11 @@ class CreateCard extends Component implements HasForms, HasActions
                                             ->preload()
                                             ->label('Account')
                                             ->columnSpanFull()
+                                          
 
-                                            ->createOptionForm([
+                                            ->createOptionForm(
+                                        
+                                                [
                                                 Section::make()
                                                 ->description('Personal Information')
                                                 ->icon('heroicon-m-user')
@@ -116,12 +120,7 @@ class CreateCard extends Component implements HasForms, HasActions
                                                 ])
                                                 ->schema([
                                                     Select::make('account_type')
-                                                        ->options([
-                                                            'Student' => 'Student',
-                                                            'Staff' => 'Staff',
-                                                            'Teacher' => 'Teacher',
-                                                            'Guest' => 'Guest',
-                                                        ])
+                                                        ->options(AccountType::all()->pluck('name', 'name'))
                                                         ->required()
                                                         ->native(false)
                                                         ->columnSpanFull()
@@ -165,11 +164,11 @@ class CreateCard extends Component implements HasForms, HasActions
 
 
                         TextInput::make('id_number')->required()->unique(ignoreRecord: true)
-                            ->columnSpan(3)
-                            ->label('Card ID'),
+                            ->columnSpan(4)
+                            ->label('RF ID'),
                         TextInput::make('qr_number')->required()->unique(ignoreRecord: true)
-                            ->columnSpan(3)
-                            ->label('QR Number'),
+                            ->columnSpan(4)
+                            ->label('School ID'),
                         // DatePicker::make('valid_from')
                         // ->native(false)
                         // ->required()
@@ -180,9 +179,9 @@ class CreateCard extends Component implements HasForms, HasActions
                         DatePicker::make('valid_until')
                         ->required()
                         ->native(false)
-                            ->label('Valid Until')
+                            ->label('Expiration Date')
 
-                            ->columnSpan(3),
+                            ->columnSpan(4),
 
                         Select::make('status')
                             ->label('Card Status')

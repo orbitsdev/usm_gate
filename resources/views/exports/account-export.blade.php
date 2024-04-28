@@ -1,7 +1,8 @@
 <table align="left">
     <thead>
         <tr style="background-color: #006100; color: white" >
-            <th style="background-color: #006100; color: white; ">ID</th>
+            <th style="background-color: #006100; color: white; ">Account ID</th>
+            {{-- <th style="background-color: #006100; color: white; ">ID</th> --}}
             <th style="background-color: #006100; color: white" >First Name</th>
             <th style="background-color: #006100; color: white; ">Last Name</th>
             <th style="background-color: #006100; color: white; ">Middle Name</th>
@@ -18,7 +19,8 @@
     <tbody>
         @foreach($collection as $item)
         <tr>
-            <td align="left" width="40">{{ $item?->id  ?? ''}}</td>
+            <td align="left" width="40">{{ $item?->unique_id  ?? ''}}</td>
+            {{-- <td align="left" width="40">{{ $item?->id  ?? ''}}</td> --}}
             <td align="left" width="40">{{ $item?->first_name?? '' }}</td>
             <td align="left" width="40">{{ $item?->last_name?? '' }}</td>
             <td align="left" width="40">{{ $item?->middle_name?? '' }}</td>

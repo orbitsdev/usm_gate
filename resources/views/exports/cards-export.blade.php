@@ -7,7 +7,7 @@
             <th  style="background-color: #006100; color: white; ">ID Number</th>
             <th  style="background-color: #006100; color: white; ">QR Number</th>
             {{-- <th  style="background-color: #006100; color: white; ">Valid From</th> --}}
-            <th  style="background-color: #006100; color: white; ">Valid Until</th>
+            <th  style="background-color: #006100; color: white; ">Expiration Date</th>
             <th  style="background-color: #006100; color: white; ">Status</th>
             <th style="background-color: #006100; color: white;">Card Owner </th>
 

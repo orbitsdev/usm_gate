@@ -4,8 +4,10 @@ namespace App\Livewire\Accounts;
 
 use Filament\Tables;
 use App\Models\Account;
+use Filament\Forms\Get;
 use Livewire\Component;
 use Filament\Tables\Table;
+use App\Models\AccountType;
 use App\Exports\AccountExport;
 use App\Imports\AccountImport;
 use Filament\Actions\StaticAction;
@@ -19,6 +21,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -64,7 +67,10 @@ class ListAccounts extends Component implements HasForms, HasTable
 
                 [
 
-
+                    TextColumn::make('unique_id')->label('Account ID')
+                    // ->formatStateUsing(fn($state)=>  strtoupper($state))
+                    ->searchable(isIndividual: true, isGlobal: true)
+                    ,
                     TextColumn::make('last_name')
                     ->label('Last name')
                     ->formatStateUsing(fn($state)=> $state ? ucfirst($state) : $state)
@@ -100,12 +106,12 @@ class ListAccounts extends Component implements HasForms, HasTable
                     TextColumn::make('account_type')
                         ->searchable()
                         ->badge()
-                        ->color(fn (string $state): string => match ($state) {
-                            'Student' => 'success',
-                            'Staff' => 'primary',
-                            'Guest' => 'gray',
-                            default => 'info',
-                        })
+                        // ->color(fn (string $state): string => match ($state) {
+                        //     'Student' => 'success',
+                        //     'Staff' => 'primary',
+                        //     'Guest' => 'gray',
+                        //     default => 'info',
+                        // })
                         ->label('Account Type'),
 
 
@@ -134,10 +140,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                         ->openUrlInNewTab(),
 
 
-                    TextColumn::make('id')->label('ID')
-                    // ->formatStateUsing(fn($state)=>  strtoupper($state))
-                    ->searchable(isIndividual: true, isGlobal: true)
-                    ,
+                
 
 
 
@@ -187,9 +190,15 @@ class ListAccounts extends Component implements HasForms, HasTable
                 ,
 
                 CreateAction::make('add')
+                ->mutateFormDataUsing(function (array $data): array {
+                //    unset($data['specify']);
+             
+                    return $data;
+                })
                 ->icon('heroicon-o-sparkles')
                 ->label('New Account')
                 ->form([
+                    
                     Section::make()
                         ->description('Personal Information')
                         ->icon('heroicon-m-user')
@@ -199,18 +208,32 @@ class ListAccounts extends Component implements HasForms, HasTable
                             '2xl' => 9,
                         ])
                         ->schema([
+                            
+                            // Checkbox::make('specify')->label('Specify')->live() ->columnSpan(2),
                             Select::make('account_type')
-                                ->options([
-                                    'Student' => 'Student',
-                                    'Staff' => 'Staff',
-                                    'Teacher' => 'Teacher',
-                                    'Guest' => 'Guest',
-                                ])
+                                ->options(AccountType::all()->pluck('name','name'))
                                 ->required()
                                 ->native(false)
                                 ->columnSpanFull()
-                                ->label('Account Type'),
-                            TextInput::make('first_name')->required()->columnSpan(3),
+                                ->label('Account Type')
+                                ->hidden(function(Get $get){
+                                    if($get('specify')){
+                                        return true;
+                                    }else{
+                                        return false;
+                                    }
+                                }),
+                                TextInput::make('account_type')->required()->columnSpan(7)
+                                ->label('Account Type')
+                                ->hidden(function(Get $get){
+                                    if($get('specify')){
+                                        return false;
+                                    }else{
+                                        return true;
+                                    }
+                                })
+                                ,
+                                TextInput::make('first_name')->required()->columnSpan(3),
                             TextInput::make('middle_name')->required()->columnSpan(3),
                             TextInput::make('last_name')->required()->columnSpan(3),
                             Select::make('sex')
@@ -258,13 +281,7 @@ class ListAccounts extends Component implements HasForms, HasTable
 
                 [
                 SelectFilter::make('account_type')
-                    ->options([
-
-                        'Student' => 'Student',
-                        'Staff' => 'Staff',
-                        'Teacher' => 'Teacher',
-                        'Guest' => 'Guest',
-                    ]),
+                    ->options(AccountType::all()->pluck('name','name')),
 
 
                     Filter::make('account')
@@ -325,7 +342,7 @@ class ListAccounts extends Component implements HasForms, HasTable
                         EditAction::make()
                             ->mutateRecordDataUsing(function (Model $record, array $data): array {
                                 // $data['account_id'] = auth()->id();
-
+                                // unset($data['specify']);
                                 return $data;
                             })
                             ->form([
@@ -338,17 +355,33 @@ class ListAccounts extends Component implements HasForms, HasTable
                                         '2xl' => 9,
                                     ])
                                     ->schema([
+
+                                        // Checkbox::make('specify')->label('Specify')->live() ->columnSpan(2),
                                         Select::make('account_type')
-                                            ->options([
-                                                'Student' => 'Student',
-                                                'Staff' => 'Staff',
-                                                'Teacher' => 'Teacher',
-                                                'Guest' => 'Guest',
-                                            ])
+                                            ->options(AccountType::all()->pluck('name','name'))
                                             ->required()
                                             ->native(false)
                                             ->columnSpanFull()
-                                            ->label('Account Type'),
+                                            ->label('Account Type')
+                                            ->hidden(function(Get $get){
+                                                if($get('specify')){
+                                                    return true;
+                                                }else{
+                                                    return false;
+                                                }
+                                            }),
+                                            TextInput::make('account_type')->required()->columnSpan(7)
+                                            ->label('Account Type')
+                                            ->hidden(function(Get $get){
+                                                if($get('specify')){
+                                                    return false;
+                                                }else{
+                                                    return true;
+                                                }
+                                            })
+                                            ,
+
+                                        
                                         TextInput::make('first_name')->required()->columnSpan(3),
                                         TextInput::make('middle_name')->required()->columnSpan(3),
                                         TextInput::make('last_name')->required()->columnSpan(3),

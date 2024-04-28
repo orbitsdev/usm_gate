@@ -19,6 +19,12 @@
             </div>
           <dl class="divide-y divide-gray-100">
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <dt class="text-sm font-medium leading-6 text-gray-900">Account ID</dt>
+              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                {{$record->unique_id ?? ''}}
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
               <dt class="text-sm font-medium leading-6 text-gray-900">Full name</dt>
               <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                 {{$record->getFullName()}}
@@ -82,33 +88,66 @@
         
        
         @if($record->card)
-        <div class="h-[4px] bg-gray-100"></div>
 
-        <h3 class="text-lg font-medium text-gray-900 mt-6">
+         
+        <div class=" bg-white grid grid-cols-12  border-t">
+          <h3 class="text-xl font-medium text-gray-700  mt-6  col-span-12">
 
-          Card Details
-        </h3>
+            Card Details
+          </h3>
+          <div   class=" border-gray-100 col-span-9">  
+            
+            
+            <dl class="divide-y divide-gray-100">
+            
+              
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">RF ID</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    {{$record?->card?->id_number ?? ''}}
+                  </dd>
+                </div>
+              
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">School ID</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    {{$record?->card?->qr_number ?? ''}}
+                  </dd>
+                </div>
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">Expiration Date</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    {{$record?->card?->validUntil() }}
+                  </dd>
+                </div>
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">Status </dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    {{$record?->card?->status ?? ''}}
+                  </dd>
+                </div>
 
-        <dl class="divide-y divide-gray-100">
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-gray-900">ID Number</dt>
-              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                {{$record?->card?->id_number ?? ''}}
-              </dd>
-            </div>
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-gray-900">Valid Until</dt>
-              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                {{$record?->card?->validUntil() }}
-              </dd>
-            </div>
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-gray-900">Status </dt>
-              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                {{$record?->card?->status ?? ''}}
-              </dd>
-            </div>
-        </dl>
+            </dl>
+          </div>
+  
+  
+        
+      
+           <div class="col-span-3 flex flex-col items-center justify-center ">
+            @if(!empty($record?->card?->qr_number))
+                <a href="{{route('download.qrcode',['idNumber'=> $record?->card?->qr_number])}}" class="block">
+                    <div class="qr-code-container">
+                        <img src="data:image/png;base64,{{ DNS2D::getBarcodePNG($record?->card?->qr_number, 'QRCODE') }}" alt="qrcode" class="qr-code-img" />
+                        <div class="qr-code-value text-center text-lg mt-2 ">  <span class="">
+                          {{ $record?->card?->qr_number }}
+                          </span>
+                          </div>
+                    </div>
+                </a>
+            @else
+                <!-- Handle case where QR code number is empty -->
+            @endif
+        </div>
         @else
 
         <div class="h-44 rounded flex items-center justify-cente border bg-gray-50 w-full" style="height: 100px; ">
