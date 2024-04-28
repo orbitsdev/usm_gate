@@ -35,7 +35,7 @@ class ListTransactions extends Component implements HasForms, HasTable
             ->columns([
                 
                 TextColumn::make('created_at')
-                    ->date('F d, Y  h:i:s A'),
+                    ->date('F d, Y  h:i:s A')->label('Date & Time'),
                 // TextColumn::make('card')->searchable()
                 // ->formatStateUsing(function($record){
                 //     $firstName = $record->card && $record->card->account && $record->card->account->first_name
