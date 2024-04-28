@@ -33,6 +33,9 @@ class ListTransactions extends Component implements HasForms, HasTable
         return $table
             ->query(Transaction::query())
             ->columns([
+                
+                TextColumn::make('created_at')
+                    ->date('F d, Y  h:i:s A'),
                 // TextColumn::make('card')->searchable()
                 // ->formatStateUsing(function($record){
                 //     $firstName = $record->card && $record->card->account && $record->card->account->first_name
@@ -61,10 +64,10 @@ class ListTransactions extends Component implements HasForms, HasTable
 
                 TextColumn::make('card.id_number')
                 ->searchable(isIndividual: true, isGlobal: true)
-                ->label('Card ID'),
+                ->label('FR ID'),
                 TextColumn::make('card.qr_number')
                 ->searchable(isIndividual: true, isGlobal: true)
-                ->label('QR Number'),
+                ->label('SCHOOL ID'),
 
                 
             //     TextColumn::make('card.account')->label('Card Owner')->formatStateUsing(function (Transaction $record) {
@@ -121,8 +124,6 @@ class ListTransactions extends Component implements HasForms, HasTable
               
 
 
-                // TextColumn::make('created_at')
-                //     ->date('M d, Y  h:i:s A'),
               
                 // TextColumn::make('updated_at')
                 // ->date('M d, Y  h:i:s A'),

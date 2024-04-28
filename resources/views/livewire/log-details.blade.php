@@ -1,4 +1,4 @@
-<div class="p-8 bg-white">
+<div class=" bg-white">
 
 
 
@@ -41,9 +41,6 @@
                 </dd>
             </div>
 
-q1  ``  
- 
-dsd
  
         @if(!empty($record->card))
 
@@ -72,13 +69,19 @@ dsd
         </div>
         
         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">ID Number</dt>
+            <dt class="text-sm font-medium leading-6 text-gray-900">FR ID</dt>
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
               {{$record?->card->id_number ?? ''}}
             </dd>
           </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">SCHOOL ID</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {{$record?->card->qr_number ?? ''}}
+            </dd>
+          </div>
           <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Valid Until</dt>
+            <dt class="text-sm font-medium leading-6 text-gray-900">Expiration Date</dt>
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
               {{$record?->card->validUntil() }}
             </dd>

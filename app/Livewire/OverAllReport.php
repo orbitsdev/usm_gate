@@ -9,6 +9,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Livewire\Component;
 use Filament\Forms\Form;
+use App\Models\AccountType;
 use App\Exports\OverAllExport;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -149,6 +150,7 @@ class OverAllReport extends Component implements HasForms
                             ->afterStateUpdated(function (Get $get, Set $set, $state) {
 
                                 $this->date_start = Carbon::parse($state)->isoFormat('MMMM DD, YYYY');
+                                // dd($this->date_start);
 
                                 if (!empty($state)) {
                                     $this->accountType = $get('accountType');
@@ -456,12 +458,7 @@ class OverAllReport extends Component implements HasForms
 
 
                         Select::make('accountType')
-                            ->options([
-                                'All' => 'All',
-                                'Student' => 'Student',
-                                'Staff' => 'Staff',
-                                'Teacher' => 'Teacher',
-                            ])
+                            ->options(AccountType::all()->pluck('name','name'))
                             ->default('All')
                             ->searchable()
                             ->columnSpan(2)
