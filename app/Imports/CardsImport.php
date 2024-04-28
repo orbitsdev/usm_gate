@@ -99,8 +99,12 @@ class CardsImport implements ToModel, WithHeadingRow
         //     DB::rollBack();
         // }
 
-        $data = Card::where('id', $row['id'])->first();
-        $accountExist = Account::where('id', $row['account_id'])->first();
+        // dd($row);
+
+        $data = Card::where('id_number', $row['fr_id']?? null)->orWhere('qr_number', $row['school_id'] ?? null)->first();
+        // $data = Card::where('id', $row['id'])->first();
+        $accountExist = Account::where('unique_id', $row['account_id'])->first();
+        // $accountExist = Account::where('id', $row['account_id'])->first();
 
 
 
@@ -138,8 +142,10 @@ class CardsImport implements ToModel, WithHeadingRow
             // Update existing card
             $data->update([
                 'account_id' => $account,
-                'id_number' => $row['id_number'],
-                'qr_number' => $row['qr_number'],
+                'id_number' => $row['fr_id'],
+                'qr_number' => $row['school_id'],
+                // 'id_number' => $row['id_number'],
+                // 'qr_number' => $row['qr_number'],
                 // 'valid_from' => $validFrom,
                 'valid_until' => $validUntil,
                 'status' => $row['status'],
@@ -147,15 +153,17 @@ class CardsImport implements ToModel, WithHeadingRow
             $data->save();
         } else {
             // Check if a card with the same ID number already exists
-            $existingData = Card::where('id_number', $row['id_number'])->first();
+            $existingData = Card::where('id_number', $row['fr_id'])->first();
 
             if (!$existingData) {
 
                 // If no existing card, create a new one
                 return new Card([
                     'account_id' => $account,
-                    'id_number' => $row['id_number'],
-                    'qr_number' => $row['qr_number'],
+                    'id_number' => $row['fr_id'],
+                    'qr_number' => $row['school_id'],
+                    // 'id_number' => $row['id_number'],
+                    // 'qr_number' => $row['qr_number'],
                     // 'valid_from' => $validFrom,
                     'valid_until' => $validUntil,
                     'status' => $row['status'],

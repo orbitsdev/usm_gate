@@ -220,7 +220,7 @@ class ListCard extends Component implements HasForms, HasTable
                     ->button()
                     ->label('Import')
                     ->modalHeading("Create or Update Cards")
-                    ->modalDescription('Important Reminder: Please ensure to adhere to the correct file format when importing Excel data. Your cooperation in following the specified format, especially in verifying the \'ID,\' is crucial for seamless processing. If updating details, confirm that the provided \'ID\' exists in the system; otherwise, it will create a new record. The "Card Owner" column is included solely for identification purposes, and any changes made to this column will not affect the database. Thank you for your attention to these guidelines.')
+                    ->modalDescription('Important Reminder: Please ensure to adhere to the correct file format when importing Excel data. Your cooperation in following the specified format, especially in verifying the \'FR ID or SCHOOL ID,\' is crucial for seamless processing. If updating details, confirm that the provided \'FR ID or SCHOOL ID\' exists in the system; otherwise, it will create a new record. The "Card Owner" column is included solely for identification purposes, and any changes made to this column will not affect the database. Thank you for your attention to these guidelines.')
 
                     ,
 
