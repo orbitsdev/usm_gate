@@ -17,7 +17,7 @@ class CheckCardApiController extends Controller
 {
     public function checkCard(Request $request)
     {
-        $card = Card::where('id_number', $request->id_number)->orWhere('qr_number', $request->id_number)->first();
+        $card = Card::where('id_number', $request->id_number)->first();
         $transaction = Transaction::create([ 'card_id'=> $card->id ?? null, 'success' => !empty($card),  'source'=> $request->source,  'door_name'=> $request->door_name,  'scanned_type'=> $request->scanned_type, ]);
 
         if ($card) {
@@ -166,7 +166,7 @@ class CheckCardApiController extends Controller
             $cardid = $card->id ?? null;
 
             $this->updateTransaction($errortype, false, $transaction, $transactionmessage);
-        
+
             return response()->json([
                 'source' => $source,
                 'transaction' => $transactionrequest,
@@ -349,7 +349,6 @@ class CheckCardApiController extends Controller
                     $transactionrequest = $request->request_type;
                     $errortype = null;
                     $transactionmessage = 'The gate is open, but the user\'s card doesn\'t have an entry record';
-                    // return $card;
                     $cardid = $card->id ?? null;
 
                     $this->updateTransaction($errortype, true, $transaction , $transactionmessage);

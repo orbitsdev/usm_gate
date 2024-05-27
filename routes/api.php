@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\ErrorController;
 use App\Http\Controllers\Api\CardSaveRecontroller;
 use App\Http\Controllers\Api\CheckCardApiController;
 use App\Http\Controllers\Api\QrController;
+use App\Http\Controllers\PublicApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,10 @@ use App\Http\Controllers\Api\QrController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//PUBLIC API
+
+Route::post('/card-details',[PublicApiController::class,'getCardDetails'])->name('public.card-details');
 
 
 Route::post('/check-card', [CheckCardApiController::class, 'checkCard'])->name('check-card');
@@ -57,7 +62,7 @@ Route::get('/test', function(){
 
     // $card = Card::first();
 
-    return response()->json(['data'=>$log,'success'=> true]); 
+    return response()->json(['data'=>$log,'success'=> true]);
 });
 
 

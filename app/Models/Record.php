@@ -23,7 +23,7 @@ class Record extends Model
     public function door(){
         return $this->belongsTo(Door::class);
     }
-    
+
     public function card(){
         return $this->belongsTo(Card::class);
     }
@@ -37,11 +37,53 @@ class Record extends Model
             'None';
         }
 
-       
+
+    }
+    public function exactDay(){
+        return $this->day->created_at->format('l');
     }
     public function dayDate(){
         return $this->day->created_at->format('F j, Y');
     }
+    public function inCompleteDetails(){
+        return $this->updated_at->format('F j, Y h:i:s A');
+
+    }
+    public function inWithSeconds(){
+        return $this->created_at->format('h:i:s A');
+    }
+    public function inWithoutSeconds(){
+        return $this->created_at->format('h:i A');
+    }
+
+    public function outCompleteDetails(){
+        if($this->entry == true && $this->exit ==true){
+
+            return $this->updated_at->format('F j, Y h:i:s A');
+        }else{
+            return '';
+            // return '-- NO EXIT -- ';
+        }
+    }
+    public function outWithSeconds(){
+        if($this->entry == true && $this->exit ==true){
+
+            return $this->updated_at->format('h:i:s A');
+        }else{
+            return '';
+            // return '-- NO EXIT -- ';
+        }
+    }
+    public function outWithoutSeconds(){
+        if($this->entry == true && $this->exit ==true){
+
+            return $this->updated_at->format('h:i: A');
+        }else{
+            return '';
+            // return '-- NO EXIT -- ';
+        }
+    }
+
     public function updateAt(){
         if($this->entry == true && $this->exit ==true){
 
@@ -50,5 +92,5 @@ class Record extends Model
             return '-- NO EXIT -- ';
         }
     }
-    
+
 }
