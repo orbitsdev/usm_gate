@@ -37,14 +37,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/card-details',[PublicApiController::class,'getCardDetails'])->name('public.card-details');
 
 
+Route::get('/logs', [PublicApiController::class, 'dailyRecord']);
+Route::get('/account-logs', [PublicApiController::class, 'allRecordsByAccount']);
+
+
+
 Route::post('/check-card', [CheckCardApiController::class, 'checkCard'])->name('check-card');
 Route::post('/check-qr', [QrController::class, 'checkQr'])->name('check-qr');
 // Route::post('/save-record', [CardSaveRecontroller::class, 'saveRecord'])->name('save-record');
 Route::post('/save-error', [ErrorController::class, 'saveError'])->name('save-error');
 Route::post('/save-scan', [ScanController::class, 'saveScan'])->name('save-scan');
 
-Route::get('/test', function(){
 
+Route::get('/test', function(){
 
     $log = Log::create([
         'card_id' => 1,
@@ -54,15 +59,11 @@ Route::get('/test', function(){
         'message' => 'none',
     ]);
 
-    // $table->foreignId('card_id')->nullable();
-    // $table->string('source')->nullable();
-    // $table->string('transaction')->nullable();
-    // $table->string('error_type')->nullable();
-    // $table->text('message')->nullable();
-
-    // $card = Card::first();
 
     return response()->json(['data'=>$log,'success'=> true]);
 });
+
+
+
 
 

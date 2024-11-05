@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use App\Helpers\ResponseHelper;
 use App\Http\Resources\CardResource;
 use App\Http\Resources\RecordResource;
+use App\Http\Resources\DailyRecordResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PublicApiController extends Controller
@@ -71,4 +72,94 @@ class PublicApiController extends Controller
             return ResponseHelper::error('An error occurred while processing the request', 500);
         }
     }
+
+    
+    public function allRecordsByAccount(Request $request)
+{
+    $startDate = $request->input('start_date');
+    $endDate = $request->input('end_date');
+    $search = $request->input('search'); 
+    $idNumber = $request->input('id_number'); 
+    $qrNumber = $request->input('qr_number'); 
+
+    
+    $query = Record::whereHas('card', function ($query) use ( $idNumber, $qrNumber, $search) {
+       
+        
+
+       
+        if ($idNumber) {
+            $query->where('id_number', $idNumber);
+        }
+
+        if ($qrNumber) {
+            $query->where('qr_number', $qrNumber);
+        }
+
+       
+        if ($search) {
+            $query->whereHas('account', function ($accountQuery) use ($search) {
+                $accountQuery->where('first_name', 'like', '%' . $search . '%')
+                             ->orWhere('last_name', 'like', '%' . $search . '%');
+            });
+        }
+    });
+
+    
+    if ($startDate && !$endDate) {
+        $query->whereDate('created_at', $startDate);
+    } elseif (!$startDate && $endDate) {
+        $query->whereDate('updated_at', $endDate);
+    } elseif ($startDate && $endDate) {
+        $query->whereDate('created_at', '>=', $startDate)
+              ->whereDate('updated_at', '<=', $endDate);
+    }
+
+    $records = $query->get();
+
+    return DailyRecordResource::collection($records);
+}
+
+
+    
+public function dailyRecord(Request $request)
+{
+    $idNumber = $request->input('id_number');
+    $qrNumber = $request->input('qr_number'); 
+    $startDate = $request->input('start_date');
+    $endDate = $request->input('end_date');
+
+    
+    $query = Record::query();
+
+    $query->whereHas('card', function ($q) use ($idNumber, $qrNumber) {
+        if ($idNumber) {
+            $q->where('id_number', $idNumber);
+        }
+        
+        if ($qrNumber) {
+            $q->where('qr_number', $qrNumber);
+        }
+    });
+
+    
+    if ($startDate && !$endDate) {
+        $query->whereDate('created_at', $startDate);
+    } elseif (!$startDate && $endDate) {
+        $query->whereDate('updated_at', $endDate);
+    } elseif ($startDate && $endDate) {
+        $query->whereDate('created_at', '>=', $startDate)
+              ->whereDate('updated_at', '<=', $endDate);
+    }
+
+    
+    $records = $query->get();
+
+    return DailyRecordResource::collection($records);
+}
+
+
+    
+
+
 }
